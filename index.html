@@ -1,0 +1,60 @@
+<!DOCTYPE  html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>CCSP_CreateJS_test</title>
+	<!--<script src="http://code.createjs.com/createjs-2013.12.12.min.js"></script>-->
+	
+	<script src = "src/createjs-2013.12.12.min.js"></script>
+	<script src = "src/RPG/global_function.js"></script>
+	<script src = "src/RPG/sprite_choose.js"></script>
+	<script src = "src/RPG/map.js"></script>
+	<script src = "src/RPG/npc.js"></script>
+	<script src = "src/RPG/character.js"></script>
+	<script src = "src/RPG/monster.js"></script>
+	<script src = "src/RPG/framework.js"></script>
+
+	<script>
+		var stage ;
+		function init() {
+			stage = new createjs.Stage( "myCanvas" ) ;
+    		document.body.style.cursor = "url('pic/cursor/normal_select.cur'), default" ;
+			// 定義畫布長寬
+			var canvas_len = 900, canvas_hei = 550 ;
+			// 建立地圖框架
+			var mapcontrol = new Main_Map( canvas_len, canvas_hei, true ) ;
+			// 建立遊戲框架
+			var framework = new Main_Framework( canvas_len, canvas_hei ) ;
+			// 建立角色物件
+			var baphomet = new Character( mapcontrol, "baphomet", 175, 55, 1.00, 600, 450, "front" ) ;
+
+			baphomet.OnLifeModify( -100, -20 ) ;
+			baphomet.OnTalk( "Welcome !! 歡迎光臨 !!" ) ;
+
+
+
+			var machine_container = new createjs.Container() ;
+			machine_container.regX = 0, machine_container.regY = 0 ;
+			machine_container.addChild( yar ) ;
+
+
+			// 地圖背景匯入
+			stage.addChild( mapcontrol.backgorond ) ;
+			// 地圖景效物件匯入(後端)
+			stage.addChild( mapcontrol.container_back ) ;
+			// 主要角色匯入
+			stage.addChild( baphomet.container ) ;
+				stage.addChild( machine_container ) ;
+			// 地圖景效物件匯入(前端)
+			stage.addChild( mapcontrol.container_front ) ;
+			// 遊戲主框架匯入
+		    stage.addChild( framework.container ) ;
+		} // init()
+	</script>
+</head>
+<body onload="init()" bgcolor="#ACA">
+	<canvas id="myCanvas" width="900" height="550" style="position: absolute; top:50%; left:50%; margin-left: -450px; margin-top: -285px; border-radius: 10px">
+		Alternative Content
+	</canvas>
+</body>
+</html>
