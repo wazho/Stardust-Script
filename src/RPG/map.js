@@ -19,7 +19,7 @@ function Main_Map( len, hei, switch_debug ) {
 // 除錯模式, 畫格建立顯示
 Main_Map.prototype.GridCreate = function( switch_debug ) {
 	this.debug_mode = new createjs.Shape() ;
-	this.debug_mode.alpha = 0.2 ;
+	this.debug_mode.alpha = 0.1 ;
 	for ( i = 0 ; i < ( this.container_front.length / this.grid.size ) ; i ++ )
 		for ( j = 0 ; j < ( this.container_front.height / this.grid.size ) ; j ++ )
 			this.debug_mode.graphics.f( "#FFF" ).r( ( ( ( i + j ) % 2 ) ?              0 : this.grid.size ) + this.grid.size * i, this.grid.size * j, this.grid.size, this.grid.size ),
@@ -30,14 +30,14 @@ Main_Map.prototype.GridCreate = function( switch_debug ) {
 } // GridCreate()
 
 // 座標系建立, 左下方為(1,1)
-Main_Map.prototype.GetGrid = function( grid, select ) {
+Main_Map.prototype.GetGrid = function( grid, select, type ) {
 	if ( select == 'x' ) {
-		x = Math.ceil( this.grid.x_max - Math.abs( this.container_front.length - grid ) / this.grid.size ) ;
-		return ( ( x - 0.5 ) * this.grid.size ) ;
+		result = ( type == 'real' ) ? ( Math.ceil( this.grid.x_max - Math.abs( this.container_front.length - grid ) / this.grid.size ) ) : grid ;
+		return ( ( result - 0.5 ) * this.grid.size ) ;
 	} // if
 	else if ( select == 'y' ) {
-		y = Math.ceil( Math.abs( this.container_front.height - grid ) / this.grid.size ) ;
-		return ( this.container_front.height - ( y - 0.5 ) * this.grid.size ) ;
+		result = ( type == 'real' ) ? ( Math.ceil( Math.abs( this.container_front.height - grid ) / this.grid.size ) ) : grid ;
+		return ( this.container_front.height - ( result - 0.5 ) * this.grid.size ) ;
 	} // else if
 } // GetGrid()
 

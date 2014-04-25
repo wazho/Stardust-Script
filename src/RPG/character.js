@@ -1,6 +1,6 @@
 function Character( MapControl, Name, HP, SP, Speed, x, y, direction ) {
 	this.OnCreate( MapControl, Name, HP, SP, Speed, x, y, direction ) ;
-	return this;
+	return this ;
 } // Character() 
 
 // 角色建立
@@ -18,15 +18,15 @@ Character.prototype.OnCreate = function( MapControl, Name, HP, SP, Speed, x, y, 
 	// 容器建立
 	this.container = new createjs.Container() ;
 	this.container.name = Name ;
-	this.container.x = x, this.container.y = y ;
 	this.container.regX = this.spriteSize / 2, this.container.regY = this.spriteSize / 2 ;
 	this.container.length = this.spriteSize, this.container.height = this.spriteSize ;
+	this.container.x = x, this.container.y = y ;
 	// 圖層建立
 	this.sprite = new createjs.Sprite( SettingSprite( "character", Name ) ) ;
 	this.sprite.regX = this.spriteSize / 2, this.sprite.regY = this.spriteSize / 2 ;
 	this.container.addChild( this.sprite ) ;
 	// 預設動畫的方向
-	this.OnDirection( direction ) ;
+	this.OnDirection( this.direction ) ;
 	// 陰影建立
 	this.sprite.shadow = new createjs.Shadow( "#454", 5, 5, 5 ) ;
 	// 隨從建立
@@ -108,12 +108,10 @@ Character.prototype.OnActive = function() {
 } // OnActive()
 
 Character.prototype.OnWalk = function( x, y ) {
-	var trim_x = this.MapControlPointer.GetGrid( x, 'x' ) + this.container.regX ;
-	var trim_y = this.MapControlPointer.GetGrid( y, 'y' ) + this.container.regY * 0.3 ;
+	var trim_x = this.MapControlPointer.GetGrid( x, 'x', 'real' ) + this.container.regX ;
+	var trim_y = this.MapControlPointer.GetGrid( y, 'y', 'real' ) + this.container.regY * 0.3 ;
 	var trim_speed = 5 * GetDistance( this.container.x, this.container.y, trim_x, trim_y ) ;
 	createjs.Tween.get( this.container, { loop: false } ).to( { x: trim_x, y: trim_y }, trim_speed, createjs.Ease.quadInOut ) ;
-	this.OnTalk( 'x:' + this.MapControlPointer.GetGrid( x, 'x' ) + ' y:' + this.MapControlPointer.GetGrid( y, 'y' ) ) ;
-	// this.container.x = x+this.container.regX, this.container.y = y+this.container.regY*0.3 ;
 } // OnWalk()
 
 // 旋轉角色方向/改變播放圖層

@@ -9,7 +9,7 @@ SettingSprite = function( type, name ) {
 				"animations": {
 					"front": { "frames": [0,1,2,1], "speed": 0.1 },
 					"walk": { "frames": [6,7,8,7], "speed": 0.1 },
-					"attack": { "frames": [12,13,14], "speed": 0.1 },
+					"attack": { "frames": [12,13,14], "speed": 0.3 },
 					"skill_self": { "frames": [18,19,20], "speed": 0.1 },
 					"die": { "frames": [24,25,26], "speed": 0.1 }
 				}

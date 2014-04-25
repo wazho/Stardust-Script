@@ -37,6 +37,8 @@
 			machine_container.regX = 0, machine_container.regY = 0 ;
 			machine_container.addChild( yar ) ;
 
+			var fake = new NPC( mapcontrol, "Husky", 14, 7, 1, "npc_01" ) ;
+
 
 			// 地圖背景匯入
 			stage.addChild( mapcontrol.backgorond ) ;
@@ -45,6 +47,7 @@
 			// 主要角色匯入
 			stage.addChild( baphomet.container ) ;
 				stage.addChild( machine_container ) ;
+				stage.addChild( fake.container ) ;
 			// 地圖景效物件匯入(前端)
 			stage.addChild( mapcontrol.container_front ) ;
 			// 遊戲主框架匯入
