@@ -104,10 +104,11 @@ Character.prototype.OnWalk = function( x, y ) {
 	var direction = ( start_x != x ) ? ( ( start_x - x > 0 ) ? 6 : 2 ) : 0 ;
 	direction += ( direction != 0 ) ? ( ( start_y != y ) ? ( ( ( start_y - y > 0 ) ? 1 : -1 ) * ( ( direction == 2 ) ? 1 : -1 ) ) : 0 ) : ( ( start_y != y ) ? ( ( start_y - y > 0 ) ? 4 : 0 ) : -1 ) ;
 	var that = this ;
+	// 這裡最後一行有 bug, 未來要改
 	createjs.Tween.get( this.container, { loop: false } ).call( function() { that.OnDirection( direction, "walk" ) } )
 														.to( { x: location_x, y: location_y }, trim_speed, createjs.Ease.quadInOut )
 														.call( function() { that.OnDirection( direction, "front" ) } )
-														.call( function() { that.MapControlPointer.GetObjectbyGrid( x, y ).getChildAt( 0 ).OnDialog() } ) ;
+														.call( function() { if ( that.MapControlPointer.GetObjectbyGrid( x, y ).getNumChildren() != 0 ) that.MapControlPointer.GetObjectbyGrid( x, y ).getChildAt( 0 ).OnDialog() } ) ;
 } // OnWalk()
 
 // 旋轉角色方向/改變播放圖層
