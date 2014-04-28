@@ -14,7 +14,7 @@ Character.prototype.OnCreate = function( MapControl, Name, HP, SP, Speed, x, y, 
 	this.name = Name ;
 	this.hp_max = HP, this.hp = HP ;
 	this.sp_max = SP, this.sp = SP ;
-	this.speed = Speed, this.direction = 6 ;
+	this.speed = Speed, this.direction = 4 ;
 	// 容器建立
 	this.container = new createjs.Container() ;
 	this.container.name = Name ;
@@ -68,14 +68,6 @@ Character.prototype.OnMove = function( x, y ) {
 
 // 按鍵監聽
 Character.prototype.OnTick = function( that ) {
-	if ( pressed[KEYCODE_UP] )
-		that.OnMove( 0, -2 ) ;
-	else if ( pressed[KEYCODE_DOWN] )
-		that.OnMove( 0, 2 ) ;
-	if ( pressed[KEYCODE_LEFT] )
-		that.OnMove( -2, 0 ) ;
-	else if ( pressed[KEYCODE_RIGHT] )
-		that.OnMove( 2, 0 ) ;
 	if ( pressed[KEYCODE_Z] )
 		; //that.sprite.gotoAndPlay( "attack" ), this.OnPlaySound( "attack" ) ;
 		// var tween = createjs.Tween.get( that, { loop: false } ).call( function() { that.sprite.gotoAndPlay( "attack" ) ; } )
@@ -100,6 +92,7 @@ Character.prototype.OnActive = function() {
 	}) ;
 } // OnActive()
 
+// 角色移動, 使用虛擬坐標
 Character.prototype.OnWalk = function( x, y ) {
 	var trim_x = this.container.regX, trim_y = this.container.regY * 0.3 ;
 	var start_x = this.MapControlPointer.GetGrid( ( this.container.x - trim_x ), 'x', 'real' ) ;
@@ -107,12 +100,8 @@ Character.prototype.OnWalk = function( x, y ) {
 	var location_x = this.MapControlPointer.GetGrid( x, 'x', 'virtual' ) + trim_x ;
 	var location_y = this.MapControlPointer.GetGrid( y, 'y', 'virtual' ) + trim_y ;
 	var trim_speed = 5 * GetDistance( this.container.x, this.container.y, location_x, location_y ) ;
-
 	var direction = ( start_x != x ) ? ( ( start_x - x > 0 ) ? 6 : 2 ) : 0 ;
 	direction += ( direction != 0 ) ? ( ( start_y != y ) ? ( ( ( start_y - y > 0 ) ? 1 : -1 ) * ( ( direction == 2 ) ? 1 : -1 ) ) : 0 ) : ( ( start_y != y ) ? ( ( start_y - y > 0 ) ? 4 : 0 ) : -1 ) ;
-
-	this.OnTalk( '坐標(' + start_x + ',' + start_y + ')->(' + x + ',' + y + ') 方向:' + direction ) ;
-
 	var that = this ;
 	createjs.Tween.get( this.container, { loop: false } ).call( function() { that.OnDirection( direction, "walk" ) } )
 														.to( { x: location_x, y: location_y }, trim_speed, createjs.Ease.quadInOut )
@@ -122,6 +111,7 @@ Character.prototype.OnWalk = function( x, y ) {
 // 旋轉角色方向/改變播放圖層
 Character.prototype.OnDirection = function( direction, type ) {
 	this.sprite.scaleX = ( direction != -1 ) ? ( ( direction > 0 && direction <= 4 ) ? -1 : 1 ) : direction ;
+	this.direction = ( direction != -1 ) ? direction : this.direction ;
 	this.sprite.gotoAndPlay( type ) ;
 } // OnDirection()
 
@@ -215,11 +205,3 @@ Character.prototype.TimeSleep = function( func ) {
 	}, 1000 ) ;
 } // TimeSleep()
 
-function GetDistance( x1, y1, x2, y2 ) {
-    var xs = x1 - x2 ;
-    xs = xs * xs;
-    var ys = y1 - y2 ;
-    ys = ys * ys ;
-
-    return Math.sqrt( xs + ys );
-} // GetDistance()

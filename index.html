@@ -2,17 +2,20 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>CCSP_CreateJS_test</title>
-	<!--<script src="http://code.createjs.com/createjs-2013.12.12.min.js"></script>-->
-	
-	<script src = "src/createjs-2013.12.12.min.js"></script>
-	<script src = "src/RPG/global_function.js"></script>
-	<script src = "src/RPG/sprite_choose.js"></script>
-	<script src = "src/RPG/map.js"></script>
-	<script src = "src/RPG/npc.js"></script>
-	<script src = "src/RPG/character.js"></script>
-	<script src = "src/RPG/monster.js"></script>
-	<script src = "src/RPG/framework.js"></script>
+	<title>Stardust Script</title>
+
+	<link href="css/pepper-grinder/jquery-ui-1.10.4.custom.css" rel="stylesheet">
+	<script src="src/jquery-1.10.2.js"></script>
+	<script src="src/jquery-ui-1.10.4.custom.js"></script>
+
+	<script src="src/createjs-2013.12.12.min.js"></script>
+	<script src="src/RPG/global_function.js"></script>
+	<script src="src/RPG/sprite_choose.js"></script>
+	<script src="src/RPG/map.js"></script>
+	<script src="src/RPG/npc.js"></script>
+	<script src="src/RPG/character.js"></script>
+	<script src="src/RPG/monster.js"></script>
+	<script src="src/RPG/framework.js"></script>
 
 	<script>
 		var stage ;
@@ -27,19 +30,30 @@
 			var framework = new Main_Framework( canvas_len, canvas_hei ) ;
 			// 建立角色物件
 			var baphomet = new Character( mapcontrol, "baphomet", 175, 55, 1.00, 9, 3, "front" ) ;
+			var farmiliar_01 = new NPC( mapcontrol, "farmiliar", 19, 1, 6, "monster", "farmiliar" ) ;
+			var farmiliar_02 = new NPC( mapcontrol, "farmiliar", 19, 1, 6, "monster", "farmiliar" ) ;
+			var farmiliar_03 = new NPC( mapcontrol, "farmiliar", 19, 1, 6, "monster", "farmiliar" ) ;
 
-			baphomet.OnLifeModify( -100, -20 ) ;
+			baphomet.OnLifeModify( -100, -40 ) ;
 			createjs.Tween.get( baphomet.container, { loop: false } )
-								.wait( 1000 ).call( function() { baphomet.OnTalk( "哈囉, ^^" ) ; } )
-								// .wait( 1000 ).call( function() { baphomet.OnWalk( 2, 1 ) ; } )
-								// .wait( 3500 ).call( function() { baphomet.OnTalk( "我" ) ; } )
-								// .wait( 3500 ).call( function() { baphomet.OnTalk( "Q" ) ; } )
-								.wait( 3500 ).call( function() { baphomet.OnTalk( "test" ) ; } )
+								.wait( 1000 ).call( function() { baphomet.OnTalk( "哈囉, 老師^^" ) ; } )
+								.wait( 1000 ).call( function() { baphomet.OnWalk( 4, 4 ) ; } )
+								.wait( 1500 ).call( function() { baphomet.OnWalk( 5, 4 ) ; } )
+								.wait( 1000 ).call( function() { baphomet.OnTalk( "這裡的話簡單的介紹了我求學期間寫過的程式," ) ; } )
+								.wait(    0 ).call( function() { farmiliar_01.OnWalk( 9, 3 ) ; } )
+								.wait( 1000 ).call( function() { $( "#dialog" ).dialog( "open" ) ; } )
+								.wait(  500 ).call( function() { farmiliar_02.OnWalk( 11, 3 ) ; } )
+								.wait(  500 ).call( function() { farmiliar_03.OnWalk( 13, 3 ) ; } )
+								.wait( 2500 ).call( function() { baphomet.OnTalk( "以及我的在校成績。" ) ; } )
+								.wait( 3500 ).call( function() { farmiliar_01.OnTalk( "我負責介紹大一程式, 吱吱。" ) ; } )
+								.wait(    0 ).call( function() { farmiliar_01.OnWalk( 12, 6 ) ; } )
+								.wait( 3500 ).call( function() { farmiliar_02.OnTalk( "吱, 我來介紹大二程式。" ) ; } )
+								.wait(    0 ).call( function() { farmiliar_02.OnWalk( 14, 4 ) ; } )
+								.wait( 3500 ).call( function() { farmiliar_03.OnTalk( "吱吱... 大三..." ) ; } )
+								.wait(    0 ).call( function() { farmiliar_03.OnWalk( 16, 2 ) ; } )
+								.wait( 1000 ).call( function() { baphomet.OnTalk( "走到該蝙蝠附近, 就可以觀看囉。（移動滑鼠）" ) ; } )
 
 								;
-
-
-
 
 			// 地圖背景匯入
 			stage.addChild( mapcontrol.backgorond ) ;
@@ -47,16 +61,58 @@
 			stage.addChild( mapcontrol.container_back ) ;
 			// 主要角色匯入
 			stage.addChild( baphomet.container ) ;
+			stage.addChild( farmiliar_01.container, farmiliar_02.container, farmiliar_03.container ) ;
 			// 地圖景效物件匯入(前端)
 			stage.addChild( mapcontrol.container_front ) ;
 			// 遊戲主框架匯入
 		    stage.addChild( framework.container ) ;
+
+		    // jQuery Setting.
+		    $( '#dialog' ).dialog({
+				autoOpen: false,
+				height: 180,
+				modal: true,
+				show: {
+					effect: "blind",
+					duration: 1000
+				},
+				hide: {
+					effect: "blind",
+					duration: 500
+				},
+				buttons: {
+					"我要觀看": function() {
+						createjs.Tween.get( baphomet.container, { loop: false } )
+											.wait( 1000 ).call( function() { farmiliar_01.OnTalk( "吱吱, 我知道了, 等我一下。" ) ; } ) ;
+						$( this ).dialog( "close" ) ;
+					},
+					"取消": function() {
+						$( this ).dialog( "close" ) ;
+					}
+				}
+			}) ;
 		} // init()
 	</script>
 </head>
+
 <body onload="init()" bgcolor="#ACA">
 	<canvas id="myCanvas" width="900" height="550" style="position: absolute; top:50%; left:50%; margin-left: -450px; margin-top: -285px; border-radius: 10px">
 		Alternative Content
 	</canvas>
+
+	<div id="dialog" title="吸血蝙蝠小弟">
+		<p>你要觀看鮭魚的大一記錄嗎？</p>
+	</div>
+
+	<div id="dialog" title="吸血蝙蝠二哥">
+		<p>你要觀看鮭魚的大二記錄嗎？</p>
+	</div>
+
+	<div id="dialog_03" title="吸血蝙蝠大哥">
+		<p>你要觀看鮭魚的大三記錄嗎？</p>
+	</div>
+
+
+
 </body>
 </html>

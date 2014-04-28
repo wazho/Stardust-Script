@@ -15,6 +15,17 @@ SettingSprite = function( type, name ) {
 				}
 			} )
 	} // if
+	else if ( type == "monster" ) {
+		if ( name == "farmiliar" )
+			spriteSheet = new createjs.SpriteSheet( {
+				"images": ["pic/monster/farmiliar.png"], 
+				"frames": { "width": 125, "height": 125, "regX": 0, "regY": 0, "count": 36 },
+				"animations": {
+					"front": { "frames": [0,1,2,3,4,5,6,7], "speed": 0.3 },
+					"walk": { "frames": [0,1,2,3,4,5,6,7], "speed": 0.3 }
+				}
+			} ) 
+	} // else if
 	else if ( type == "effect" ) {
 		if ( name == "sk_blessing" )
 			spriteSheet = new createjs.SpriteSheet( {

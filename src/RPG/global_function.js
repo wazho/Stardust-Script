@@ -38,3 +38,12 @@ function halfFullCheck( type, text ) {
 	var arr = ( type == "half" ) ? text.match( /[\x00-\xff]/g ) : text.match( /[^\x00-\xff]/g ) ; 
 	return ( arr ) ? arr.length : 0 ;
 } // halfFullCheck
+
+function GetDistance( x1, y1, x2, y2 ) {
+    var xs = x1 - x2 ;
+    xs = xs * xs;
+    var ys = y1 - y2 ;
+    ys = ys * ys ;
+
+    return Math.sqrt( xs + ys );
+} // GetDistance()
