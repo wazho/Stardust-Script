@@ -22,22 +22,23 @@
 			// 定義畫布長寬
 			var canvas_len = 900, canvas_hei = 550 ;
 			// 建立地圖框架
-			var mapcontrol = new Main_Map( canvas_len, canvas_hei, true ) ;
+			var mapcontrol = new Main_Map( "01", canvas_len, canvas_hei, true ) ;
 			// 建立遊戲框架
 			var framework = new Main_Framework( canvas_len, canvas_hei ) ;
 			// 建立角色物件
-			var baphomet = new Character( mapcontrol, "baphomet", 175, 55, 1.00, 600, 450, "front" ) ;
+			var baphomet = new Character( mapcontrol, "baphomet", 175, 55, 1.00, 9, 3, "front" ) ;
 
 			baphomet.OnLifeModify( -100, -20 ) ;
-			baphomet.OnTalk( "Welcome !! 歡迎光臨 !!" ) ;
+			createjs.Tween.get( baphomet.container, { loop: false } )
+								.wait( 1000 ).call( function() { baphomet.OnTalk( "哈囉, ^^" ) ; } )
+								// .wait( 1000 ).call( function() { baphomet.OnWalk( 2, 1 ) ; } )
+								// .wait( 3500 ).call( function() { baphomet.OnTalk( "我" ) ; } )
+								// .wait( 3500 ).call( function() { baphomet.OnTalk( "Q" ) ; } )
+								.wait( 3500 ).call( function() { baphomet.OnTalk( "test" ) ; } )
+
+								;
 
 
-
-			var machine_container = new createjs.Container() ;
-			machine_container.regX = 0, machine_container.regY = 0 ;
-			machine_container.addChild( yar ) ;
-
-			var fake = new NPC( mapcontrol, "Husky", 14, 7, 1, "npc_01" ) ;
 
 
 			// 地圖背景匯入
@@ -46,8 +47,6 @@
 			stage.addChild( mapcontrol.container_back ) ;
 			// 主要角色匯入
 			stage.addChild( baphomet.container ) ;
-				stage.addChild( machine_container ) ;
-				stage.addChild( fake.container ) ;
 			// 地圖景效物件匯入(前端)
 			stage.addChild( mapcontrol.container_front ) ;
 			// 遊戲主框架匯入

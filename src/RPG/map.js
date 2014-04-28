@@ -1,6 +1,6 @@
-function Main_Map( len, hei, switch_debug ) {
+function Main_Map( map_num, len, hei, switch_debug ) {
 	// 背景建立
-	this.backgorond = new createjs.Bitmap( "pic/map/map_01.jpg" ) ;
+	this.backgorond = new createjs.Bitmap( "pic/map/map_" + map_num + ".jpg" ) ;
 	// 容器建立(前端與後端)
 	this.container_front = new createjs.Container() ;
 	this.container_back = new createjs.Container() ;
@@ -29,16 +29,13 @@ Main_Map.prototype.GridCreate = function( switch_debug ) {
 
 } // GridCreate()
 
-// 座標系建立, 左下方為(1,1)
+// type'real'    -> real coordinate to virtual grid
+// type'virtual' -> virtual grid to real coordinate 
 Main_Map.prototype.GetGrid = function( grid, select, type ) {
-	if ( select == 'x' ) {
-		result = ( type == 'real' ) ? ( Math.ceil( this.grid.x_max - Math.abs( this.container_front.length - grid ) / this.grid.size ) ) : grid ;
-		return ( ( result - 0.5 ) * this.grid.size ) ;
-	} // if
-	else if ( select == 'y' ) {
-		result = ( type == 'real' ) ? ( Math.ceil( Math.abs( this.container_front.height - grid ) / this.grid.size ) ) : grid ;
-		return ( this.container_front.height - ( result - 0.5 ) * this.grid.size ) ;
-	} // else if
+	if ( select == 'x' )
+		return ( ( type == 'real' ) ? ( Math.ceil( this.grid.x_max - Math.abs( this.container_front.length - grid ) / this.grid.size ) ) : ( ( grid - 0.5 ) * this.grid.size ) ) ;
+	else if ( select == 'y' )
+		return ( ( type == 'real' ) ? ( Math.ceil( Math.abs( this.container_front.height - grid ) / this.grid.size ) ) : ( this.container_front.height - ( grid - 0.5 ) * this.grid.size ) ) ;
 } // GetGrid()
 
 // 漂浮物件建立

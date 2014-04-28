@@ -14,19 +14,20 @@ Character.prototype.OnCreate = function( MapControl, Name, HP, SP, Speed, x, y, 
 	this.name = Name ;
 	this.hp_max = HP, this.hp = HP ;
 	this.sp_max = SP, this.sp = SP ;
-	this.speed = Speed, this.direction = "front" ;
+	this.speed = Speed, this.direction = 6 ;
 	// 容器建立
 	this.container = new createjs.Container() ;
 	this.container.name = Name ;
 	this.container.regX = this.spriteSize / 2, this.container.regY = this.spriteSize / 2 ;
 	this.container.length = this.spriteSize, this.container.height = this.spriteSize ;
-	this.container.x = x, this.container.y = y ;
+	this.container.x = this.MapControlPointer.GetGrid( x, 'x', 'virtual' ) + this.container.regX ;
+	this.container.y = this.MapControlPointer.GetGrid( y, 'y', 'virtual' ) + this.container.regY * 0.3 ;
 	// 圖層建立
 	this.sprite = new createjs.Sprite( SettingSprite( "character", Name ) ) ;
 	this.sprite.regX = this.spriteSize / 2, this.sprite.regY = this.spriteSize / 2 ;
 	this.container.addChild( this.sprite ) ;
 	// 預設動畫的方向
-	this.OnDirection( this.direction ) ;
+	this.OnDirection( this.direction, "front" ) ;
 	// 陰影建立
 	this.sprite.shadow = new createjs.Shadow( "#454", 5, 5, 5 ) ;
 	// 隨從建立
@@ -63,7 +64,6 @@ Character.prototype.OnCreate = function( MapControl, Name, HP, SP, Speed, x, y, 
 // 角色移動
 Character.prototype.OnMove = function( x, y ) {
 	this.container.x += x, this.container.y += y ;
-	// console.log( 'Location modified!  ' + this.sprite.name + '.  x: ' + this.container.x + ', y: ' + this.container.y + '    HP: ' + this.hp + ', SP: ' + this.sp ) ;
 } // OnMove()
 
 // 按鍵監聽
@@ -72,18 +72,12 @@ Character.prototype.OnTick = function( that ) {
 		that.OnMove( 0, -2 ) ;
 	else if ( pressed[KEYCODE_DOWN] )
 		that.OnMove( 0, 2 ) ;
-	if ( pressed[KEYCODE_LEFT] ) {
+	if ( pressed[KEYCODE_LEFT] )
 		that.OnMove( -2, 0 ) ;
-		if ( that.direction != "left" )
-			that.direction = "left", that.sprite.scaleX = 1, that.sprite.gotoAndPlay( "front" ) ;
-	} // if
-	else if ( pressed[KEYCODE_RIGHT] ) {
+	else if ( pressed[KEYCODE_RIGHT] )
 		that.OnMove( 2, 0 ) ;
-		if ( that.direction != "right" )
-			that.direction = "right", that.sprite.scaleX = -1, that.sprite.gotoAndPlay( "front" ) ;
-	} // else if
 	if ( pressed[KEYCODE_Z] )
-		that.sprite.gotoAndPlay( "attack" ), this.OnPlaySound( "attack" ) ;
+		; //that.sprite.gotoAndPlay( "attack" ), this.OnPlaySound( "attack" ) ;
 		// var tween = createjs.Tween.get( that, { loop: false } ).call( function() { that.sprite.gotoAndPlay( "attack" ) ; } )
 		// 														.wait( 600 ).call( function() { that.sprite.gotoAndPlay( "front" ) ; } ) ;	
 	if ( pressed[KEYCODE_X] )
@@ -101,22 +95,34 @@ Character.prototype.OnActive = function() {
 	var that = this ; 
 	createjs.Ticker.addEventListener( "tick", function() { that.OnTick( that ) ; } ) ;
 
-
 	stage.on( "stagemousedown", function( evt ) {
-		that.OnWalk( evt.stageX, evt.stageY ) ;
+		that.OnWalk( that.MapControlPointer.GetGrid( evt.stageX, 'x', 'real' ), that.MapControlPointer.GetGrid( evt.stageY, 'y', 'real' ) ) ;
 	}) ;
 } // OnActive()
 
 Character.prototype.OnWalk = function( x, y ) {
-	var trim_x = this.MapControlPointer.GetGrid( x, 'x', 'real' ) + this.container.regX ;
-	var trim_y = this.MapControlPointer.GetGrid( y, 'y', 'real' ) + this.container.regY * 0.3 ;
-	var trim_speed = 5 * GetDistance( this.container.x, this.container.y, trim_x, trim_y ) ;
-	createjs.Tween.get( this.container, { loop: false } ).to( { x: trim_x, y: trim_y }, trim_speed, createjs.Ease.quadInOut ) ;
+	var trim_x = this.container.regX, trim_y = this.container.regY * 0.3 ;
+	var start_x = this.MapControlPointer.GetGrid( ( this.container.x - trim_x ), 'x', 'real' ) ;
+	var start_y = this.MapControlPointer.GetGrid( ( this.container.y - trim_y ), 'y', 'real' ) ;
+	var location_x = this.MapControlPointer.GetGrid( x, 'x', 'virtual' ) + trim_x ;
+	var location_y = this.MapControlPointer.GetGrid( y, 'y', 'virtual' ) + trim_y ;
+	var trim_speed = 5 * GetDistance( this.container.x, this.container.y, location_x, location_y ) ;
+
+	var direction = ( start_x != x ) ? ( ( start_x - x > 0 ) ? 6 : 2 ) : 0 ;
+	direction += ( direction != 0 ) ? ( ( start_y != y ) ? ( ( ( start_y - y > 0 ) ? 1 : -1 ) * ( ( direction == 2 ) ? 1 : -1 ) ) : 0 ) : ( ( start_y != y ) ? ( ( start_y - y > 0 ) ? 4 : 0 ) : -1 ) ;
+
+	this.OnTalk( '坐標(' + start_x + ',' + start_y + ')->(' + x + ',' + y + ') 方向:' + direction ) ;
+
+	var that = this ;
+	createjs.Tween.get( this.container, { loop: false } ).call( function() { that.OnDirection( direction, "walk" ) } )
+														.to( { x: location_x, y: location_y }, trim_speed, createjs.Ease.quadInOut )
+														.call( function() { that.OnDirection( direction, "front" ) } ) ;
 } // OnWalk()
 
 // 旋轉角色方向/改變播放圖層
-Character.prototype.OnDirection = function( direction ) {
-	this.sprite.gotoAndPlay( direction ) ;
+Character.prototype.OnDirection = function( direction, type ) {
+	this.sprite.scaleX = ( direction != -1 ) ? ( ( direction > 0 && direction <= 4 ) ? -1 : 1 ) : direction ;
+	this.sprite.gotoAndPlay( type ) ;
 } // OnDirection()
 
 // 角色進行對話
@@ -124,7 +130,7 @@ Character.prototype.OnTalk = function( text ) {
 	// 初始化
 	this.OffTalk( 'now' ) ;
 	// 取得對話內容與角色名稱字串總長度, 判斷全形半形
-	var chat_len = ( halfFullCheck( "half", text ) * 1.07 + halfFullCheck( "full", text ) * 2 ) * 10 ;
+	var chat_len = 20 + ( halfFullCheck( "half", text ) * 1.07 + halfFullCheck( "full", text ) * 1.71 ) * 10 ;
 	// 設定對話背景與文字
 	this.talk.bg.alpha = 0.65 ;
 	this.talk.bg.graphics.f( "#000" ).r( 0, 0, chat_len, 25 ) ;
