@@ -30,18 +30,22 @@
 			var framework = new Main_Framework( canvas_len, canvas_hei ) ;
 			// 建立角色物件
 			var baphomet = new Character( mapcontrol, "baphomet", 175, 55, 1.00, 9, 3, "front" ) ;
-			var farmiliar_01 = new NPC( mapcontrol, "farmiliar", 19, 1, 6, "monster", "farmiliar" ) ;
-			var farmiliar_02 = new NPC( mapcontrol, "farmiliar", 19, 1, 6, "monster", "farmiliar" ) ;
-			var farmiliar_03 = new NPC( mapcontrol, "farmiliar", 19, 1, 6, "monster", "farmiliar" ) ;
+			var farmiliar_01 = new NPC( mapcontrol, "farmiliar_01", 19, 1, 6, "monster", "farmiliar" ) ;
+			var farmiliar_01 = new NPC( mapcontrol, "farmiliar_01", 19, 1, 6, "monster", "farmiliar" ) ;
+			var farmiliar_02 = new NPC( mapcontrol, "farmiliar_02", 19, 1, 6, "monster", "farmiliar" ) ;
+			var farmiliar_03 = new NPC( mapcontrol, "farmiliar_03", 19, 1, 6, "monster", "farmiliar" ) ;
 
 			baphomet.OnLifeModify( -100, -40 ) ;
 			createjs.Tween.get( baphomet.container, { loop: false } )
-								.wait( 1000 ).call( function() { baphomet.OnTalk( "哈囉, 老師^^" ) ; } )
+								.wait(    0 ).call( function() { mapcontrol.GetObjectbyGrid( 9, 3 ) ; } )
+								.wait( 1000 ).call( function() { farmiliar_01.OnWalk( 9, 3 ) ; } )
+								.wait(    0 ).call( function() { mapcontrol.GetObjectbyGrid( 9, 3 ) ; } )
+								//.wait( 1000 ).call( function() { $( "#dialog_01" ).dialog( "open" ) ; } )
+								.wait( 1000 ).call( function() { baphomet.OnTalk( "哈囉 ^^" ) ; } )
 								.wait( 1000 ).call( function() { baphomet.OnWalk( 4, 4 ) ; } )
 								.wait( 1500 ).call( function() { baphomet.OnWalk( 5, 4 ) ; } )
-								.wait( 1000 ).call( function() { baphomet.OnTalk( "這裡的話簡單的介紹了我求學期間寫過的程式," ) ; } )
+								.wait( 1000 ).call( function() { baphomet.OnTalk( "這裡簡單的介紹了我求學期間寫過的程式," ) ; } )
 								.wait(    0 ).call( function() { farmiliar_01.OnWalk( 9, 3 ) ; } )
-								.wait( 1000 ).call( function() { $( "#dialog" ).dialog( "open" ) ; } )
 								.wait(  500 ).call( function() { farmiliar_02.OnWalk( 11, 3 ) ; } )
 								.wait(  500 ).call( function() { farmiliar_03.OnWalk( 13, 3 ) ; } )
 								.wait( 2500 ).call( function() { baphomet.OnTalk( "以及我的在校成績。" ) ; } )
@@ -68,10 +72,11 @@
 		    stage.addChild( framework.container ) ;
 
 		    // jQuery Setting.
-		    $( '#dialog' ).dialog({
+		    $( '#dialog_01, #dialog_02, #dialog_03' ).dialog({
 				autoOpen: false,
 				height: 180,
 				modal: true,
+				text: "翻天",
 				show: {
 					effect: "blind",
 					duration: 1000
@@ -91,6 +96,7 @@
 					}
 				}
 			}) ;
+
 		} // init()
 	</script>
 </head>
@@ -100,11 +106,11 @@
 		Alternative Content
 	</canvas>
 
-	<div id="dialog" title="吸血蝙蝠小弟">
+	<div id="dialog_01" title="吸血蝙蝠小弟" number=1>
 		<p>你要觀看鮭魚的大一記錄嗎？</p>
 	</div>
 
-	<div id="dialog" title="吸血蝙蝠二哥">
+	<div id="dialog_02" title="吸血蝙蝠二哥">
 		<p>你要觀看鮭魚的大二記錄嗎？</p>
 	</div>
 

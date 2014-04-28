@@ -14,7 +14,38 @@ function Main_Map( map_num, len, hei, switch_debug ) {
 	this.grid.y_max = Math.ceil( this.container_front.height / this.grid.size ) ;
 	this.GridCreate( switch_debug ) ;
 	this.container_back.addChild( this.grid ) ;
+	// 地圖網格上物件管理
+	this.controlContainer = new createjs.Container() ;
 } // Main_Map()
+
+// 地圖網格上物件管理, 更新物件
+Main_Map.prototype.UpdateObject = function( object ) {
+	this.controlContainer.addChild( object ) ;
+} // UpdateObject()
+
+// 地圖網格上物件管理, 依照名稱取得物件
+Main_Map.prototype.GetObjectbyName = function( name ) {
+	var object_list = this.controlContainer ;
+	var result_list = new createjs.Container() ;
+	for ( i = 0 ; i < object_list.getNumChildren() ; i ++ ) {
+		object = object_list.getChildAt( i ) ;
+		if ( object.name == name )
+			result_list.addChild( object ) ;
+	} // for
+	return result_list ;
+} // GetObjectbyName()
+
+// 地圖網格上物件管理, 依照地圖坐標
+Main_Map.prototype.GetObjectbyGrid = function( x, y ) {
+	var object_list = this.controlContainer ;
+	var result_list = new createjs.Container() ;
+	for ( i = 0 ; i < object_list.getNumChildren() ; i ++ ) {
+		object = object_list.getChildAt( i ) ;
+		if ( object.container.grid_x == x && object.container.grid_y == y )
+			result_list.addChild( object ) ;
+	} // for
+	return result_list ;
+} // GetObjectbyGrid()
 
 // 除錯模式, 畫格建立顯示
 Main_Map.prototype.GridCreate = function( switch_debug ) {
@@ -26,7 +57,6 @@ Main_Map.prototype.GridCreate = function( switch_debug ) {
 			this.debug_mode.graphics.f( "#000" ).r( ( ( ( i + j ) % 2 ) ? this.grid.size :              0 ) + this.grid.size * i, this.grid.size * j, this.grid.size, this.grid.size ) ;
 	if ( switch_debug )
 		this.grid.addChild( this.debug_mode ) ;
-
 } // GridCreate()
 
 // type'real'    -> real coordinate to virtual grid

@@ -12,6 +12,7 @@ NPC.prototype.OnCreate = function( MapControl, Name, x, y, direction, sheet_type
 	this.MapControlPointer = MapControl ;
 	// 基本資訊設值
 	this.name = Name ;
+	this.type = "NPC" ;
 	this.direction = direction ;
 	// 容器建立
 	this.container = new createjs.Container() ;
@@ -20,6 +21,8 @@ NPC.prototype.OnCreate = function( MapControl, Name, x, y, direction, sheet_type
 	this.container.length = this.spriteSize, this.container.height = this.spriteSize ;
 	this.container.x = this.MapControlPointer.GetGrid( x, 'x', 'virtual' ) + this.container.regX ;
 	this.container.y = this.MapControlPointer.GetGrid( y, 'y', 'virtual' ) + this.container.regY * 0.3 ;
+	this.container.grid_x = x ;
+	this.container.grid_y = y ;
 	// 圖層建立
 	this.sprite = new createjs.Sprite( SettingSprite( sheet_type, sheet_name ) ) ;
 	this.sprite.regX = this.spriteSize / 2, this.sprite.regY = this.spriteSize / 2 ;
@@ -40,11 +43,8 @@ NPC.prototype.OnCreate = function( MapControl, Name, x, y, direction, sheet_type
 	this.talk.wd = new createjs.Text( "", "17px Courier New", "#FFF" ) ;
 	this.talk.fadetime = 0 ;
 	this.talk.addChild( this.talk.bg, this.talk.wd ) ;
-
-
-
-
-
+	// 更新於地圖資料上
+	this.MapControlPointer.UpdateObject( this ) ;
 } // OnCreate()
 
 // 角色移動, 使用虛擬坐標
@@ -54,6 +54,7 @@ NPC.prototype.OnWalk = function( x, y ) {
 	var start_y = this.MapControlPointer.GetGrid( ( this.container.y - trim_y ), 'y', 'real' ) ;
 	var location_x = this.MapControlPointer.GetGrid( x, 'x', 'virtual' ) + trim_x ;
 	var location_y = this.MapControlPointer.GetGrid( y, 'y', 'virtual' ) + trim_y ;
+	this.container.grid_x = x, this.container.grid_y = y ;
 	var trim_speed = 5 * GetDistance( this.container.x, this.container.y, location_x, location_y ) ;
 	var direction = ( start_x != x ) ? ( ( start_x - x > 0 ) ? 6 : 2 ) : 0 ;
 	direction += ( direction != 0 ) ? ( ( start_y != y ) ? ( ( ( start_y - y > 0 ) ? 1 : -1 ) * ( ( direction == 2 ) ? 1 : -1 ) ) : 0 ) : ( ( start_y != y ) ? ( ( start_y - y > 0 ) ? 4 : 0 ) : -1 ) ;
