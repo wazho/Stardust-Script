@@ -58,7 +58,8 @@ Character.prototype.OnCreate = function( MapControl, Name, HP, SP, Speed, x, y, 
 	this.OnActive() ;
 	// 自動恢復生命條
 	this.sp_recover = createjs.Tween.get( this, { loop: true } ).wait( 1000 ).call( function() { this.OnLifeModify( 2, 2 ) ; } ) ;
-	// console.log( 'Hi ! I\'m ' + this.name + '.  HP: ' + this.hp + '/' + this.hp_max + ', SP: ' + this.sp + '/' + this.sp_max ) ;
+	// 更新於地圖資料上
+	this.MapControlPointer.UpdateObject( this ) ;
 } // OnCreate()
 
 // 角色移動
@@ -105,7 +106,8 @@ Character.prototype.OnWalk = function( x, y ) {
 	var that = this ;
 	createjs.Tween.get( this.container, { loop: false } ).call( function() { that.OnDirection( direction, "walk" ) } )
 														.to( { x: location_x, y: location_y }, trim_speed, createjs.Ease.quadInOut )
-														.call( function() { that.OnDirection( direction, "front" ) } ) ;
+														.call( function() { that.OnDirection( direction, "front" ) } )
+														.call( function() { that.MapControlPointer.GetObjectbyGrid( x, y ).getChildAt( 0 ).OnDialog() } ) ;
 } // OnWalk()
 
 // 旋轉角色方向/改變播放圖層

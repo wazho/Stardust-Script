@@ -14,6 +14,8 @@ NPC.prototype.OnCreate = function( MapControl, Name, x, y, direction, sheet_type
 	this.name = Name ;
 	this.type = "NPC" ;
 	this.direction = direction ;
+	this.sheet_type = sheet_type ;
+	this.sheet_name = sheet_name ;
 	// 容器建立
 	this.container = new createjs.Container() ;
 	this.container.name = Name ;
@@ -46,6 +48,12 @@ NPC.prototype.OnCreate = function( MapControl, Name, x, y, direction, sheet_type
 	// 更新於地圖資料上
 	this.MapControlPointer.UpdateObject( this ) ;
 } // OnCreate()
+
+// 角色物件複製, 但其實指標內容是相通的
+NPC.prototype.Clone = function() {
+	var cloneContainer = new NPC( this.MapControlPointer, this.name, this.container.grid_x, this.container.grid_y, this.direction, this.sheet_type, this.sheet_name ) ;
+	return cloneContainer ;
+} // Clone()
 
 // 角色移動, 使用虛擬坐標
 NPC.prototype.OnWalk = function( x, y ) {
@@ -106,6 +114,12 @@ NPC.prototype.OffTalk = function( type ) {
 	} // else if
 } // OffTalk()
 
+// 角色視窗型對話
+NPC.prototype.OnDialog = function() {
+	$( "#dialog_01" ).dialog( "open" ) ;
+} // OnDialog()
+
+// 函數進入睡眠延遲
 NPC.prototype.TimeSleep = function( func ) {
 	var that = this ;
 	setTimeout( function() {

@@ -30,7 +30,7 @@ Main_Map.prototype.GetObjectbyName = function( name ) {
 	for ( i = 0 ; i < object_list.getNumChildren() ; i ++ ) {
 		object = object_list.getChildAt( i ) ;
 		if ( object.name == name )
-			result_list.addChild( object ) ;
+			result_list.addChild( object.Clone() ) ;
 	} // for
 	return result_list ;
 } // GetObjectbyName()
@@ -42,7 +42,7 @@ Main_Map.prototype.GetObjectbyGrid = function( x, y ) {
 	for ( i = 0 ; i < object_list.getNumChildren() ; i ++ ) {
 		object = object_list.getChildAt( i ) ;
 		if ( object.container.grid_x == x && object.container.grid_y == y )
-			result_list.addChild( object ) ;
+			result_list.addChild( object.Clone() ) ;
 	} // for
 	return result_list ;
 } // GetObjectbyGrid()
