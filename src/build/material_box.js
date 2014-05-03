@@ -139,7 +139,7 @@ MaterialBox.prototype.OnTexture = function() {
 	this.box.list.page.prevPage.text = new createjs.Text( "<- Previous", "18px comic sans ms", "#000000" ) ;
 	this.box.list.page.prevPage.text.x = 5, this.box.list.page.prevPage.text.y = 17 ;
 	this.box.list.page.prevPage.addChild( this.box.list.page.prevPage.bg, this.box.list.page.prevPage.text ) ;
-	this.box.list.page.prevPage.on( "click", function( evt ) { refresh( that, -1 ) ; } ) ;
+	this.box.list.page.prevPage.on( "click", function( evt ) { Refresh( that, -1 ) ; } ) ;
 	this.box.list.page.nextPage = new createjs.Container() ;
 	this.box.list.page.nextPage.x = 120, this.box.list.page.nextPage.y = 0 ;
 	this.box.list.page.nextPage.bg = new createjs.Shape() ;
@@ -147,7 +147,7 @@ MaterialBox.prototype.OnTexture = function() {
 	this.box.list.page.nextPage.text = new createjs.Text( "Next ->", "18px comic sans ms", "#000000" ) ;
 	this.box.list.page.nextPage.text.x = 18, this.box.list.page.nextPage.text.y = 17 ;
 	this.box.list.page.nextPage.addChild( this.box.list.page.nextPage.bg, this.box.list.page.nextPage.text ) ;
-	this.box.list.page.nextPage.on( "click", function( evt ) { refresh( that, 1 ) ; } ) ;
+	this.box.list.page.nextPage.on( "click", function( evt ) { Refresh( that, 1 ) ; } ) ;
 	this.box.list.page.addChild( this.box.list.page.prevPage, this.box.list.page.nextPage ) ;
 	// Selected for marking.
 	this.box.list.marked = new createjs.Container() ;
