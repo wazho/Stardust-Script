@@ -133,19 +133,22 @@ MaterialBox.prototype.OnTexture = function() {
 		for ( i = 0 ; i < range ; i ++ )
 			for ( j = 0 ; j < range ; j ++ ) {
 				pt.box.list.texture.pic.sourceRect = new createjs.Rectangle( j * size, i * size, size, size ) ;
+				pt.box.list.texture.pic.name = j + 4 * i ;
 				pt.box.list.texture.pic.x = 15 + j * ( size + 1 ), pt.box.list.texture.pic.y = 15 + i * ( size + 1 ) ;
 				pt.box.list.texture.addChild( pt.box.list.texture.pic.clone( false ) ) ;
 			} // for
+		for ( i = 0 ; i < range * range ; i ++ )
+			pt.box.list.texture.getChildAt( i ).on( "click", function( evt ) { console.log( this.name ) ; } ) ;
 		// Text info.
-		pt.box.list.picName = new createjs.Text( "Name: " + pt.box.list.texture.number + ".png", "22px comic sans ms", "#000000" ) ;
-		pt.box.list.picName.x = 35, pt.box.list.picName.y = 287 ;
+		pt.box.list.picName = new createjs.Text( "Name: " + pt.box.list.texture.number + ".png", "18px comic sans ms", "#000000" ) ;
+		pt.box.list.picName.x = 35, pt.box.list.picName.y = 307 ;
 		pt.box.list.texture.addChild( pt.box.list.picName ) ;
 		stage.update() ;
 	} // refresh
 	refresh( this, 0 ) ;
 	// Page change.
 	this.box.list.page = new createjs.Container() ;
-	this.box.list.page.x = 35, this.box.list.page.y = 315 ;
+	this.box.list.page.x = 35, this.box.list.page.y = 355 ;
 	this.box.list.page.prevPage = new createjs.Container() ;
 	this.box.list.page.prevPage.x = 0, this.box.list.page.prevPage.y = 0 ;
 	this.box.list.page.prevPage.bg = new createjs.Shape() ;
