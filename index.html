@@ -95,10 +95,24 @@
 
 		} // init()
 	</script>
+
+	<style>
+		body {
+			background-color: #ACA
+		}
+		#myCanvas {
+			 position: absolute ;
+			 top: 50% ;
+			 left: 50% ;
+			 margin-left: -450px ;
+			 margin-top: -285px ;
+			 border-radius: 10px ;
+		}
+	</style>
 </head>
 
-<body onload="init()" bgcolor="#ACA">
-	<canvas id="myCanvas" width="900" height="550" style="position: absolute; top:50%; left:50%; margin-left: -450px; margin-top: -285px; border-radius: 10px">
+<body onload="init()">
+	<canvas id="myCanvas" width="900" height="550">
 		Alternative Content
 	</canvas>
 
@@ -113,8 +127,5 @@
 	<div id="dialog_03" title="吸血蝙蝠大哥">
 		<p>吱吱</p>
 	</div>
-
-
-
 </body>
 </html>

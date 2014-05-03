@@ -1,0 +1,50 @@
+<!DOCTYPE  html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Stardust Script - Making map</title>
+
+	<link href="css/pepper-grinder/jquery-ui-1.10.4.custom.css" rel="stylesheet">
+	<script src="src/jquery-1.10.2.js"></script>
+	<script src="src/jquery-ui-1.10.4.custom.js"></script>
+
+	<script src="src/createjs-2013.12.12.min.js"></script>
+	<script src="src/build/texture_box.js"></script>
+	<script src="src/build/preview_box.js"></script>
+
+	<script>
+		var stage ;
+		function init() {
+			stage = new createjs.Stage( "myCanvas" ) ;
+    		document.body.style.cursor = "url('pic/cursor/normal_select.cur'), default" ;
+
+			var preview = new PreviewBox() ;
+			var texture = new TextureBox() ;
+
+			stage.addChild( preview.box, texture.box ) ;
+			stage.update() ;
+		} // init()
+	</script>
+
+	<style>
+		body {
+			background-color: #ACD
+		}
+		#myCanvas {
+			top: 50% ;
+			left: 50% ;
+			margin-left: -450px ;
+			margin-top: -285px ;
+			border-radius: 10px ;
+			position: absolute ;
+		}
+	</style>
+</head>
+
+<body onload="init()">
+	<canvas id="myCanvas" width="900" height="550">
+		Alternative Content
+	</canvas>
+</body>
+
+</html>
