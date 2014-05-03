@@ -281,6 +281,7 @@ MaterialBox.prototype.OnOption = function() {
 	this.box.list.newPage.text1 = new createjs.Text( "Create New Map", "20px comic sans ms", "#FFFFFF" ) ;
 	this.box.list.newPage.text1.x = 22, this.box.list.newPage.text1.y = 7 ;
 	this.box.list.newPage.addChild( this.box.list.newPage.bg, this.box.list.newPage.text1 ) ;
+	this.box.list.newPage.on( "click", function( evt ) { $( "#dialog_01" ).dialog( "open" ) ; } ) ;
 
 	this.box.list.save = new createjs.Container() ;
 	this.box.list.save.x = 45, this.box.list.save.y = 340 ;
@@ -289,5 +290,5 @@ MaterialBox.prototype.OnOption = function() {
 	this.box.list.save.bg.graphics.f( "#AA0000" ).r( 0, 0, 200, 30 ) ;
 	this.box.list.save.text1 = new createjs.Text( "Save the Map to json", "18px comic sans ms", "#FFFFFF" ) ;
 	this.box.list.save.text1.x = 12, this.box.list.save.text1.y = 8 ;
-	this.box.list.save.addChild( this.box.list.save.bg, this.box.list.save.text1 ) ;
+	this.box.list.save.addChild( this.box.list.save.bg, this.box.list.save.text1 ) ;	
 } // OnOption()

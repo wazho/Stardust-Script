@@ -26,12 +26,50 @@
 			// 換面更新幀數
 			createjs.Ticker.addEventListener( "tick", tick ) ;
 			createjs.Ticker.setFPS( 500 ) ;
+
+			function tick( event ) {
+				stage.update() ;
+			} // tick()
+
+		    // jQuery Setting.
+		    $( '#dialog_01' ).dialog({
+				autoOpen: false,
+				height: 180,
+				modal: true,
+				show: {
+					effect: "blind",
+					duration: 1000
+				},
+				hide: {
+					effect: "blind",
+					duration: 500
+				},
+				buttons: {
+					"Create": function() {
+						$( this ).dialog( "close" ) ;
+						$( "#dialog_02" ).dialog( "open" ) ;
+					},
+					"Cancel": function() {
+						$( this ).dialog( "close" ) ;
+					}
+				}
+			}) ;
+		    // jQuery Setting.
+		    $( '#dialog_02' ).dialog({
+				autoOpen: false,
+				width: 550,
+				height: 400,
+				modal: true,
+				show: {
+					effect: "blind",
+					duration: 1000
+				},
+				hide: {
+					effect: "blind",
+					duration: 500
+				}
+			}) ;
 		} // init()
-
-
-		function tick( event ) {
-			stage.update() ;
-		} // tick()
 	</script>
 
 	<style>
@@ -55,6 +93,14 @@
 	<canvas id="myCanvas" width="1000" height="550">
 		Alternative Content
 	</canvas>
+
+	<div id="dialog_01" title="Tiled Map Editor" number=1>
+		<p>Do yo wanna create a new map?</p>
+	</div>
+
+	<div id="dialog_02" title="Tiled Map Editor">
+		<p>Please key in you map size.</p>
+	</div>
 </body>
 
 </html>
