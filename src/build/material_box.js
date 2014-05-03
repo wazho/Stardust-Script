@@ -84,7 +84,8 @@ MaterialBox.prototype.OnCreate = function() {
 	this.box.list = new createjs.Container() ;
 	this.box.list.x = 30, this.box.list.y = 80 ;
 	this.box.addChild( this.box.list ) ;
-	this.OnInit() ;
+	this.OnSelectEffect( this.box.selector.buttonF ) ;
+	this.OnOption() ;
 } // OnCreate()
 
 MaterialBox.prototype.OnSelectEffect = function( select ) {
@@ -96,22 +97,6 @@ MaterialBox.prototype.OnSelectEffect = function( select ) {
 	this.box.selector.buttonF.text.color = "#000000" ;
 	select.text.color = "#FF0000" ;
 } // OnSelectEffect()
-
-// 
-MaterialBox.prototype.OnInit = function() {
-	// Remove original list first.
-	this.box.list.removeAllChildren() ;
-	// List background.
-	this.box.list.bg = new createjs.Shape() ;
-	this.box.list.bg.graphics.f( "#FFF3DA" ).r( 0, 0, 290, 440 ) ;
-
-	this.box.list.pic = new createjs.Bitmap( "pic/husky.png" ) ;
-	this.box.list.pic.x = this.box.list.pic.y = 5 ;
-	this.box.list.pic.scaleX = this.box.list.pic.scaleY = 0.35 ;
-	this.box.list.author = new createjs.Text( "Tiled map editor\n\nMade by Salmon", "24px comic sans ms", "#000000" ) ;
-	this.box.list.author.x = 53, this.box.list.author.y = 307 ;
-	this.box.list.addChild( this.box.list.bg, this.box.list.pic, this.box.list.author ) ;
-} // OnInit()
 
 // 
 MaterialBox.prototype.OnTexture = function() {
@@ -281,8 +266,15 @@ MaterialBox.prototype.OnOption = function() {
 	this.box.list.bg.graphics.f( "#FFF3AD" ).r( 0, 0, 290, 440 ) ;
 	this.box.list.addChild( this.box.list.bg ) ;
 
+	this.box.list.pic = new createjs.Bitmap( "pic/husky.png" ) ;
+	this.box.list.pic.x = this.box.list.pic.y = 5 ;
+	this.box.list.pic.scaleX = this.box.list.pic.scaleY = 0.35 ;
+	this.box.list.author = new createjs.Text( "Made by Salmon (http://salmon.tw)", "12px comic sans ms", "#000000" ) ;
+	this.box.list.author.x = 48, this.box.list.author.y = 405 ;
+	this.box.list.addChild( this.box.list.bg, this.box.list.pic, this.box.list.author ) ;
+
 	this.box.list.newPage = new createjs.Container() ;
-	this.box.list.newPage.x = 45, this.box.list.newPage.y = 30 ;
+	this.box.list.newPage.x = 45, this.box.list.newPage.y = 290 ;
 	this.box.list.addChild( this.box.list.newPage ) ;
 	this.box.list.newPage.bg = new createjs.Shape() ;
 	this.box.list.newPage.bg.graphics.f( "#AA0000" ).r( 0, 0, 200, 30 ) ;
@@ -291,7 +283,7 @@ MaterialBox.prototype.OnOption = function() {
 	this.box.list.newPage.addChild( this.box.list.newPage.bg, this.box.list.newPage.text1 ) ;
 
 	this.box.list.save = new createjs.Container() ;
-	this.box.list.save.x = 45, this.box.list.save.y = 125 ;
+	this.box.list.save.x = 45, this.box.list.save.y = 340 ;
 	this.box.list.addChild( this.box.list.save ) ;
 	this.box.list.save.bg = new createjs.Shape() ;
 	this.box.list.save.bg.graphics.f( "#AA0000" ).r( 0, 0, 200, 30 ) ;
