@@ -31,13 +31,15 @@ PreviewBox.prototype.OnTiledControl = function() {
 	this.box.mapbox.tiled = new createjs.Container() ;
 	this.box.mapbox.tiled.x = 0, this.box.mapbox.tiled.y = 0 ;
 	this.box.mapbox.addChild( this.box.mapbox.tiled ) ;
-	this.box.mapbox.tiled.pic = new createjs.Bitmap( src + "0.png" ) ;
 	for ( i = 0 ; i < height ; i ++ )
 		for ( j = 0 ; j < length ; j ++ ) {
-			this.box.mapbox.tiled.pic.sourceRect = new createjs.Rectangle( 0, 0, size, size ) ;
-			this.box.mapbox.tiled.pic.name = i * length + j ;
-			this.box.mapbox.tiled.pic.x = j * size, this.box.mapbox.tiled.pic.y = i * size ;
-			this.box.mapbox.tiled.addChild( this.box.mapbox.tiled.pic.clone( false ) ) ;
+			this.box.mapbox.tiled.single = new createjs.Container() ;
+			this.box.mapbox.tiled.single.pic = new createjs.Bitmap( src + "0.png" ) ;
+			this.box.mapbox.tiled.single.pic.sourceRect = new createjs.Rectangle( 0, 0, size, size ) ;
+			this.box.mapbox.tiled.single.addChild( this.box.mapbox.tiled.single.pic ) ;
+			this.box.mapbox.tiled.single.name = i * length + j ;
+			this.box.mapbox.tiled.single.x = j * size, this.box.mapbox.tiled.single.y = i * size ;
+			this.box.mapbox.tiled.addChild( this.box.mapbox.tiled.single.clone( true ) ) ;
 		} // for
 	// Add listening event.
 	for ( i = 0 ; i < length * height ; i ++ )
@@ -45,11 +47,11 @@ PreviewBox.prototype.OnTiledControl = function() {
 
 
 	function Refresh( pt, tiled ) {
+		tiled.removeAllChildren() ;
 		console.log( tiled.name ) ;
-
-		//tiled = new createjs.Bitmap( src + "1.png" ) ;
-		tiled.sourceRect = new createjs.Rectangle( 64, 64, size, size ) ;
-
+		tiled.pic = new createjs.Bitmap( src + "1.png" ) ;
+		tiled.pic.sourceRect = new createjs.Rectangle( 0, 0, size, size ) ;
+		tiled.addChild( tiled.pic ) ;
 		// Refresh canvas.
 		stage.update() ;
 	} // Refresh()
