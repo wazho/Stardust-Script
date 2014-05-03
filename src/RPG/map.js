@@ -1,6 +1,7 @@
 function Main_Map( map_num, len, hei, switch_debug ) {
 	// 背景建立
 	this.backgorond = new createjs.Container() ;
+	this.backgorond.regX = len, this.backgorond.regY = hei ;
 	this.DrawMap() ;
 	// 容器建立(前端與後端)
 	this.container_front = new createjs.Container() ;
@@ -87,7 +88,7 @@ Main_Map.prototype.Float_Object = function( type, start_x, start_y, end_x, end_y
 	// } // GetRand()
 } // Float_Object()
 
-// 
+// DrawMap
 Main_Map.prototype.DrawMap = function() {
 
 	for ( i = 0 ; i < 20 ; i ++ )
@@ -98,6 +99,13 @@ Main_Map.prototype.DrawMap = function() {
 		} // for
 
 
-} // MapDraw()
+} // DrawMap()
 
+Main_Map.prototype.MapMove = function( x, y, speed ) {
+	createjs.Tween.get( this.backgorond, { loop: false } ).to( { x: x, y: y }, speed, createjs.Ease.quadInOut ) ;
+
+
+
+
+} // MapMove
 
