@@ -14,13 +14,32 @@ PreviewBox.prototype.OnCreate = function( material ) {
 	this.box.addChild( this.box.bg ) ;
 	// Map box.
 	this.box.mapbox = new createjs.Container() ;
-	this.box.mapbox.x = 37, this.box.mapbox.y = 50 ;
+	this.box.mapbox.x = 37, this.box.mapbox.y = 70 ;
 	this.box.mapbox.bg = new createjs.Shape() ;
 	this.box.mapbox.bg.graphics.f( "#BBDDAA" ).r( 0, 0, 576, 448 ) ;
 	this.box.mapbox.addChild( this.box.mapbox.bg ) ;
 	this.OnTiledControl() ;
+	// Map silde bar.
+	this.box.bar = new createjs.Container() ;
+	this.box.bar.horizontal = new createjs.Container() ;
+	this.box.bar.horizontal.x = 37, this.box.bar.horizontal.y = 525 ;
+	this.box.bar.vertical = new createjs.Container() ;
+	this.box.bar.vertical.x = 620, this.box.bar.vertical.y = 70 ;
+	this.box.bar.addChild( this.box.bar.horizontal, this.box.bar.vertical ) ;
+	this.box.bar.horizontal.bg = new createjs.Shape() ;
+	this.box.bar.horizontal.bg.graphics.f( "#88FFAA" ).r( 0, 0, 576, 12 ) ;
+	this.box.bar.horizontal.addChild( this.box.bar.horizontal.bg ) ;
+	this.box.bar.vertical.bg = new createjs.Shape() ;
+	this.box.bar.vertical.bg.graphics.f( "#88FFAA" ).r( 0, 0, 12, 448 ) ;
+	this.box.bar.vertical.addChild( this.box.bar.vertical.bg ) ;
+	// Map editor tools.
+	this.box.tool = new createjs.Container() ;
+	this.box.tool.x = 37, this.box.tool.y = 15 ;
+	this.box.tool.bg = new createjs.Shape() ;
+	this.box.tool.bg.graphics.f( "#AAFFBB" ).r( 0, 0, 576, 40 ) ;
+	this.box.tool.addChild( this.box.tool.bg ) ;
 
-	this.box.addChild( this.box.mapbox ) ;
+	this.box.addChild( this.box.mapbox, this.box.bar, this.box.tool ) ;
 } // OnCreate()
 
 // 
