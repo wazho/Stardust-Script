@@ -9,7 +9,7 @@
 	<script src="src/jquery-ui-1.10.4.custom.js"></script>
 
 	<script src="src/createjs-2013.12.12.min.js"></script>
-	<script src="src/build/texture_box.js"></script>
+	<script src="src/build/material_box.js"></script>
 	<script src="src/build/preview_box.js"></script>
 
 	<script>
@@ -19,9 +19,9 @@
     		document.body.style.cursor = "url('pic/cursor/normal_select.cur'), default" ;
 
 			var preview = new PreviewBox() ;
-			var texture = new TextureBox() ;
+			var material = new MaterialBox() ;
 
-			stage.addChild( preview.box, texture.box ) ;
+			stage.addChild( preview.box, material.box ) ;
 			stage.update() ;
 		} // init()
 	</script>
