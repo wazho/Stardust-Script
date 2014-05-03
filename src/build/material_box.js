@@ -106,14 +106,15 @@ MaterialBox.prototype.OnInit = function() {
 	this.box.list.texture = new createjs.Bitmap( "pic/husky.png" ) ;
 	this.box.list.texture.x = this.box.list.texture.y = 5 ;
 	this.box.list.texture.scaleX = this.box.list.texture.scaleY = 0.35 ;
-	this.box.list.text = new createjs.Text( "Tiled map editor\n\n   Made by Salmon", "24px comic sans ms", "#000000" ) ;
-	this.box.list.text.x = 45, this.box.list.text.y = 307 ;
-	this.box.list.addChild( this.box.list.bg, this.box.list.texture, this.box.list.text ) ;
+	this.box.list.author = new createjs.Text( "Tiled map editor\n\n   Made by Salmon", "24px comic sans ms", "#000000" ) ;
+	this.box.list.author.x = 45, this.box.list.author.y = 307 ;
+	this.box.list.addChild( this.box.list.bg, this.box.list.texture, this.box.list.author ) ;
 	stage.update() ;
 } // OnInit()
 
 // 
 MaterialBox.prototype.OnTexture = function() {
+	var that = this ;
 	var size = 64, range = 4 ;
 	var src = "pic/map/texture/" ;
 	// Remove original list first.
@@ -123,18 +124,48 @@ MaterialBox.prototype.OnTexture = function() {
 	this.box.list.bg.graphics.beginFill( "#FFF3DA" ).drawRect( 0, 0, 290, 440 ) ;
 	// Texture select container.
 	this.box.list.texture = new createjs.Container() ;
-	this.box.list.texture.pic = new createjs.Bitmap( src + "02.png" ) ;
-	for ( i = 0 ; i < range ; i ++ )
-		for ( j = 0 ; j < range ; j ++ ) {
-			this.box.list.texture.pic.sourceRect = new createjs.Rectangle( j * size, i * size, size, size ) ;
-			this.box.list.texture.pic.x = 15 + j * ( size + 1 ), this.box.list.texture.pic.y = 15 + i * ( size + 1 ) ;
-			this.box.list.texture.addChild( this.box.list.texture.pic.clone( false ) ) ;
-		} // for
-	// Text info.
-	this.box.list.text = new createjs.Text( "Name: " + "01", "20px comic sans ms", "#000000" ) ;
-	this.box.list.text.x = 35, this.box.list.text.y = 287 ;
+	this.box.list.texture.number = 1 ;
+	// Refresh map texture pics. 
+	function refresh( pt, num ) {
+		pt.box.list.texture.removeAllChildren() ;
+		pt.box.list.texture.number += ( pt.box.list.texture.number + num > 0 ) ? num : 0 ;
+		pt.box.list.texture.pic = new createjs.Bitmap( src + pt.box.list.texture.number + ".png" ) ;
+		for ( i = 0 ; i < range ; i ++ )
+			for ( j = 0 ; j < range ; j ++ ) {
+				pt.box.list.texture.pic.sourceRect = new createjs.Rectangle( j * size, i * size, size, size ) ;
+				pt.box.list.texture.pic.x = 15 + j * ( size + 1 ), pt.box.list.texture.pic.y = 15 + i * ( size + 1 ) ;
+				pt.box.list.texture.addChild( pt.box.list.texture.pic.clone( false ) ) ;
+			} // for
+		// Text info.
+		pt.box.list.picName = new createjs.Text( "Name: " + pt.box.list.texture.number + ".png", "22px comic sans ms", "#000000" ) ;
+		pt.box.list.picName.x = 35, pt.box.list.picName.y = 287 ;
+		pt.box.list.texture.addChild( pt.box.list.picName ) ;
+		stage.update() ;
+	} // refresh
+	refresh( this, 0 ) ;
+	// Page change.
+	this.box.list.page = new createjs.Container() ;
+	this.box.list.page.x = 35, this.box.list.page.y = 315 ;
+	this.box.list.page.prevPage = new createjs.Container() ;
+	this.box.list.page.prevPage.x = 0, this.box.list.page.prevPage.y = 0 ;
+	this.box.list.page.prevPage.bg = new createjs.Shape() ;
+	this.box.list.page.prevPage.bg.graphics.beginFill( "#CCF356" ).drawRect( 0, 0, 100, 50 ) ;
+	this.box.list.page.prevPage.bg.x = 0, this.box.list.page.prevPage.bg.y = 0 ;
+	this.box.list.page.prevPage.text = new createjs.Text( "<- Previous", "18px comic sans ms", "#000000" ) ;
+	this.box.list.page.prevPage.text.x = 5, this.box.list.page.prevPage.text.y = 17 ;
+	this.box.list.page.prevPage.addChild( this.box.list.page.prevPage.bg, this.box.list.page.prevPage.text ) ;
+	this.box.list.page.prevPage.on( "click", function( evt ) { refresh( that, -1 ) ; } ) ;
+	this.box.list.page.nextPage = new createjs.Container() ;
+	this.box.list.page.nextPage.x = 120, this.box.list.page.nextPage.y = 0 ;
+	this.box.list.page.nextPage.bg = new createjs.Shape() ;
+	this.box.list.page.nextPage.bg.graphics.beginFill( "#CCF356" ).drawRect( 0, 0, 100, 50 ) ;
+	this.box.list.page.nextPage.text = new createjs.Text( "Next ->", "18px comic sans ms", "#000000" ) ;
+	this.box.list.page.nextPage.text.x = 18, this.box.list.page.nextPage.text.y = 17 ;
+	this.box.list.page.nextPage.addChild( this.box.list.page.nextPage.bg, this.box.list.page.nextPage.text ) ;
+	this.box.list.page.nextPage.on( "click", function( evt ) { refresh( that, 1 ) ; } ) ;
+	this.box.list.page.addChild( this.box.list.page.prevPage, this.box.list.page.nextPage ) ;
 	// Add to top container.
-	this.box.list.addChild( this.box.list.bg, this.box.list.texture, this.box.list.text ) ;
+	this.box.list.addChild( this.box.list.bg, this.box.list.texture, this.box.list.page ) ;
 	stage.update() ;
 } // OnTexture()
 
