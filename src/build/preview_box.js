@@ -23,10 +23,11 @@ PreviewBox.prototype.OnCreate = function( material ) {
 	this.box.addChild( this.box.mapbox ) ;
 } // OnCreate()
 
-
+// 
 PreviewBox.prototype.OnTiledControl = function() {
 	var that = this ;
 	var size = 64, range = 4, length = 9, height = 7 ;
+	var customer_length = 20, customer_height = 20 ;
 	var src = "pic/map/texture/" ;
 	// Map box tiled.
 	this.box.mapbox.tiled = new createjs.Container() ;
@@ -46,18 +47,29 @@ PreviewBox.prototype.OnTiledControl = function() {
 	for ( i = 0 ; i < length * height ; i ++ )
 		this.box.mapbox.tiled.getChildAt( i ).on( "click", function( evt ) { Refresh( that, this ) ; } ) ;
 
-
 	// Number of map : Math.floor( select / 100 )
 	// Index of tiled : select - Math.floor( select / 100 ) * 100
 	function Refresh( pt, tiled ) {
-		var select = pt.material.box.list.marked.name ;
-		var map = Math.floor( select / 100 ) ;
-		var index = select - Math.floor( ( select / 100 ) ) * 100 ;
-		tiled.removeAllChildren() ;
-		tiled.pic = new createjs.Bitmap( src + map + ".png" ) ;
-		tiled.pic.sourceRect = new createjs.Rectangle( ( index % range ) * size, ( Math.floor( index / range ) ) * size, size, size ) ;
-		tiled.addChild( tiled.pic ) ;
-		// Refresh canvas.
-		stage.update() ;
+		if ( pt.material.box.selector.statusPage == 1 ) {
+			var select = pt.material.box.list.marked.name ;
+			var map = Math.floor( select / 100 ) ;
+			var index = select - Math.floor( ( select / 100 ) ) * 100 ;
+			tiled.removeAllChildren() ;
+			tiled.pic = new createjs.Bitmap( src + map + ".png" ) ;
+			tiled.pic.sourceRect = new createjs.Rectangle( ( index % range ) * size, ( Math.floor( index / range ) ) * size, size, size ) ;
+			tiled.addChild( tiled.pic ) ;
+		} // if
+		else if ( pt.material.box.selector.statusPage == 2 ) {
+
+		} // else if
+		else if ( pt.material.box.selector.statusPage == 3 ) {
+
+		} // else if
+		else if ( pt.material.box.selector.statusPage == 4 ) {
+
+		} // else if
+		else if ( pt.material.box.selector.statusPage == 5 ) {
+
+		} // else if
 	} // Refresh()
 } // OnTiledControl()

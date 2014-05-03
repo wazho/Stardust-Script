@@ -16,6 +16,7 @@ MaterialBox.prototype.OnCreate = function() {
 	this.box.selector = new createjs.Container() ;
 	this.box.selector.x = 25, this.box.selector.y = 25 ;
 	this.box.addChild( this.box.selector ) ;
+	this.box.selector.statusPage = 0 ;
 	this.box.selector.bg = new createjs.Shape() ;
 	this.box.selector.bg.graphics.f( "#FFA54F" ).r( 0, 0, 300, 500 ) ;
 	this.box.selector.addChild( this.box.selector.bg ) ;
@@ -69,16 +70,16 @@ MaterialBox.prototype.OnCreate = function() {
 	this.box.selector.buttonE.text.x = 31, this.box.selector.buttonE.text.y = 7 ;
 	this.box.selector.buttonE.addChild( this.box.selector.buttonE.bg, this.box.selector.buttonE.text ) ;
 	this.box.selector.buttonE.on( "click", function( evt ) { that.OnSelectEffect( that.box.selector.buttonE ) ; that.OnSound() ; } ) ;
-	// Material selector button - save.
+	// Material selector button - option.
 	this.box.selector.buttonF = new createjs.Container() ;
 	this.box.selector.buttonF.x = 200, this.box.selector.buttonF.y = 25 ;
 	this.box.selector.addChild( this.box.selector.buttonF ) ;
 	this.box.selector.buttonF.bg = new createjs.Shape() ;
 	this.box.selector.buttonF.bg.graphics.f( "#87CEEB" ).r( 0, 0, 100, 25 ) ;
-	this.box.selector.buttonF.text = new createjs.Text( "Save", "14px comic sans ms", "#000000" ) ;
-	this.box.selector.buttonF.text.x = 35, this.box.selector.buttonF.text.y = 7 ;
+	this.box.selector.buttonF.text = new createjs.Text( "Option", "14px comic sans ms", "#000000" ) ;
+	this.box.selector.buttonF.text.x = 29, this.box.selector.buttonF.text.y = 7 ;
 	this.box.selector.buttonF.addChild( this.box.selector.buttonF.bg, this.box.selector.buttonF.text ) ;
-	this.box.selector.buttonF.on( "click", function( evt ) { that.OnSelectEffect( that.box.selector.buttonF ) ; that.OnSave() ; } ) ;
+	this.box.selector.buttonF.on( "click", function( evt ) { that.OnSelectEffect( that.box.selector.buttonF ) ; that.OnOption() ; } ) ;
 	// Material list container.
 	this.box.list = new createjs.Container() ;
 	this.box.list.x = 30, this.box.list.y = 80 ;
@@ -110,7 +111,6 @@ MaterialBox.prototype.OnInit = function() {
 	this.box.list.author = new createjs.Text( "Tiled map editor\n\nMade by Salmon", "24px comic sans ms", "#000000" ) ;
 	this.box.list.author.x = 53, this.box.list.author.y = 307 ;
 	this.box.list.addChild( this.box.list.bg, this.box.list.pic, this.box.list.author ) ;
-	stage.update() ;
 } // OnInit()
 
 // 
@@ -120,6 +120,7 @@ MaterialBox.prototype.OnTexture = function() {
 	var src = "pic/map/texture/" ;
 	// Remove original list first.
 	this.box.list.removeAllChildren() ;
+	this.box.selector.statusPage = 1 ;
 	// List background.
 	this.box.list.bg = new createjs.Shape() ;
 	this.box.list.bg.graphics.f( "#FFF3DA" ).r( 0, 0, 290, 440 ) ;
@@ -157,8 +158,6 @@ MaterialBox.prototype.OnTexture = function() {
 	this.box.list.addChild( this.box.list.bg, this.box.list.texture, this.box.list.page, this.box.list.marked ) ;
 	// Refresh map texture pics. 
 	Refresh( this, 0 ) ;
-	// Refresh canvas.
-	stage.update() ;
 
 	function Refresh( pt, num ) {
 		pt.box.list.texture.removeAllChildren() ;
@@ -180,8 +179,6 @@ MaterialBox.prototype.OnTexture = function() {
 		// Add listening event.
 		for ( i = 0 ; i < range * range ; i ++ )
 			pt.box.list.texture.getChildAt( i ).on( "click", function( evt ) { MarkedSelected( that, this ) ; } ) ;
-		// Refresh canvas.
-		stage.update() ;
 
 		// Number of map : Math.floor( tiled.name / 100 )
 		// Index of tiled : tiled.name - Math.floor( tiled.name / 100 ) * 100
@@ -191,16 +188,17 @@ MaterialBox.prototype.OnTexture = function() {
 			var index = tiled.name - Math.floor( ( tiled.name / 100 ) ) * 100 ;
 			pt.box.list.marked.x = 14 + ( index % range ) * ( size + 1 ) ;
 			pt.box.list.marked.y = 14 + ( Math.floor( index / range ) ) * ( size + 1 ) ;
-			stage.update() ;
 		} // MarkedSelected()
 	} // Refresh()
 } // OnTexture()
 
 // 
 MaterialBox.prototype.OnWalkable = function() {
+	var that = this ;
 	var size = 64 ;
 	// Remove original list first.
 	this.box.list.removeAllChildren() ;
+	this.box.selector.statusPage = 2 ;
 	// List background.
 	this.box.list.bg = new createjs.Shape() ;
 	this.box.list.bg.graphics.f( "#FFF3AD" ).r( 0, 0, 290, 440 ) ;
@@ -208,22 +206,40 @@ MaterialBox.prototype.OnWalkable = function() {
 	// Walkable, unwalkable select container.
 	this.box.list.walkable = new createjs.Container() ;
 	this.box.list.walkable.yes = new createjs.Shape() ;
+	this.box.list.walkable.yes.name = "walkable" ;
 	this.box.list.walkable.yes.x = 15, this.box.list.walkable.yes.y = 15 ;
 	this.box.list.walkable.yes.graphics.f( "#00FF00" ).r( 0, 0, size, size ) ;
 	this.box.list.walkable.yes.alpha = 0.5 ;
+	this.box.list.walkable.yes.on( "click", function( evt ) { MarkedSelected( that, this ) ; } ) ;
 	this.box.list.walkable.no = new createjs.Shape() ;
-	this.box.list.walkable.no.x = 15, this.box.list.walkable.no.y = 30 + size ;
+	this.box.list.walkable.no.name = "unwalkable" ;
+	this.box.list.walkable.no.x = 15, this.box.list.walkable.no.y = 95 ;
 	this.box.list.walkable.no.graphics.f( "#FF0000" ).r( 0, 0, size, size ) ;
 	this.box.list.walkable.no.alpha = 0.5 ;
+	this.box.list.walkable.no.on( "click", function( evt ) { MarkedSelected( that, this ) ; } ) ;
 	this.box.list.walkable.addChild( this.box.list.walkable.yes, this.box.list.walkable.no ) ;
 	// Text info.
 	this.box.list.text1 = new createjs.Text( "Walkable", "26px comic sans ms", "#000000" ) ;
 	this.box.list.text1.x = 100, this.box.list.text1.y = 37 ;
 	this.box.list.text2 = new createjs.Text( "Unwalkable", "26px comic sans ms", "#000000" ) ;
 	this.box.list.text2.x = 100, this.box.list.text2.y = 116 ;
+	// Selected for marking.
+	this.box.list.marked = new createjs.Container() ;
+	this.box.list.marked.pane = new createjs.Shape() ;
+	this.box.list.marked.pane.graphics.s( "#0200BE" ).r( 0, 0, size + 1, size + 1 ) ;
+	this.box.list.marked.visible = false ;
+	this.box.list.marked.addChild( this.box.list.marked.pane ) ;
 	// Add to top container.
-	this.box.list.addChild( this.box.list.bg, this.box.list.walkable, this.box.list.text1, this.box.list.text2 ) ;
-	stage.update() ;
+	this.box.list.addChild( this.box.list.bg, this.box.list.walkable, this.box.list.text1, this.box.list.text2, this.box.list.marked ) ;
+
+	function MarkedSelected( pt, con ) {
+		console.log( con.name ) ;
+
+		pt.box.list.marked.name = con.name ;
+		pt.box.list.marked.visible = true ;
+		pt.box.list.marked.x = ( con.name == "walkable" ) ? 14 : 14 ;
+		pt.box.list.marked.y = ( con.name == "walkable" ) ? 14 : 94 ;
+	} // MarkedSelected()
 } // OnWalkable()
 
 // 
@@ -234,8 +250,6 @@ MaterialBox.prototype.OnObject = function() {
 	this.box.list.bg = new createjs.Shape() ;
 	this.box.list.bg.graphics.f( "#FFF3DA" ).r( 0, 0, 290, 440 ) ;
 	this.box.list.addChild( this.box.list.bg ) ;
-
-	stage.update() ;
 } // OnObject()
 
 // 
@@ -246,8 +260,6 @@ MaterialBox.prototype.OnLight = function() {
 	this.box.list.bg = new createjs.Shape() ;
 	this.box.list.bg.graphics.f( "#FFF3AD" ).r( 0, 0, 290, 440 ) ;
 	this.box.list.addChild( this.box.list.bg ) ;
-
-	stage.update() ;
 } // OnLight()
 
 // 
@@ -258,12 +270,10 @@ MaterialBox.prototype.OnSound = function() {
 	this.box.list.bg = new createjs.Shape() ;
 	this.box.list.bg.graphics.f( "#FFF3DA" ).r( 0, 0, 290, 440 ) ;
 	this.box.list.addChild( this.box.list.bg ) ;
-
-	stage.update() ;
 } // OnSound()
 
 // 
-MaterialBox.prototype.OnSave = function() {
+MaterialBox.prototype.OnOption = function() {
 	// Remove original list first.
 	this.box.list.removeAllChildren() ;
 	// List background.
@@ -271,5 +281,21 @@ MaterialBox.prototype.OnSave = function() {
 	this.box.list.bg.graphics.f( "#FFF3AD" ).r( 0, 0, 290, 440 ) ;
 	this.box.list.addChild( this.box.list.bg ) ;
 
-	stage.update() ;
-} // OnSave()
+	this.box.list.newPage = new createjs.Container() ;
+	this.box.list.newPage.x = 45, this.box.list.newPage.y = 30 ;
+	this.box.list.addChild( this.box.list.newPage ) ;
+	this.box.list.newPage.bg = new createjs.Shape() ;
+	this.box.list.newPage.bg.graphics.f( "#AA0000" ).r( 0, 0, 200, 30 ) ;
+	this.box.list.newPage.text1 = new createjs.Text( "Create New Map", "20px comic sans ms", "#FFFFFF" ) ;
+	this.box.list.newPage.text1.x = 22, this.box.list.newPage.text1.y = 7 ;
+	this.box.list.newPage.addChild( this.box.list.newPage.bg, this.box.list.newPage.text1 ) ;
+
+	this.box.list.save = new createjs.Container() ;
+	this.box.list.save.x = 45, this.box.list.save.y = 125 ;
+	this.box.list.addChild( this.box.list.save ) ;
+	this.box.list.save.bg = new createjs.Shape() ;
+	this.box.list.save.bg.graphics.f( "#AA0000" ).r( 0, 0, 200, 30 ) ;
+	this.box.list.save.text1 = new createjs.Text( "Save the Map to json", "18px comic sans ms", "#FFFFFF" ) ;
+	this.box.list.save.text1.x = 12, this.box.list.save.text1.y = 8 ;
+	this.box.list.save.addChild( this.box.list.save.bg, this.box.list.save.text1 ) ;
+} // OnOption()

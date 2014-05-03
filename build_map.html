@@ -22,8 +22,16 @@
 			var preview = new PreviewBox( material ) ;
 
 			stage.addChild( preview.box, material.box ) ;
-			stage.update() ;
+
+			// 換面更新幀數
+			createjs.Ticker.addEventListener( "tick", tick ) ;
+			createjs.Ticker.setFPS( 100 ) ;
 		} // init()
+
+
+		function tick( event ) {
+			stage.update() ;
+		} // tick()
 	</script>
 
 	<style>
