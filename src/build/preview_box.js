@@ -16,4 +16,5 @@ PreviewBox.prototype.OnCreate = function() {
 	this.box.mapbox.x = 50, this.box.mapbox.y = 50 ;
 	this.box.mapbox.graphics.beginFill( "#BBDDAA" ).drawRect( 0, 0, 550, 450 ) ;
 	this.box.addChild( this.box.mapbox ) ;
+	
 } // OnCreate()
