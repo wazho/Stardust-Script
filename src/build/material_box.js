@@ -186,8 +186,9 @@ MaterialBox.prototype.OnTexture = function() {
 		// Number of map : Math.floor( tiled.name / 100 )
 		// Index of tiled : tiled.name - Math.floor( tiled.name / 100 ) * 100
 		function MarkedSelected( pt, tiled ) {
+			pt.box.list.marked.name = tiled.name ;
 			pt.box.list.marked.visible = true ;
-			index = tiled.name - Math.floor( ( tiled.name / 100 ) ) * 100 ;
+			var index = tiled.name - Math.floor( ( tiled.name / 100 ) ) * 100 ;
 			pt.box.list.marked.x = 14 + ( index % range ) * ( size + 1 ) ;
 			pt.box.list.marked.y = 14 + ( Math.floor( index / range ) ) * ( size + 1 ) ;
 			stage.update() ;

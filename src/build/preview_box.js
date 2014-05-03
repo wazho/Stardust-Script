@@ -1,11 +1,12 @@
-function PreviewBox() {
-	this.OnCreate() ;
+function PreviewBox( material ) {
+	this.OnCreate( material ) ;
 	return this ;
 } // PreviewBox() 
 
 // create container
-PreviewBox.prototype.OnCreate = function() {
+PreviewBox.prototype.OnCreate = function( material ) {
 	// Map preview box.
+	this.material = material ;
 	this.box = new createjs.Container() ;
 	this.box.x = 0, this.box.y = 0 ;
 	this.box.bg = new createjs.Shape() ;
@@ -25,7 +26,7 @@ PreviewBox.prototype.OnCreate = function() {
 
 PreviewBox.prototype.OnTiledControl = function() {
 	var that = this ;
-	var size = 64, length = 9, height = 7 ;
+	var size = 64, range = 4, length = 9, height = 7 ;
 	var src = "pic/map/texture/" ;
 	// Map box tiled.
 	this.box.mapbox.tiled = new createjs.Container() ;
@@ -46,11 +47,15 @@ PreviewBox.prototype.OnTiledControl = function() {
 		this.box.mapbox.tiled.getChildAt( i ).on( "click", function( evt ) { Refresh( that, this ) ; } ) ;
 
 
+	// Number of map : Math.floor( select / 100 )
+	// Index of tiled : select - Math.floor( select / 100 ) * 100
 	function Refresh( pt, tiled ) {
+		var select = pt.material.box.list.marked.name ;
+		var map = Math.floor( select / 100 ) ;
+		var index = select - Math.floor( ( select / 100 ) ) * 100 ;
 		tiled.removeAllChildren() ;
-		console.log( tiled.name ) ;
-		tiled.pic = new createjs.Bitmap( src + "1.png" ) ;
-		tiled.pic.sourceRect = new createjs.Rectangle( 0, 0, size, size ) ;
+		tiled.pic = new createjs.Bitmap( src + map + ".png" ) ;
+		tiled.pic.sourceRect = new createjs.Rectangle( ( index % range ) * size, ( Math.floor( index / range ) ) * size, size, size ) ;
 		tiled.addChild( tiled.pic ) ;
 		// Refresh canvas.
 		stage.update() ;

@@ -18,8 +18,8 @@
 			stage = new createjs.Stage( "myCanvas" ) ;
     		document.body.style.cursor = "url('pic/cursor/normal_select.cur'), default" ;
 
-			var preview = new PreviewBox() ;
 			var material = new MaterialBox() ;
+			var preview = new PreviewBox( material ) ;
 
 			stage.addChild( preview.box, material.box ) ;
 			stage.update() ;
