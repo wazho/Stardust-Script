@@ -9,9 +9,6 @@ MaterialBox.prototype.OnCreate = function() {
 	// Material box.
 	this.box = new createjs.Container() ;
 	this.box.x = 650, this.box.y = 0 ;
-	this.box.bg = new createjs.Shape() ;
-	this.box.bg.graphics.f( "#FFCCAA" ).r( 0, 0, 350, 550 ) ;
-	this.box.addChild( this.box.bg ) ;
 	// Material selector container.
 	this.box.selector = new createjs.Container() ;
 	this.box.selector.x = 25, this.box.selector.y = 25 ;

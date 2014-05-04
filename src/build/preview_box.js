@@ -10,8 +10,7 @@ PreviewBox.prototype.OnCreate = function( material ) {
 	// Map preview box.
 	this.box = new createjs.Container() ;
 	this.box.x = 0, this.box.y = 0 ;
-	this.box.bg = new createjs.Shape() ;
-	this.box.bg.graphics.f( "#DDFFDD" ).r( 0, 0, 650, 550 ) ;
+	this.box.bg = new createjs.Bitmap( "pic/map_build/background.jpg" ) ;
 	this.box.addChild( this.box.bg ) ;
 	// Map box and silde bar.
 	this.box.mapbox = new createjs.Container() ;
