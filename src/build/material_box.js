@@ -14,84 +14,81 @@ MaterialBox.prototype.OnCreate = function() {
 	this.box.selector.x = 25, this.box.selector.y = 25 ;
 	this.box.addChild( this.box.selector ) ;
 	this.box.selector.statusPage = 0 ;
-	this.box.selector.bg = new createjs.Shape() ;
-	this.box.selector.bg.graphics.f( "#FFA54F" ).r( 0, 0, 300, 500 ) ;
-	this.box.selector.addChild( this.box.selector.bg ) ;
 	// Material selector button - texture.
 	this.box.selector.buttonA = new createjs.Container() ;
 	this.box.selector.buttonA.x = 0, this.box.selector.buttonA.y = 0 ;
 	this.box.selector.addChild( this.box.selector.buttonA ) ;
-	this.box.selector.buttonA.bg = new createjs.Shape() ;
-	this.box.selector.buttonA.bg.graphics.f( "#00BFFF" ).r( 0, 0, 100, 25 ) ;
-	this.box.selector.buttonA.text = new createjs.Text( "Texture", "14px comic sans ms", "#000000" ) ;
-	this.box.selector.buttonA.text.x = 24, this.box.selector.buttonA.text.y = 7 ;
+	this.box.selector.buttonA.bg = new createjs.Bitmap( "pic/map_build/buttonA.png" ) ;
+	this.box.selector.buttonA.bg.scaleX = this.box.selector.buttonA.bg.scaleY = 0.45 ;
+	this.box.selector.buttonA.text = new createjs.Text( "Texture", "14px comic sans ms", "#FFFFFF" ) ;
+	this.box.selector.buttonA.text.x = 50, this.box.selector.buttonA.text.y = 35 ;
 	this.box.selector.buttonA.addChild( this.box.selector.buttonA.bg, this.box.selector.buttonA.text ) ;
 	this.box.selector.buttonA.on( "click", function( evt ) { that.OnSelectEffect( that.box.selector.buttonA ) ; that.OnTexture() ; } ) ;
 	// Material selector button - walkable.
 	this.box.selector.buttonB = new createjs.Container() ;
 	this.box.selector.buttonB.x = 100, this.box.selector.buttonB.y = 0 ;
 	this.box.selector.addChild( this.box.selector.buttonB ) ;
-	this.box.selector.buttonB.bg = new createjs.Shape() ;
-	this.box.selector.buttonB.bg.graphics.f( "#87CEEB" ).r( 0, 0, 100, 25 ) ;
-	this.box.selector.buttonB.text = new createjs.Text( "Walkable", "14px comic sans ms", "#000000" ) ;
-	this.box.selector.buttonB.text.x = 21, this.box.selector.buttonB.text.y = 7 ;
+	this.box.selector.buttonB.bg = new createjs.Bitmap( "pic/map_build/buttonB.png" ) ;
+	this.box.selector.buttonB.bg.scaleX = this.box.selector.buttonB.bg.scaleY = 0.45 ;
+	this.box.selector.buttonB.text = new createjs.Text( "Walk", "14px comic sans ms", "#FFFFFF" ) ;
+	this.box.selector.buttonB.text.x = 58, this.box.selector.buttonB.text.y = 35 ;
 	this.box.selector.buttonB.addChild( this.box.selector.buttonB.bg, this.box.selector.buttonB.text ) ;
 	this.box.selector.buttonB.on( "click", function( evt ) { that.OnSelectEffect( that.box.selector.buttonB ) ; that.OnWalkable() ; } ) ;
 	// Material selector button - object.
 	this.box.selector.buttonC = new createjs.Container() ;
 	this.box.selector.buttonC.x = 200, this.box.selector.buttonC.y = 0 ;
 	this.box.selector.addChild( this.box.selector.buttonC ) ;
-	this.box.selector.buttonC.bg = new createjs.Shape() ;
-	this.box.selector.buttonC.bg.graphics.f( "#00BFFF" ).r( 0, 0, 100, 25 ) ;
-	this.box.selector.buttonC.text = new createjs.Text( "Object", "14px comic sans ms", "#000000" ) ;
-	this.box.selector.buttonC.text.x = 27, this.box.selector.buttonC.text.y = 7 ;
+	this.box.selector.buttonC.bg = new createjs.Bitmap( "pic/map_build/buttonC.png" ) ;
+	this.box.selector.buttonC.bg.scaleX = this.box.selector.buttonC.bg.scaleY = 0.45 ;
+	this.box.selector.buttonC.text = new createjs.Text( "Object", "14px comic sans ms", "#FFFFFF" ) ;
+	this.box.selector.buttonC.text.x = 50, this.box.selector.buttonC.text.y = 35 ;
 	this.box.selector.buttonC.addChild( this.box.selector.buttonC.bg, this.box.selector.buttonC.text ) ;
 	this.box.selector.buttonC.on( "click", function( evt ) { that.OnSelectEffect( that.box.selector.buttonC ) ; that.OnObject() ; } ) ;
 	// Material selector button - light.
 	this.box.selector.buttonD = new createjs.Container() ;
-	this.box.selector.buttonD.x = 0, this.box.selector.buttonD.y = 25 ;
+	this.box.selector.buttonD.x = 45, this.box.selector.buttonD.y = 45 ;
 	this.box.selector.addChild( this.box.selector.buttonD ) ;
-	this.box.selector.buttonD.bg = new createjs.Shape() ;
-	this.box.selector.buttonD.bg.graphics.f( "#87CEEB" ).r( 0, 0, 100, 25 ) ;
-	this.box.selector.buttonD.text = new createjs.Text( "Light", "14px comic sans ms", "#000000" ) ;
-	this.box.selector.buttonD.text.x = 35, this.box.selector.buttonD.text.y = 7 ;
+	this.box.selector.buttonD.bg = new createjs.Bitmap( "pic/map_build/buttonD.png" ) ;
+	this.box.selector.buttonD.bg.scaleX = this.box.selector.buttonD.bg.scaleY = 0.45 ;
+	this.box.selector.buttonD.text = new createjs.Text( "Light", "14px comic sans ms", "#FFFFFF" ) ;
+	this.box.selector.buttonD.text.x = -32, this.box.selector.buttonD.text.y = 35 ;
 	this.box.selector.buttonD.addChild( this.box.selector.buttonD.bg, this.box.selector.buttonD.text ) ;
 	this.box.selector.buttonD.on( "click", function( evt ) { that.OnSelectEffect( that.box.selector.buttonD ) ; that.OnLight() ; } ) ;
 	// Material selector button - sound.
 	this.box.selector.buttonE = new createjs.Container() ;
-	this.box.selector.buttonE.x = 100, this.box.selector.buttonE.y = 25 ;
+	this.box.selector.buttonE.x = 145, this.box.selector.buttonE.y = 45 ;
 	this.box.selector.addChild( this.box.selector.buttonE ) ;
-	this.box.selector.buttonE.bg = new createjs.Shape() ;
-	this.box.selector.buttonE.bg.graphics.f( "#00BFFF" ).r( 0, 0, 100, 25 ) ;
-	this.box.selector.buttonE.text = new createjs.Text( "Sound", "14px comic sans ms", "#000000" ) ;
-	this.box.selector.buttonE.text.x = 31, this.box.selector.buttonE.text.y = 7 ;
+	this.box.selector.buttonE.bg = new createjs.Bitmap( "pic/map_build/buttonE.png" ) ;
+	this.box.selector.buttonE.bg.scaleX = this.box.selector.buttonE.bg.scaleY = 0.45 ;
+	this.box.selector.buttonE.text = new createjs.Text( "Sound", "14px comic sans ms", "#FFFFFF" ) ;
+	this.box.selector.buttonE.text.x = -35, this.box.selector.buttonE.text.y = 35 ;
 	this.box.selector.buttonE.addChild( this.box.selector.buttonE.bg, this.box.selector.buttonE.text ) ;
 	this.box.selector.buttonE.on( "click", function( evt ) { that.OnSelectEffect( that.box.selector.buttonE ) ; that.OnSound() ; } ) ;
 	// Material selector button - option.
 	this.box.selector.buttonF = new createjs.Container() ;
-	this.box.selector.buttonF.x = 200, this.box.selector.buttonF.y = 25 ;
+	this.box.selector.buttonF.x = 245, this.box.selector.buttonF.y = 45 ;
 	this.box.selector.addChild( this.box.selector.buttonF ) ;
-	this.box.selector.buttonF.bg = new createjs.Shape() ;
-	this.box.selector.buttonF.bg.graphics.f( "#87CEEB" ).r( 0, 0, 100, 25 ) ;
-	this.box.selector.buttonF.text = new createjs.Text( "Option", "14px comic sans ms", "#000000" ) ;
-	this.box.selector.buttonF.text.x = 29, this.box.selector.buttonF.text.y = 7 ;
+	this.box.selector.buttonF.bg = new createjs.Bitmap( "pic/map_build/buttonF.png" ) ;
+	this.box.selector.buttonF.bg.scaleX = this.box.selector.buttonF.bg.scaleY = 0.45 ;
+	this.box.selector.buttonF.text = new createjs.Text( "Option", "14px comic sans ms", "#FFFFFF" ) ;
+	this.box.selector.buttonF.text.x = -40, this.box.selector.buttonF.text.y = 35 ;
 	this.box.selector.buttonF.addChild( this.box.selector.buttonF.bg, this.box.selector.buttonF.text ) ;
 	this.box.selector.buttonF.on( "click", function( evt ) { that.OnSelectEffect( that.box.selector.buttonF ) ; that.OnOption() ; } ) ;
 	// Material list container.
 	this.box.list = new createjs.Container() ;
-	this.box.list.x = 30, this.box.list.y = 80 ;
+	this.box.list.x = 30, this.box.list.y = 130 ;
 	this.box.addChild( this.box.list ) ;
 	this.OnSelectEffect( this.box.selector.buttonF ) ;
 	this.OnOption() ;
 } // OnCreate()
 
 MaterialBox.prototype.OnSelectEffect = function( select ) {
-	this.box.selector.buttonA.text.color = "#000000" ;
-	this.box.selector.buttonB.text.color = "#000000" ;
-	this.box.selector.buttonC.text.color = "#000000" ;
-	this.box.selector.buttonD.text.color = "#000000" ;
-	this.box.selector.buttonE.text.color = "#000000" ;
-	this.box.selector.buttonF.text.color = "#000000" ;
+	this.box.selector.buttonA.text.color = "#FFFFFF" ;
+	this.box.selector.buttonB.text.color = "#FFFFFF" ;
+	this.box.selector.buttonC.text.color = "#FFFFFF" ;
+	this.box.selector.buttonD.text.color = "#FFFFFF" ;
+	this.box.selector.buttonE.text.color = "#FFFFFF" ;
+	this.box.selector.buttonF.text.color = "#FFFFFF" ;
 	select.text.color = "#FF0000" ;
 } // OnSelectEffect()
 
@@ -102,15 +99,12 @@ MaterialBox.prototype.OnTexture = function() {
 	// Remove original list first.
 	this.box.list.removeAllChildren() ;
 	this.box.selector.statusPage = 1 ;
-	// List background.
-	this.box.list.bg = new createjs.Shape() ;
-	this.box.list.bg.graphics.f( "#FFF3DA" ).r( 0, 0, 290, 440 ) ;
 	// Texture select container.
 	this.box.list.texture = new createjs.Container() ;
 	this.box.list.texture.number = 1 ;
 	// Page change.
 	this.box.list.page = new createjs.Container() ;
-	this.box.list.page.x = 35, this.box.list.page.y = 355 ;
+	this.box.list.page.x = 35, this.box.list.page.y = 330 ;
 	this.box.list.page.prevPage = new createjs.Container() ;
 	this.box.list.page.prevPage.x = 0, this.box.list.page.prevPage.y = 0 ;
 	this.box.list.page.prevPage.bg = new createjs.Shape() ;
@@ -136,13 +130,18 @@ MaterialBox.prototype.OnTexture = function() {
 	this.box.list.marked.visible = false ;
 	this.box.list.marked.addChild( this.box.list.marked.pane ) ;
 	// Add to top container.
-	this.box.list.addChild( this.box.list.bg, this.box.list.texture, this.box.list.page, this.box.list.marked ) ;
+	this.box.list.addChild( this.box.list.texture, this.box.list.page, this.box.list.marked ) ;
 	// Refresh map texture pics. 
 	Refresh( this, 0 ) ;
 
 	function Refresh( pt, num ) {
 		pt.box.list.texture.removeAllChildren() ;
 		pt.box.list.marked.visible = false ;
+		// Container background.
+		pt.box.list.texture.bg = new createjs.Shape() ;
+		pt.box.list.texture.bg.x = pt.box.list.texture.bg.y = 15 ;
+		pt.box.list.texture.bg.graphics.f( "#FFFFFF" ).r( 0, 0, 259, 259 ) ;
+		pt.box.list.texture.addChild( pt.box.list.texture.bg ) ;
 		// Change pic and drawing.
 		pt.box.list.texture.number += ( pt.box.list.texture.number + num > 0 ) ? num : 0 ;
 		pt.box.list.texture.pic = new createjs.Bitmap( G.src + pt.box.list.texture.number + ".png" ) ;
@@ -154,8 +153,8 @@ MaterialBox.prototype.OnTexture = function() {
 				pt.box.list.texture.addChild( pt.box.list.texture.pic.clone( false ) ) ;
 			} // for
 		// Text info.
-		pt.box.list.picName = new createjs.Text( "Name: " + pt.box.list.texture.number + ".png", "18px comic sans ms", "#000000" ) ;
-		pt.box.list.picName.x = 35, pt.box.list.picName.y = 307 ;
+		pt.box.list.picName = new createjs.Text( "Name: " + pt.box.list.texture.number + ".png", "18px comic sans ms", "#FFFFFF" ) ;
+		pt.box.list.picName.x = 35, pt.box.list.picName.y = 297 ;
 		pt.box.list.texture.addChild( pt.box.list.picName ) ;
 		// Add listening event.
 		for ( i = 0 ; i < G.range * G.range ; i ++ )
@@ -180,10 +179,6 @@ MaterialBox.prototype.OnWalkable = function() {
 	// Remove original list first.
 	this.box.list.removeAllChildren() ;
 	this.box.selector.statusPage = 2 ;
-	// List background.
-	this.box.list.bg = new createjs.Shape() ;
-	this.box.list.bg.graphics.f( "#FFF3AD" ).r( 0, 0, 290, 440 ) ;
-	this.box.list.addChild( this.box.list.bg ) ;
 	// Walkable, unwalkable select container.
 	this.box.list.walkable = new createjs.Container() ;
 	this.box.list.walkable.yes = new createjs.Shape() ;
@@ -200,24 +195,26 @@ MaterialBox.prototype.OnWalkable = function() {
 	this.box.list.walkable.no.on( "click", function( evt ) { MarkedSelected( that, this ) ; } ) ;
 	this.box.list.walkable.addChild( this.box.list.walkable.yes, this.box.list.walkable.no ) ;
 	// Text info.
-	this.box.list.text1 = new createjs.Text( "Walkable", "26px comic sans ms", "#000000" ) ;
+	this.box.list.text1 = new createjs.Text( "Walkable", "26px comic sans ms", "#FFFFFF" ) ;
 	this.box.list.text1.x = 100, this.box.list.text1.y = 37 ;
-	this.box.list.text2 = new createjs.Text( "Unwalkable", "26px comic sans ms", "#000000" ) ;
+	this.box.list.text2 = new createjs.Text( "Unwalkable", "26px comic sans ms", "#FFFFFF" ) ;
 	this.box.list.text2.x = 100, this.box.list.text2.y = 116 ;
 	// Selected for marking.
 	this.box.list.marked = new createjs.Container() ;
 	this.box.list.marked.pane = new createjs.Shape() ;
-	this.box.list.marked.pane.graphics.s( "#0200BE" ).r( 0, 0, G.size + 1, G.size + 1 ) ;
+	this.box.list.marked.pane.graphics.s( "#FFFFFF" ).r( 0, 0, G.size + 1, G.size + 1 ) ;
 	this.box.list.marked.visible = false ;
 	this.box.list.marked.addChild( this.box.list.marked.pane ) ;
 	// Add to top container.
-	this.box.list.addChild( this.box.list.bg, this.box.list.walkable, this.box.list.text1, this.box.list.text2, this.box.list.marked ) ;
+	this.box.list.addChild( this.box.list.walkable, this.box.list.text1, this.box.list.text2, this.box.list.marked ) ;
 
 	function MarkedSelected( pt, con ) {
 		pt.box.list.marked.name = con.name ;
 		pt.box.list.marked.visible = true ;
 		pt.box.list.marked.x = ( con.name == "walkable" ) ? 14 : 14 ;
 		pt.box.list.marked.y = ( con.name == "walkable" ) ? 14 : 94 ;
+		pt.box.list.text1.color = ( con.name == "walkable" ) ? "#00FF00" : "#FFFFFF" ;
+		pt.box.list.text2.color = ( con.name == "walkable" ) ? "#FFFFFF" : "#FF0000" ;
 	} // MarkedSelected()
 } // OnWalkable()
 
@@ -228,7 +225,7 @@ MaterialBox.prototype.OnObject = function() {
 	this.box.selector.statusPage = 3 ;
 	// List background.
 	this.box.list.bg = new createjs.Shape() ;
-	this.box.list.bg.graphics.f( "#FFF3DA" ).r( 0, 0, 290, 440 ) ;
+	this.box.list.bg.graphics.f( "#FFF3DA" ).r( 0, 0, 290, 400 ) ;
 	this.box.list.addChild( this.box.list.bg ) ;
 } // OnObject()
 
@@ -239,7 +236,7 @@ MaterialBox.prototype.OnLight = function() {
 	this.box.selector.statusPage = 4 ;
 	// List background.
 	this.box.list.bg = new createjs.Shape() ;
-	this.box.list.bg.graphics.f( "#FFF3AD" ).r( 0, 0, 290, 440 ) ;
+	this.box.list.bg.graphics.f( "#FFF3AD" ).r( 0, 0, 290, 400 ) ;
 	this.box.list.addChild( this.box.list.bg ) ;
 } // OnLight()
 
@@ -250,7 +247,7 @@ MaterialBox.prototype.OnSound = function() {
 	this.box.selector.statusPage = 5 ;
 	// List background.
 	this.box.list.bg = new createjs.Shape() ;
-	this.box.list.bg.graphics.f( "#FFF3DA" ).r( 0, 0, 290, 440 ) ;
+	this.box.list.bg.graphics.f( "#FFF3DA" ).r( 0, 0, 290, 400 ) ;
 	this.box.list.addChild( this.box.list.bg ) ;
 } // OnSound()
 
@@ -259,20 +256,16 @@ MaterialBox.prototype.OnOption = function() {
 	// Remove original list first.
 	this.box.list.removeAllChildren() ;
 	this.box.selector.statusPage = 6 ;
-	// List background.
-	this.box.list.bg = new createjs.Shape() ;
-	this.box.list.bg.graphics.f( "#FFF3AD" ).r( 0, 0, 290, 440 ) ;
-	this.box.list.addChild( this.box.list.bg ) ;
 	// Something info.
 	this.box.list.pic = new createjs.Bitmap( "pic/husky.png" ) ;
-	this.box.list.pic.x = 35, this.box.list.pic.y = 5 ;
-	this.box.list.pic.scaleX = this.box.list.pic.scaleY = 0.27 ;
-	this.box.list.author = new createjs.Text( "Made by Salmon (http://salmon.tw)", "12px comic sans ms", "#000000" ) ;
-	this.box.list.author.x = 48, this.box.list.author.y = 415 ;
-	this.box.list.addChild( this.box.list.bg, this.box.list.pic, this.box.list.author ) ;
+	this.box.list.pic.x = 58, this.box.list.pic.y = 5 ;
+	this.box.list.pic.scaleX = this.box.list.pic.scaleY = 0.22 ;
+	this.box.list.author = new createjs.Text( "Made by Salmon (http://salmon.tw)", "12px comic sans ms", "#FFFFFF" ) ;
+	this.box.list.author.x = 48, this.box.list.author.y = 375 ;
+	this.box.list.addChild( this.box.list.pic, this.box.list.author ) ;
 	// Create new page button.
 	this.box.list.newPage = new createjs.Container() ;
-	this.box.list.newPage.x = 45, this.box.list.newPage.y = 230 ;
+	this.box.list.newPage.x = 45, this.box.list.newPage.y = 200 ;
 	this.box.list.newPage.bg = new createjs.Shape() ;
 	this.box.list.newPage.bg.graphics.f( "#AA0000" ).r( 0, 0, 200, 30 ) ;
 	this.box.list.newPage.text1 = new createjs.Text( "Create New Map", "20px comic sans ms", "#FFFFFF" ) ;
@@ -281,7 +274,7 @@ MaterialBox.prototype.OnOption = function() {
 	this.box.list.newPage.on( "click", function( evt ) { $( "#dialog_01" ).dialog( "open" ) ; } ) ;
 	// Save button.
 	this.box.list.save = new createjs.Container() ;
-	this.box.list.save.x = 45, this.box.list.save.y = 280 ;
+	this.box.list.save.x = 45, this.box.list.save.y = 250 ;
 	this.box.list.save.bg = new createjs.Shape() ;
 	this.box.list.save.bg.graphics.f( "#AA0000" ).r( 0, 0, 200, 30 ) ;
 	this.box.list.save.text1 = new createjs.Text( "Save the Map to json", "18px comic sans ms", "#FFFFFF" ) ;
@@ -289,7 +282,7 @@ MaterialBox.prototype.OnOption = function() {
 	this.box.list.save.addChild( this.box.list.save.bg, this.box.list.save.text1 ) ;
 	// Tutorial button.
 	this.box.list.tutorial = new createjs.Container() ;
-	this.box.list.tutorial.x = 45, this.box.list.tutorial.y = 330 ;
+	this.box.list.tutorial.x = 45, this.box.list.tutorial.y = 300 ;
 	this.box.list.tutorial.bg = new createjs.Shape() ;
 	this.box.list.tutorial.bg.graphics.f( "#AA0000" ).r( 0, 0, 200, 30 ) ;
 	this.box.list.tutorial.text1 = new createjs.Text( "Tutorial", "18px comic sans ms", "#FFFFFF" ) ;
