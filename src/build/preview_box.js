@@ -68,19 +68,22 @@ PreviewBox.prototype.OnTiledControl = function() {
 
 	// Replace all of this map box.
 	function TotalRefresh( pt, mr, mc ) {
-		if ( mr >= G.customer_height )
-			return ;
-		if ( mc >= G.customer_length )
+		if ( mr >= G.customer_height || mc >= G.customer_length )
 		 	return ;
-
+		// Initial must remove old tiled map.
 		pt.box.mapbox.tiled.removeAllChildren() ;
 		pt.box.mapbox.tiled.mr = mr, pt.box.mapbox.tiled.mc = mc ;
 		for ( i = 0 ; i < G.height ; i ++ )
 			for ( j = 0 ; j < G.length ; j ++ ) {
 				if ( ( i + mr ) < G.customer_height && ( j + mc ) < G.customer_length ) {
+					var data = tiled[i+mr][j+mc] ;
+					var row = Math.floor( data.index / G.range ) ;
+					var column = data.index % G.range ;
+					console.log( row + "  " + column ) ;
+
 					pt.box.mapbox.tiled.single = new createjs.Container() ;
-					pt.box.mapbox.tiled.single.pic = new createjs.Bitmap( G.src + tiled[i+mr][j+mc].map + ".png" ) ;
-					pt.box.mapbox.tiled.single.pic.sourceRect = new createjs.Rectangle( 0, 0, G.size, G.size ) ;
+					pt.box.mapbox.tiled.single.pic = new createjs.Bitmap( G.src + data.map + ".png" ) ;
+					pt.box.mapbox.tiled.single.pic.sourceRect = new createjs.Rectangle( column * G.size, row * G.size, G.size, G.size ) ;
 					pt.box.mapbox.tiled.single.addChild( pt.box.mapbox.tiled.single.pic ) ;
 					pt.box.mapbox.tiled.single.name = i * G.length + j ;
 					pt.box.mapbox.tiled.single.x = j * G.size, pt.box.mapbox.tiled.single.y = i * G.size ;
@@ -102,7 +105,6 @@ PreviewBox.prototype.OnTiledControl = function() {
 			// Get sileded tiled map data.
 			var row = mr + Math.floor( singleTiled.name / G.length ) ;
 			var column = mc + ( singleTiled.name % G.length ) ;
-			console.log( row + " " + column ) ;
 			// tilde map assign.
 			tiled[row][column].map = map ;
 			tiled[row][column].index = index ;
