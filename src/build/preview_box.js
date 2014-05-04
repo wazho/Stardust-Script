@@ -12,26 +12,11 @@ PreviewBox.prototype.OnCreate = function( material ) {
 	this.box.bg = new createjs.Shape() ;
 	this.box.bg.graphics.f( "#DDFFDD" ).r( 0, 0, 650, 550 ) ;
 	this.box.addChild( this.box.bg ) ;
-	// Map box.
+	// Map box and silde bar.
 	this.box.mapbox = new createjs.Container() ;
 	this.box.mapbox.x = 37, this.box.mapbox.y = 70 ;
-	this.box.mapbox.bg = new createjs.Shape() ;
-	this.box.mapbox.bg.graphics.f( "#BBDDAA" ).r( 0, 0, 576, 448 ) ;
-	this.box.mapbox.addChild( this.box.mapbox.bg ) ;
-	this.OnTiledControl() ;
-	// Map silde bar.
 	this.box.bar = new createjs.Container() ;
-	this.box.bar.horizontal = new createjs.Container() ;
-	this.box.bar.horizontal.x = 37, this.box.bar.horizontal.y = 525 ;
-	this.box.bar.vertical = new createjs.Container() ;
-	this.box.bar.vertical.x = 620, this.box.bar.vertical.y = 70 ;
-	this.box.bar.addChild( this.box.bar.horizontal, this.box.bar.vertical ) ;
-	this.box.bar.horizontal.bg = new createjs.Shape() ;
-	this.box.bar.horizontal.bg.graphics.f( "#88FFAA" ).r( 0, 0, 576, 12 ) ;
-	this.box.bar.horizontal.addChild( this.box.bar.horizontal.bg ) ;
-	this.box.bar.vertical.bg = new createjs.Shape() ;
-	this.box.bar.vertical.bg.graphics.f( "#88FFAA" ).r( 0, 0, 12, 448 ) ;
-	this.box.bar.vertical.addChild( this.box.bar.vertical.bg ) ;
+	this.OnTiledControl() ;
 	// Map editor tools.
 	this.box.tool = new createjs.Container() ;
 	this.box.tool.x = 37, this.box.tool.y = 15 ;
@@ -49,34 +34,57 @@ PreviewBox.prototype.OnTiledControl = function() {
 	// Create tiled map data struct.
 	var tiled = this.box.mapbox.tiled_data = OnCreateTiled( G.customer_length, G.customer_height ) ;
 
-	for ( i = 0 ; i < G.customer_height ; i ++ )
-		for ( j = 0 ; j < G.customer_length ; j ++ )
-			console.log( "row:" + i + " column:" + j + "  map:" + tiled[i][j].map + "  index:" + tiled[i][j].index + "  walkable:" + tiled[i][j].walkable ) ;
+	// for ( i = 0 ; i < G.customer_height ; i ++ )
+	// 	for ( j = 0 ; j < G.customer_length ; j ++ )
+	// 		console.log( "row:" + i + " column:" + j + "  map:" + tiled[i][j].map + "  index:" + tiled[i][j].index + "  walkable:" + tiled[i][j].walkable ) ;
 
-
-
-
+	this.box.mapbox.bg = new createjs.Shape() ;
+	this.box.mapbox.bg.graphics.f( "#BBDDAA" ).r( 0, 0, 576, 448 ) ;
+	this.box.mapbox.addChild( this.box.mapbox.bg ) ;
 	// Map box tiled.
 	this.box.mapbox.tiled = new createjs.Container() ;
 	this.box.mapbox.tiled.x = 0, this.box.mapbox.tiled.y = 0 ;
 	this.box.mapbox.addChild( this.box.mapbox.tiled ) ;
-	for ( i = 0 ; i < G.height ; i ++ )
-		for ( j = 0 ; j < G.length ; j ++ ) {
-			this.box.mapbox.tiled.single = new createjs.Container() ;
-			this.box.mapbox.tiled.single.pic = new createjs.Bitmap( G.src + "0.png" ) ;
-			this.box.mapbox.tiled.single.pic.sourceRect = new createjs.Rectangle( 0, 0, G.size, G.size ) ;
-			this.box.mapbox.tiled.single.addChild( this.box.mapbox.tiled.single.pic ) ;
-			this.box.mapbox.tiled.single.name = i * length + j ;
-			this.box.mapbox.tiled.single.x = j * G.size, this.box.mapbox.tiled.single.y = i * G.size ;
-			this.box.mapbox.tiled.addChild( this.box.mapbox.tiled.single.clone( true ) ) ;
-		} // for
-	// Add listening event.
-	for ( i = 0 ; i < G.length * G.height ; i ++ )
-		this.box.mapbox.tiled.getChildAt( i ).on( "click", function( evt ) { SingleRefresh( that, this ) ; } ) ;
+	// Modify row, column for silde tiled map.
+	TotalRefresh( this, 1, 1 ) ;
+	// Slide bar create.
+	this.box.bar.horizontal = new createjs.Container() ;
+	this.box.bar.horizontal.x = 37, this.box.bar.horizontal.y = 525 ;
+	this.box.bar.vertical = new createjs.Container() ;
+	this.box.bar.vertical.x = 620, this.box.bar.vertical.y = 70 ;
+	this.box.bar.addChild( this.box.bar.horizontal, this.box.bar.vertical ) ;
+	this.box.bar.horizontal.bg = new createjs.Shape() ;
+	this.box.bar.horizontal.bg.graphics.f( "#88FFAA" ).r( 0, 0, 576, 12 ) ;
+	this.box.bar.horizontal.addChild( this.box.bar.horizontal.bg ) ;
+	this.box.bar.vertical.bg = new createjs.Shape() ;
+	this.box.bar.vertical.bg.graphics.f( "#88FFAA" ).r( 0, 0, 12, 448 ) ;
+	this.box.bar.vertical.addChild( this.box.bar.vertical.bg ) ;
 
 
-	// Number of map : Math.floor( select / 100 )
-	// Index of tiled : select - Math.floor( select / 100 ) * 100
+	this.box.bar.horizontal.bg.on( "click", function( evt ) { console.log( "haha" ) ; TotalRefresh( that, 2, 2 ) ; } ) ;
+
+
+	// Replace all of this map box.
+	function TotalRefresh( pt, mr, mc ) {
+		pt.box.mapbox.tiled.removeAllChildren() ;
+		for ( i = 0 ; i < G.height ; i ++ )
+			for ( j = 0 ; j < G.length ; j ++ ) {
+				if ( ( i + mr ) < G.customer_height && ( j + mc ) < G.customer_length ) {
+					pt.box.mapbox.tiled.single = new createjs.Container() ;
+					pt.box.mapbox.tiled.single.pic = new createjs.Bitmap( G.src + tiled[i+mr][j+mc].map + ".png" ) ;
+					pt.box.mapbox.tiled.single.pic.sourceRect = new createjs.Rectangle( 0, 0, G.size, G.size ) ;
+					pt.box.mapbox.tiled.single.addChild( pt.box.mapbox.tiled.single.pic ) ;
+					pt.box.mapbox.tiled.single.name = i * G.length + j ;
+					pt.box.mapbox.tiled.single.x = j * G.size, pt.box.mapbox.tiled.single.y = i * G.size ;
+					pt.box.mapbox.tiled.addChild( pt.box.mapbox.tiled.single.clone( true ) ) ;
+				} // if
+			} // for
+		// Add listening event.
+		for ( i = 0 ; i < pt.box.mapbox.tiled.getNumChildren() ; i ++ )
+			pt.box.mapbox.tiled.getChildAt( i ).on( "click", function( evt ) { SingleRefresh( pt, this ) ; } ) ;
+	} // TotalRefresh()
+
+	// Focus one tiled, let it replace new one.
 	function SingleRefresh( pt, tiled ) {
 		if ( pt.material.box.selector.statusPage == 1 ) {
 			var select = pt.material.box.list.marked.name ;
@@ -101,11 +109,10 @@ PreviewBox.prototype.OnTiledControl = function() {
 		} // else if
 	} // SingleRefresh()
 
-	//
-	function SildeControl( pt, tiled ) {
+	// 
+	function SildeControl() {
 
-
-
+		TotalRefresh( this, 0, 0 ) ;
 
 	} // SildeControl()
 
@@ -124,7 +131,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 
 		function Tiled_Datastruct() {
 			this.map = 0 ;
-			this.index = -1 ;
+			this.index = 0 ;
 			this.walkable = 1 ;
 		} // Tiled_Datastruct()
 	} // OnCreateTiled()
