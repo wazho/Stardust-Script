@@ -38,38 +38,23 @@ PreviewBox.prototype.OnCreate = function( material ) {
 	this.box.tool.bg = new createjs.Shape() ;
 	this.box.tool.bg.graphics.f( "#AAFFBB" ).r( 0, 0, 576, 40 ) ;
 	this.box.tool.addChild( this.box.tool.bg ) ;
-
+	// Add to top container.
 	this.box.addChild( this.box.mapbox, this.box.bar, this.box.tool ) ;
 } // OnCreate()
-
-
-PreviewBox.prototype.OnCreateTiled = function( length, height ) {
-	// Assign row number.
-	var tiled = new Array( height ) ;
-	// Assign column number.
-	for ( i = 0 ; i < height ; i ++ )
-		tiled[i] = new Array( length ) ;
-	// Datastructure created.
-	for ( i = 0 ; i < height ; i ++ )
-		for ( j = 0 ; j < length ; j ++ )
-			tiled[i][j] = new Tiled_Datastruct() ;
-	return tiled ;
-
-	function Tiled_Datastruct() {
-		this.map = -1 ;
-		this.index = -1 ;
-		this.walkable = 1 ;
-	} // Tiled_Datastruct()
-} // OnCreateTiled()
 
 // 
 PreviewBox.prototype.OnTiledControl = function() {
 	var that = this ;
 	var G = new GlobalValues() ;
+	// Create tiled map data struct.
+	var tiled = this.box.mapbox.tiled_data = OnCreateTiled( G.customer_length, G.customer_height ) ;
 
-	var tiled_data = this.OnCreateTiled( G.customer_length, G.customer_height ) ;
+	for ( i = 0 ; i < G.customer_height ; i ++ )
+		for ( j = 0 ; j < G.customer_length ; j ++ )
+			console.log( "row:" + i + " column:" + j + "  map:" + tiled[i][j].map + "  index:" + tiled[i][j].index + "  walkable:" + tiled[i][j].walkable ) ;
 
-	// console.log( tiled_data[0][0] + " " + G.size ) ;
+
+
 
 	// Map box tiled.
 	this.box.mapbox.tiled = new createjs.Container() ;
@@ -87,11 +72,12 @@ PreviewBox.prototype.OnTiledControl = function() {
 		} // for
 	// Add listening event.
 	for ( i = 0 ; i < G.length * G.height ; i ++ )
-		this.box.mapbox.tiled.getChildAt( i ).on( "click", function( evt ) { Refresh( that, this ) ; } ) ;
+		this.box.mapbox.tiled.getChildAt( i ).on( "click", function( evt ) { SingleRefresh( that, this ) ; } ) ;
+
 
 	// Number of map : Math.floor( select / 100 )
 	// Index of tiled : select - Math.floor( select / 100 ) * 100
-	function Refresh( pt, tiled ) {
+	function SingleRefresh( pt, tiled ) {
 		if ( pt.material.box.selector.statusPage == 1 ) {
 			var select = pt.material.box.list.marked.name ;
 			var map = Math.floor( select / 100 ) ;
@@ -113,7 +99,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 		else if ( pt.material.box.selector.statusPage == 5 ) {
 
 		} // else if
-	} // Refresh()
+	} // SingleRefresh()
 
 	//
 	function SildeControl( pt, tiled ) {
@@ -122,4 +108,24 @@ PreviewBox.prototype.OnTiledControl = function() {
 
 
 	} // SildeControl()
+
+	// Create tiled map data struct.
+	function OnCreateTiled( length, height ) {
+		// Assign row number for array memory.
+		var tiled = new Array( height ) ;
+		// Assign column number for array memory.
+		for ( i = 0 ; i < height ; i ++ )
+			tiled[i] = new Array( length ) ;
+		// Data structure created.
+		for ( i = 0 ; i < height ; i ++ )
+			for ( j = 0 ; j < length ; j ++ )
+				tiled[i][j] = new Tiled_Datastruct() ;
+		return tiled ;
+
+		function Tiled_Datastruct() {
+			this.map = 0 ;
+			this.index = -1 ;
+			this.walkable = 1 ;
+		} // Tiled_Datastruct()
+	} // OnCreateTiled()
 } // OnTiledControl()
