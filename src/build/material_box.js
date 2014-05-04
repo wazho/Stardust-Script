@@ -228,6 +228,7 @@ MaterialBox.prototype.OnWalkable = function() {
 MaterialBox.prototype.OnObject = function() {
 	// Remove original list first.
 	this.box.list.removeAllChildren() ;
+	this.box.selector.statusPage = 3 ;
 	// List background.
 	this.box.list.bg = new createjs.Shape() ;
 	this.box.list.bg.graphics.f( "#FFF3DA" ).r( 0, 0, 290, 440 ) ;
@@ -238,6 +239,7 @@ MaterialBox.prototype.OnObject = function() {
 MaterialBox.prototype.OnLight = function() {
 	// Remove original list first.
 	this.box.list.removeAllChildren() ;
+	this.box.selector.statusPage = 4 ;
 	// List background.
 	this.box.list.bg = new createjs.Shape() ;
 	this.box.list.bg.graphics.f( "#FFF3AD" ).r( 0, 0, 290, 440 ) ;
@@ -248,6 +250,7 @@ MaterialBox.prototype.OnLight = function() {
 MaterialBox.prototype.OnSound = function() {
 	// Remove original list first.
 	this.box.list.removeAllChildren() ;
+	this.box.selector.statusPage = 5 ;
 	// List background.
 	this.box.list.bg = new createjs.Shape() ;
 	this.box.list.bg.graphics.f( "#FFF3DA" ).r( 0, 0, 290, 440 ) ;
@@ -258,34 +261,43 @@ MaterialBox.prototype.OnSound = function() {
 MaterialBox.prototype.OnOption = function() {
 	// Remove original list first.
 	this.box.list.removeAllChildren() ;
+	this.box.selector.statusPage = 6 ;
 	// List background.
 	this.box.list.bg = new createjs.Shape() ;
 	this.box.list.bg.graphics.f( "#FFF3AD" ).r( 0, 0, 290, 440 ) ;
 	this.box.list.addChild( this.box.list.bg ) ;
-
+	// Something info.
 	this.box.list.pic = new createjs.Bitmap( "pic/husky.png" ) ;
-	this.box.list.pic.x = this.box.list.pic.y = 5 ;
-	this.box.list.pic.scaleX = this.box.list.pic.scaleY = 0.35 ;
+	this.box.list.pic.x = 35, this.box.list.pic.y = 5 ;
+	this.box.list.pic.scaleX = this.box.list.pic.scaleY = 0.27 ;
 	this.box.list.author = new createjs.Text( "Made by Salmon (http://salmon.tw)", "12px comic sans ms", "#000000" ) ;
-	this.box.list.author.x = 48, this.box.list.author.y = 405 ;
+	this.box.list.author.x = 48, this.box.list.author.y = 415 ;
 	this.box.list.addChild( this.box.list.bg, this.box.list.pic, this.box.list.author ) ;
-
+	// Create new page button.
 	this.box.list.newPage = new createjs.Container() ;
-	this.box.list.newPage.x = 45, this.box.list.newPage.y = 290 ;
-	this.box.list.addChild( this.box.list.newPage ) ;
+	this.box.list.newPage.x = 45, this.box.list.newPage.y = 230 ;
 	this.box.list.newPage.bg = new createjs.Shape() ;
 	this.box.list.newPage.bg.graphics.f( "#AA0000" ).r( 0, 0, 200, 30 ) ;
 	this.box.list.newPage.text1 = new createjs.Text( "Create New Map", "20px comic sans ms", "#FFFFFF" ) ;
 	this.box.list.newPage.text1.x = 22, this.box.list.newPage.text1.y = 7 ;
 	this.box.list.newPage.addChild( this.box.list.newPage.bg, this.box.list.newPage.text1 ) ;
 	this.box.list.newPage.on( "click", function( evt ) { $( "#dialog_01" ).dialog( "open" ) ; } ) ;
-
+	// Save button.
 	this.box.list.save = new createjs.Container() ;
-	this.box.list.save.x = 45, this.box.list.save.y = 340 ;
-	this.box.list.addChild( this.box.list.save ) ;
+	this.box.list.save.x = 45, this.box.list.save.y = 280 ;
 	this.box.list.save.bg = new createjs.Shape() ;
 	this.box.list.save.bg.graphics.f( "#AA0000" ).r( 0, 0, 200, 30 ) ;
 	this.box.list.save.text1 = new createjs.Text( "Save the Map to json", "18px comic sans ms", "#FFFFFF" ) ;
 	this.box.list.save.text1.x = 12, this.box.list.save.text1.y = 8 ;
-	this.box.list.save.addChild( this.box.list.save.bg, this.box.list.save.text1 ) ;	
+	this.box.list.save.addChild( this.box.list.save.bg, this.box.list.save.text1 ) ;
+	// Tutorial button.
+	this.box.list.tutorial = new createjs.Container() ;
+	this.box.list.tutorial.x = 45, this.box.list.tutorial.y = 330 ;
+	this.box.list.tutorial.bg = new createjs.Shape() ;
+	this.box.list.tutorial.bg.graphics.f( "#AA0000" ).r( 0, 0, 200, 30 ) ;
+	this.box.list.tutorial.text1 = new createjs.Text( "Tutorial", "18px comic sans ms", "#FFFFFF" ) ;
+	this.box.list.tutorial.text1.x = 65, this.box.list.tutorial.text1.y = 8 ;
+	this.box.list.tutorial.addChild( this.box.list.tutorial.bg, this.box.list.tutorial.text1 ) ;
+
+	this.box.list.addChild( this.box.list.newPage, this.box.list.save, this.box.list.tutorial ) ;
 } // OnOption()

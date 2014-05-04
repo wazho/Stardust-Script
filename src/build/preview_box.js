@@ -5,8 +5,9 @@ function PreviewBox( material ) {
 
 // create container
 PreviewBox.prototype.OnCreate = function( material ) {
-	// Map preview box.
+	var that = this ;
 	this.material = material ;
+	// Map preview box.
 	this.box = new createjs.Container() ;
 	this.box.x = 0, this.box.y = 0 ;
 	this.box.bg = new createjs.Shape() ;
@@ -33,11 +34,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 	var G = new GlobalValues() ;
 	// Create tiled map data struct.
 	var tiled = this.box.mapbox.tiled_data = OnCreateTiled( G.customer_length, G.customer_height ) ;
-
-	// for ( i = 0 ; i < G.customer_height ; i ++ )
-	// 	for ( j = 0 ; j < G.customer_length ; j ++ )
-	// 		console.log( "row:" + i + " column:" + j + "  map:" + tiled[i][j].map + "  index:" + tiled[i][j].index + "  walkable:" + tiled[i][j].walkable ) ;
-
+	// Map box container.
 	this.box.mapbox.bg = new createjs.Shape() ;
 	this.box.mapbox.bg.graphics.f( "#BBDDAA" ).r( 0, 0, 576, 448 ) ;
 	this.box.mapbox.addChild( this.box.mapbox.bg ) ;
@@ -68,13 +65,18 @@ PreviewBox.prototype.OnTiledControl = function() {
 	this.box.bar.vertical.down = new createjs.Shape() ;
 	this.box.bar.vertical.down.graphics.f( "#FF0000" ).dc( 6, 438, 13 ) ;
 	this.box.bar.vertical.addChild( this.box.bar.vertical.bg, this.box.bar.vertical.up, this.box.bar.vertical.down ) ;
-
-
+	// Add listening events.
 	this.box.bar.horizontal.left.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc - 1 ) ; } ) ;
 	this.box.bar.horizontal.right.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc + 1 ) ; } ) ;
 	this.box.bar.vertical.up.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr - 1, that.box.mapbox.tiled.mc ) ; } ) ;
 	this.box.bar.vertical.down.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr + 1, that.box.mapbox.tiled.mc ) ; } ) ;
-
+	// [Special] button - material box listening event added.
+	this.material.box.selector.buttonA.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc ) ; } ) ;
+	this.material.box.selector.buttonB.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc ) ; } ) ;
+	this.material.box.selector.buttonC.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc ) ; } ) ;
+	this.material.box.selector.buttonD.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc ) ; } ) ;
+	this.material.box.selector.buttonE.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc ) ; } ) ;
+	this.material.box.selector.buttonF.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc ) ; } ) ;
 
 	// Replace all of this map box.
 	function TotalRefresh( pt, mr, mc ) {
@@ -92,7 +94,16 @@ PreviewBox.prototype.OnTiledControl = function() {
 					pt.box.mapbox.tiled.single = new createjs.Container() ;
 					pt.box.mapbox.tiled.single.pic = new createjs.Bitmap( G.src + data.map + ".png" ) ;
 					pt.box.mapbox.tiled.single.pic.sourceRect = new createjs.Rectangle( column * G.size, row * G.size, G.size, G.size ) ;
-					pt.box.mapbox.tiled.single.addChild( pt.box.mapbox.tiled.single.pic ) ;
+					// Mask for walkable / unwalkable.
+					pt.box.mapbox.tiled.single.mask = new createjs.Shape() ;
+					if ( data.walkable == 1 )
+						pt.box.mapbox.tiled.single.mask.graphics.f( "#00FF00" ).r( 0, 0, G.size, G.size ) ;
+					else
+						pt.box.mapbox.tiled.single.mask.graphics.f( "#FF0000" ).r( 0, 0, G.size, G.size ) ;
+					pt.box.mapbox.tiled.single.mask.alpha = 0.5 ;
+					pt.box.mapbox.tiled.single.mask.visible = ( pt.material.box.selector.statusPage == 2 ) ? true : false ;
+					// Add to container.
+					pt.box.mapbox.tiled.single.addChild( pt.box.mapbox.tiled.single.pic, pt.box.mapbox.tiled.single.mask ) ;
 					pt.box.mapbox.tiled.single.name = i * G.length + j ;
 					pt.box.mapbox.tiled.single.x = j * G.size, pt.box.mapbox.tiled.single.y = i * G.size ;
 					pt.box.mapbox.tiled.addChild( pt.box.mapbox.tiled.single.clone( true ) ) ;
