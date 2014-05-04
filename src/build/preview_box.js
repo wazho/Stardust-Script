@@ -50,18 +50,18 @@ PreviewBox.prototype.OnTiledControl = function() {
 	this.box.bar.vertical.x = 620, this.box.bar.vertical.y = 70 ;
 	this.box.bar.addChild( this.box.bar.horizontal, this.box.bar.vertical ) ;
 	this.box.bar.horizontal.bg = new createjs.Shape() ;
-	this.box.bar.horizontal.bg.graphics.f( "#88FFAA" ).r( 0, 0, 576, 12 ) ;
-	this.box.bar.horizontal.left = new createjs.Shape() ;
-	this.box.bar.horizontal.left.graphics.f( "#FF0000" ).dc( 8, 5, 13 ) ;
-	this.box.bar.horizontal.right = new createjs.Shape() ;
-	this.box.bar.horizontal.right.graphics.f( "#FF0000" ).dc( 570, 5, 13 ) ;
+	this.box.bar.horizontal.bg.graphics.f( "#88FFAA" ).r( 50, 0, 500, 12 ) ;
+	this.box.bar.horizontal.left = new createjs.Bitmap( "pic/map_build/left.png" ) ;
+	this.box.bar.horizontal.left.x = 0, this.box.bar.horizontal.left.y = -6 ;
+	this.box.bar.horizontal.right = new createjs.Bitmap( "pic/map_build/right.png" ) ;
+	this.box.bar.horizontal.right.x = 555, this.box.bar.horizontal.right.y = -6 ;
 	this.box.bar.horizontal.addChild( this.box.bar.horizontal.bg, this.box.bar.horizontal.left, this.box.bar.horizontal.right ) ;
 	this.box.bar.vertical.bg = new createjs.Shape() ;
-	this.box.bar.vertical.bg.graphics.f( "#88FFAA" ).r( 0, 0, 12, 448 ) ;
-	this.box.bar.vertical.up = new createjs.Shape() ;
-	this.box.bar.vertical.up.graphics.f( "#FF0000" ).dc( 6, 7, 13 ) ;
-	this.box.bar.vertical.down = new createjs.Shape() ;
-	this.box.bar.vertical.down.graphics.f( "#FF0000" ).dc( 6, 438, 13 ) ;
+	this.box.bar.vertical.bg.graphics.f( "#88FFAA" ).r( 0, 50, 12, 350 ) ;
+	this.box.bar.vertical.up = new createjs.Bitmap( "pic/map_build/up.png" ) ;
+	this.box.bar.vertical.up.x = -6, this.box.bar.vertical.up.y = 0 ;
+	this.box.bar.vertical.down = new createjs.Bitmap( "pic/map_build/down.png" ) ;
+	this.box.bar.vertical.down.x = -6, this.box.bar.vertical.down.y = 425 ;
 	this.box.bar.vertical.addChild( this.box.bar.vertical.bg, this.box.bar.vertical.up, this.box.bar.vertical.down ) ;
 	// Add listening events.
 	this.box.bar.horizontal.left.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc - 1 ) ; } ) ;
