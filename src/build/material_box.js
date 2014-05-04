@@ -250,15 +250,19 @@ MaterialBox.prototype.OnOption = function() {
 	this.box.list.removeAllChildren() ;
 	this.box.selector.statusPage = 6 ;
 	// Something info.
-	this.box.list.pic = new createjs.Bitmap( "pic/husky.png" ) ;
+	this.box.list.pic = new createjs.Container() ;
 	this.box.list.pic.x = 58, this.box.list.pic.y = 5 ;
-	this.box.list.pic.scaleX = this.box.list.pic.scaleY = 0.22 ;
+	this.box.list.pic.bg = new createjs.Shape() ;
+	this.box.list.pic.bg.graphics.s( "#000000" ).f( "#EEEEEE" ).dc( 88, 88, 90 ) ;
+	this.box.list.pic.img = new createjs.Bitmap( "pic/husky.png" ) ;
+	this.box.list.pic.img.scaleX = this.box.list.pic.img.scaleY = 0.22 ;
+	this.box.list.pic.addChild( this.box.list.pic.bg, this.box.list.pic.img ) ;
 	this.box.list.author = new createjs.Text( "Made by Salmon (http://salmon.tw)", "12px comic sans ms", "#FFFFFF" ) ;
 	this.box.list.author.x = 48, this.box.list.author.y = 375 ;
 	this.box.list.addChild( this.box.list.pic, this.box.list.author ) ;
 	// Create new page button.
 	this.box.list.newPage = new createjs.Container() ;
-	this.box.list.newPage.x = 30, this.box.list.newPage.y = 170 ;
+	this.box.list.newPage.x = 30, this.box.list.newPage.y = 180 ;
 	this.box.list.newPage.bg = new createjs.Bitmap( "pic/map_build/buttonG.png" ) ;
 	this.box.list.newPage.bg.scaleX = this.box.list.newPage.bg.scaleY = 0.5 ;
 	this.box.list.newPage.bg.x = 0, this.box.list.newPage.bg.y = 0 ;
@@ -268,7 +272,7 @@ MaterialBox.prototype.OnOption = function() {
 	this.box.list.newPage.on( "click", function( evt ) { $( "#dialog_01" ).dialog( "open" ) ; } ) ;
 	// Save button.
 	this.box.list.save = new createjs.Container() ;
-	this.box.list.save.x = 30, this.box.list.save.y = 220 ;
+	this.box.list.save.x = 30, this.box.list.save.y = 230 ;
 	this.box.list.save.bg = new createjs.Bitmap( "pic/map_build/buttonH.png" ) ;
 	this.box.list.save.bg.scaleX = this.box.list.save.bg.scaleY = 0.5 ;
 	this.box.list.save.bg.x = 170, this.box.list.save.bg.y = 0 ;
@@ -277,7 +281,7 @@ MaterialBox.prototype.OnOption = function() {
 	this.box.list.save.addChild( this.box.list.save.bg, this.box.list.save.text1 ) ;
 	// Tutorial button.
 	this.box.list.tutorial = new createjs.Container() ;
-	this.box.list.tutorial.x = 30, this.box.list.tutorial.y = 270 ;
+	this.box.list.tutorial.x = 30, this.box.list.tutorial.y = 280 ;
 	this.box.list.tutorial.bg = new createjs.Bitmap( "pic/map_build/buttonI.png" ) ;
 	this.box.list.tutorial.bg.scaleX = this.box.list.tutorial.bg.scaleY = 0.5 ;
 	this.box.list.tutorial.bg.x = 0, this.box.list.tutorial.bg.y = 0 ;
