@@ -42,28 +42,51 @@ PreviewBox.prototype.OnCreate = function( material ) {
 	this.box.addChild( this.box.mapbox, this.box.bar, this.box.tool ) ;
 } // OnCreate()
 
+
+PreviewBox.prototype.OnCreateTiled = function( length, height ) {
+	// Assign row number.
+	var tiled = new Array( height ) ;
+	// Assign column number.
+	for ( i = 0 ; i < height ; i ++ )
+		tiled[i] = new Array( length ) ;
+	// Datastructure created.
+	for ( i = 0 ; i < height ; i ++ )
+		for ( j = 0 ; j < length ; j ++ )
+			tiled[i][j] = new Tiled_Datastruct() ;
+	return tiled ;
+
+	function Tiled_Datastruct() {
+		this.map = -1 ;
+		this.index = -1 ;
+		this.walkable = 1 ;
+	} // Tiled_Datastruct()
+} // OnCreateTiled()
+
 // 
 PreviewBox.prototype.OnTiledControl = function() {
 	var that = this ;
-	var size = 64, range = 4, length = 9, height = 7 ;
-	var customer_length = 20, customer_height = 20 ;
-	var src = "pic/map/texture/" ;
+	var G = new GlobalValues() ;
+
+	var tiled_data = this.OnCreateTiled( G.customer_length, G.customer_height ) ;
+
+	// console.log( tiled_data[0][0] + " " + G.size ) ;
+
 	// Map box tiled.
 	this.box.mapbox.tiled = new createjs.Container() ;
 	this.box.mapbox.tiled.x = 0, this.box.mapbox.tiled.y = 0 ;
 	this.box.mapbox.addChild( this.box.mapbox.tiled ) ;
-	for ( i = 0 ; i < height ; i ++ )
-		for ( j = 0 ; j < length ; j ++ ) {
+	for ( i = 0 ; i < G.height ; i ++ )
+		for ( j = 0 ; j < G.length ; j ++ ) {
 			this.box.mapbox.tiled.single = new createjs.Container() ;
-			this.box.mapbox.tiled.single.pic = new createjs.Bitmap( src + "0.png" ) ;
-			this.box.mapbox.tiled.single.pic.sourceRect = new createjs.Rectangle( 0, 0, size, size ) ;
+			this.box.mapbox.tiled.single.pic = new createjs.Bitmap( G.src + "0.png" ) ;
+			this.box.mapbox.tiled.single.pic.sourceRect = new createjs.Rectangle( 0, 0, G.size, G.size ) ;
 			this.box.mapbox.tiled.single.addChild( this.box.mapbox.tiled.single.pic ) ;
 			this.box.mapbox.tiled.single.name = i * length + j ;
-			this.box.mapbox.tiled.single.x = j * size, this.box.mapbox.tiled.single.y = i * size ;
+			this.box.mapbox.tiled.single.x = j * G.size, this.box.mapbox.tiled.single.y = i * G.size ;
 			this.box.mapbox.tiled.addChild( this.box.mapbox.tiled.single.clone( true ) ) ;
 		} // for
 	// Add listening event.
-	for ( i = 0 ; i < length * height ; i ++ )
+	for ( i = 0 ; i < G.length * G.height ; i ++ )
 		this.box.mapbox.tiled.getChildAt( i ).on( "click", function( evt ) { Refresh( that, this ) ; } ) ;
 
 	// Number of map : Math.floor( select / 100 )
@@ -74,8 +97,8 @@ PreviewBox.prototype.OnTiledControl = function() {
 			var map = Math.floor( select / 100 ) ;
 			var index = select - Math.floor( ( select / 100 ) ) * 100 ;
 			tiled.removeAllChildren() ;
-			tiled.pic = new createjs.Bitmap( src + map + ".png" ) ;
-			tiled.pic.sourceRect = new createjs.Rectangle( ( index % range ) * size, ( Math.floor( index / range ) ) * size, size, size ) ;
+			tiled.pic = new createjs.Bitmap( G.src + map + ".png" ) ;
+			tiled.pic.sourceRect = new createjs.Rectangle( ( G.index % G.range ) * G.size, ( Math.floor( G.index / G.range ) ) * G.size, G.size, G.size ) ;
 			tiled.addChild( tiled.pic ) ;
 		} // if
 		else if ( pt.material.box.selector.statusPage == 2 ) {
@@ -91,4 +114,12 @@ PreviewBox.prototype.OnTiledControl = function() {
 
 		} // else if
 	} // Refresh()
+
+	//
+	function SildeControl( pt, tiled ) {
+
+
+
+
+	} // SildeControl()
 } // OnTiledControl()
