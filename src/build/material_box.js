@@ -265,28 +265,31 @@ MaterialBox.prototype.OnOption = function() {
 	this.box.list.addChild( this.box.list.pic, this.box.list.author ) ;
 	// Create new page button.
 	this.box.list.newPage = new createjs.Container() ;
-	this.box.list.newPage.x = 45, this.box.list.newPage.y = 200 ;
-	this.box.list.newPage.bg = new createjs.Shape() ;
-	this.box.list.newPage.bg.graphics.f( "#AA0000" ).r( 0, 0, 200, 30 ) ;
+	this.box.list.newPage.x = 30, this.box.list.newPage.y = 170 ;
+	this.box.list.newPage.bg = new createjs.Bitmap( "pic/map_build/buttonG.png" ) ;
+	this.box.list.newPage.bg.scaleX = this.box.list.newPage.bg.scaleY = 0.5 ;
+	this.box.list.newPage.bg.x = 0, this.box.list.newPage.bg.y = 0 ;
 	this.box.list.newPage.text1 = new createjs.Text( "Create New Map", "20px comic sans ms", "#FFFFFF" ) ;
-	this.box.list.newPage.text1.x = 22, this.box.list.newPage.text1.y = 7 ;
+	this.box.list.newPage.text1.x = 65, this.box.list.newPage.text1.y = 23 ;
 	this.box.list.newPage.addChild( this.box.list.newPage.bg, this.box.list.newPage.text1 ) ;
 	this.box.list.newPage.on( "click", function( evt ) { $( "#dialog_01" ).dialog( "open" ) ; } ) ;
 	// Save button.
 	this.box.list.save = new createjs.Container() ;
-	this.box.list.save.x = 45, this.box.list.save.y = 250 ;
-	this.box.list.save.bg = new createjs.Shape() ;
-	this.box.list.save.bg.graphics.f( "#AA0000" ).r( 0, 0, 200, 30 ) ;
-	this.box.list.save.text1 = new createjs.Text( "Save the Map to json", "18px comic sans ms", "#FFFFFF" ) ;
-	this.box.list.save.text1.x = 12, this.box.list.save.text1.y = 8 ;
+	this.box.list.save.x = 30, this.box.list.save.y = 220 ;
+	this.box.list.save.bg = new createjs.Bitmap( "pic/map_build/buttonH.png" ) ;
+	this.box.list.save.bg.scaleX = this.box.list.save.bg.scaleY = 0.5 ;
+	this.box.list.save.bg.x = 170, this.box.list.save.bg.y = 0 ;
+	this.box.list.save.text1 = new createjs.Text( "Save/Load the Map", "18px comic sans ms", "#FFFFFF" ) ;
+	this.box.list.save.text1.x = 5, this.box.list.save.text1.y = 23 ;
 	this.box.list.save.addChild( this.box.list.save.bg, this.box.list.save.text1 ) ;
 	// Tutorial button.
 	this.box.list.tutorial = new createjs.Container() ;
-	this.box.list.tutorial.x = 45, this.box.list.tutorial.y = 300 ;
-	this.box.list.tutorial.bg = new createjs.Shape() ;
-	this.box.list.tutorial.bg.graphics.f( "#AA0000" ).r( 0, 0, 200, 30 ) ;
-	this.box.list.tutorial.text1 = new createjs.Text( "Tutorial", "18px comic sans ms", "#FFFFFF" ) ;
-	this.box.list.tutorial.text1.x = 65, this.box.list.tutorial.text1.y = 8 ;
+	this.box.list.tutorial.x = 30, this.box.list.tutorial.y = 270 ;
+	this.box.list.tutorial.bg = new createjs.Bitmap( "pic/map_build/buttonI.png" ) ;
+	this.box.list.tutorial.bg.scaleX = this.box.list.tutorial.bg.scaleY = 0.5 ;
+	this.box.list.tutorial.bg.x = 0, this.box.list.tutorial.bg.y = 0 ;
+	this.box.list.tutorial.text1 = new createjs.Text( "Tutorial of Making", "18px comic sans ms", "#FFFFFF" ) ;
+	this.box.list.tutorial.text1.x = 65, this.box.list.tutorial.text1.y = 23 ;
 	this.box.list.tutorial.addChild( this.box.list.tutorial.bg, this.box.list.tutorial.text1 ) ;
 
 	this.box.list.addChild( this.box.list.newPage, this.box.list.save, this.box.list.tutorial ) ;
