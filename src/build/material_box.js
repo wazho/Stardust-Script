@@ -146,7 +146,7 @@ MaterialBox.prototype.OnTexture = function() {
 				pt.box.list.texture.addChild( pt.box.list.texture.pic.clone( false ) ) ;
 			} // for
 		// Text info.
-		pt.box.list.picName = new createjs.Text( "Name: " + pt.box.list.texture.number + ".png", "18px comic sans ms", "#FFFFFF" ) ;
+		pt.box.list.picName = new createjs.Text( "Name: " + pt.box.list.texture.number, "18px comic sans ms", "#FFFFFF" ) ;
 		pt.box.list.picName.x = 35, pt.box.list.picName.y = 297 ;
 		pt.box.list.texture.addChild( pt.box.list.picName ) ;
 		// Add listening event.

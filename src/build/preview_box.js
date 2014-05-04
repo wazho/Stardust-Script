@@ -21,7 +21,14 @@ PreviewBox.prototype.OnCreate = function( material ) {
 	this.OnTiledControl() ;
 	// Map editor tools.
 	this.box.tool = new createjs.Container() ;
-	this.box.tool.x = 15, this.box.tool.y = 15 ;
+	this.box.tool.x = 525, this.box.tool.y = 22 ;
+	this.box.tool.backward = new createjs.Bitmap( "pic/map_build/movement_a.png" ) ;
+	this.box.tool.backward.scaleX = this.box.tool.backward.scaleY = 0.3 ;
+	this.box.tool.backward.x = 0, this.box.tool.backward.y = 0 ;
+	this.box.tool.forward = new createjs.Bitmap( "pic/map_build/movement_b.png" ) ;
+	this.box.tool.forward.scaleX = this.box.tool.forward.scaleY = 0.3 ;
+	this.box.tool.forward.x = 50, this.box.tool.forward.y = 0 ;
+	this.box.tool.addChild( this.box.tool.backward, this.box.tool.forward ) ;
 	// Add to top container.
 	this.box.addChild( this.box.mapbox, this.box.bar, this.box.tool ) ;
 } // OnCreate()
@@ -49,20 +56,16 @@ PreviewBox.prototype.OnTiledControl = function() {
 	this.box.bar.vertical = new createjs.Container() ;
 	this.box.bar.vertical.x = 620, this.box.bar.vertical.y = 70 ;
 	this.box.bar.addChild( this.box.bar.horizontal, this.box.bar.vertical ) ;
-	this.box.bar.horizontal.bg = new createjs.Shape() ;
-	this.box.bar.horizontal.bg.graphics.f( "#88FFAA" ).r( 50, 0, 500, 12 ) ;
 	this.box.bar.horizontal.left = new createjs.Bitmap( "pic/map_build/left.png" ) ;
 	this.box.bar.horizontal.left.x = 0, this.box.bar.horizontal.left.y = -6 ;
 	this.box.bar.horizontal.right = new createjs.Bitmap( "pic/map_build/right.png" ) ;
 	this.box.bar.horizontal.right.x = 555, this.box.bar.horizontal.right.y = -6 ;
-	this.box.bar.horizontal.addChild( this.box.bar.horizontal.bg, this.box.bar.horizontal.left, this.box.bar.horizontal.right ) ;
-	this.box.bar.vertical.bg = new createjs.Shape() ;
-	this.box.bar.vertical.bg.graphics.f( "#88FFAA" ).r( 0, 50, 12, 350 ) ;
+	this.box.bar.horizontal.addChild( this.box.bar.horizontal.left, this.box.bar.horizontal.right ) ;
 	this.box.bar.vertical.up = new createjs.Bitmap( "pic/map_build/up.png" ) ;
 	this.box.bar.vertical.up.x = -6, this.box.bar.vertical.up.y = 0 ;
 	this.box.bar.vertical.down = new createjs.Bitmap( "pic/map_build/down.png" ) ;
 	this.box.bar.vertical.down.x = -6, this.box.bar.vertical.down.y = 425 ;
-	this.box.bar.vertical.addChild( this.box.bar.vertical.bg, this.box.bar.vertical.up, this.box.bar.vertical.down ) ;
+	this.box.bar.vertical.addChild( this.box.bar.vertical.up, this.box.bar.vertical.down ) ;
 	// Add listening events.
 	this.box.bar.horizontal.left.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc - 1 ) ; } ) ;
 	this.box.bar.horizontal.right.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc + 1 ) ; } ) ;
