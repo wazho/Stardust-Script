@@ -4,6 +4,6 @@ function GlobalValues() {
 	this.length = 9 ;
 	this.height = 7 ;
 	this.customer_length = 8 ;
-	this.customer_height = 5 ;
+	this.customer_height = 6 ;
 	this.src = "pic/map/texture/" ;
 } // Tiled_Datastruct()

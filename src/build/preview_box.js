@@ -44,9 +44,10 @@ PreviewBox.prototype.OnTiledControl = function() {
 	// Map box tiled.
 	this.box.mapbox.tiled = new createjs.Container() ;
 	this.box.mapbox.tiled.x = 0, this.box.mapbox.tiled.y = 0 ;
+	this.box.mapbox.tiled.mr = 0, this.box.mapbox.tiled.mc = 0 ;
 	this.box.mapbox.addChild( this.box.mapbox.tiled ) ;
 	// Modify row, column for silde tiled map.
-	TotalRefresh( this, 1, 1 ) ;
+	TotalRefresh( this, 0, 0 ) ;
 	// Slide bar create.
 	this.box.bar.horizontal = new createjs.Container() ;
 	this.box.bar.horizontal.x = 37, this.box.bar.horizontal.y = 525 ;
@@ -61,12 +62,19 @@ PreviewBox.prototype.OnTiledControl = function() {
 	this.box.bar.vertical.addChild( this.box.bar.vertical.bg ) ;
 
 
-	this.box.bar.horizontal.bg.on( "click", function( evt ) { console.log( "haha" ) ; TotalRefresh( that, 2, 2 ) ; } ) ;
+	this.box.bar.horizontal.bg.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc + 1 ) ; } ) ;
+	this.box.bar.vertical.bg.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr + 1, that.box.mapbox.tiled.mc ) ; } ) ;
 
 
 	// Replace all of this map box.
 	function TotalRefresh( pt, mr, mc ) {
+		if ( mr >= G.customer_height )
+			return ;
+		if ( mc >= G.customer_length )
+		 	return ;
+
 		pt.box.mapbox.tiled.removeAllChildren() ;
+		pt.box.mapbox.tiled.mr = mr, pt.box.mapbox.tiled.mc = mc ;
 		for ( i = 0 ; i < G.height ; i ++ )
 			for ( j = 0 ; j < G.length ; j ++ ) {
 				if ( ( i + mr ) < G.customer_height && ( j + mc ) < G.customer_length ) {
@@ -85,15 +93,24 @@ PreviewBox.prototype.OnTiledControl = function() {
 	} // TotalRefresh()
 
 	// Focus one tiled, let it replace new one.
-	function SingleRefresh( pt, tiled ) {
+	function SingleRefresh( pt, singleTiled ) {
+		var mr = pt.box.mapbox.tiled.mr, mc = pt.box.mapbox.tiled.mc ;
 		if ( pt.material.box.selector.statusPage == 1 ) {
 			var select = pt.material.box.list.marked.name ;
 			var map = Math.floor( select / 100 ) ;
 			var index = select - Math.floor( ( select / 100 ) ) * 100 ;
-			tiled.removeAllChildren() ;
-			tiled.pic = new createjs.Bitmap( G.src + map + ".png" ) ;
-			tiled.pic.sourceRect = new createjs.Rectangle( ( G.index % G.range ) * G.size, ( Math.floor( G.index / G.range ) ) * G.size, G.size, G.size ) ;
-			tiled.addChild( tiled.pic ) ;
+			// Get sileded tiled map data.
+			var row = mr + Math.floor( singleTiled.name / G.length ) ;
+			var column = mc + ( singleTiled.name % G.length ) ;
+			console.log( row + " " + column ) ;
+			// tilde map assign.
+			tiled[row][column].map = map ;
+			tiled[row][column].index = index ;
+			// singleTiled to redraw.
+			singleTiled.removeAllChildren() ;
+			singleTiled.pic = new createjs.Bitmap( G.src + map + ".png" ) ;
+			singleTiled.pic.sourceRect = new createjs.Rectangle( ( index % G.range ) * G.size, ( Math.floor( index / G.range ) ) * G.size, G.size, G.size ) ;
+			singleTiled.addChild( singleTiled.pic ) ;
 		} // if
 		else if ( pt.material.box.selector.statusPage == 2 ) {
 
@@ -108,13 +125,6 @@ PreviewBox.prototype.OnTiledControl = function() {
 
 		} // else if
 	} // SingleRefresh()
-
-	// 
-	function SildeControl() {
-
-		TotalRefresh( this, 0, 0 ) ;
-
-	} // SildeControl()
 
 	// Create tiled map data struct.
 	function OnCreateTiled( length, height ) {
