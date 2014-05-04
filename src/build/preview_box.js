@@ -100,7 +100,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 						pt.box.mapbox.tiled.single.mask.graphics.f( "#00FF00" ).r( 0, 0, G.size, G.size ) ;
 					else
 						pt.box.mapbox.tiled.single.mask.graphics.f( "#FF0000" ).r( 0, 0, G.size, G.size ) ;
-					pt.box.mapbox.tiled.single.mask.alpha = 0.5 ;
+					pt.box.mapbox.tiled.single.mask.alpha = 0.2 ;
 					pt.box.mapbox.tiled.single.mask.visible = ( pt.material.box.selector.statusPage == 2 ) ? true : false ;
 					// Add to container.
 					pt.box.mapbox.tiled.single.addChild( pt.box.mapbox.tiled.single.pic, pt.box.mapbox.tiled.single.mask ) ;
@@ -116,25 +116,22 @@ PreviewBox.prototype.OnTiledControl = function() {
 
 	// Focus one tiled, let it replace new one.
 	function SingleRefresh( pt, singleTiled ) {
-		var mr = pt.box.mapbox.tiled.mr, mc = pt.box.mapbox.tiled.mc ;
+		// Get sileded tiled map data.
+		var select = pt.material.box.list.marked.name ;
+		var row = Math.floor( singleTiled.name / G.length ) + pt.box.mapbox.tiled.mr ;
+		var column = ( singleTiled.name % G.length ) + pt.box.mapbox.tiled.mc ;
 		if ( pt.material.box.selector.statusPage == 1 ) {
-			var select = pt.material.box.list.marked.name ;
 			var map = Math.floor( select / 100 ) ;
 			var index = select - Math.floor( ( select / 100 ) ) * 100 ;
-			// Get sileded tiled map data.
-			var row = mr + Math.floor( singleTiled.name / G.length ) ;
-			var column = mc + ( singleTiled.name % G.length ) ;
 			// tilde map assign.
 			tiled[row][column].map = map ;
 			tiled[row][column].index = index ;
-			// singleTiled to redraw.
-			singleTiled.removeAllChildren() ;
-			singleTiled.pic = new createjs.Bitmap( G.src + map + ".png" ) ;
-			singleTiled.pic.sourceRect = new createjs.Rectangle( ( index % G.range ) * G.size, ( Math.floor( index / G.range ) ) * G.size, G.size, G.size ) ;
-			singleTiled.addChild( singleTiled.pic ) ;
 		} // if
 		else if ( pt.material.box.selector.statusPage == 2 ) {
-
+			if ( select == "walkable" )
+				tiled[row][column].walkable = 1 ;
+			else if ( select == "unwalkable" )
+				tiled[row][column].walkable = 0 ;
 		} // else if
 		else if ( pt.material.box.selector.statusPage == 3 ) {
 
@@ -145,6 +142,8 @@ PreviewBox.prototype.OnTiledControl = function() {
 		else if ( pt.material.box.selector.statusPage == 5 ) {
 
 		} // else if
+		// Redraw.
+		TotalRefresh( pt, pt.box.mapbox.tiled.mr, pt.box.mapbox.tiled.mc ) ;
 	} // SingleRefresh()
 
 	// Create tiled map data struct.
