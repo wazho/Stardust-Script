@@ -56,19 +56,29 @@ PreviewBox.prototype.OnTiledControl = function() {
 	this.box.bar.addChild( this.box.bar.horizontal, this.box.bar.vertical ) ;
 	this.box.bar.horizontal.bg = new createjs.Shape() ;
 	this.box.bar.horizontal.bg.graphics.f( "#88FFAA" ).r( 0, 0, 576, 12 ) ;
-	this.box.bar.horizontal.addChild( this.box.bar.horizontal.bg ) ;
+	this.box.bar.horizontal.left = new createjs.Shape() ;
+	this.box.bar.horizontal.left.graphics.f( "#FF0000" ).dc( 8, 5, 13 ) ;
+	this.box.bar.horizontal.right = new createjs.Shape() ;
+	this.box.bar.horizontal.right.graphics.f( "#FF0000" ).dc( 570, 5, 13 ) ;
+	this.box.bar.horizontal.addChild( this.box.bar.horizontal.bg, this.box.bar.horizontal.left, this.box.bar.horizontal.right ) ;
 	this.box.bar.vertical.bg = new createjs.Shape() ;
 	this.box.bar.vertical.bg.graphics.f( "#88FFAA" ).r( 0, 0, 12, 448 ) ;
-	this.box.bar.vertical.addChild( this.box.bar.vertical.bg ) ;
+	this.box.bar.vertical.up = new createjs.Shape() ;
+	this.box.bar.vertical.up.graphics.f( "#FF0000" ).dc( 6, 7, 13 ) ;
+	this.box.bar.vertical.down = new createjs.Shape() ;
+	this.box.bar.vertical.down.graphics.f( "#FF0000" ).dc( 6, 438, 13 ) ;
+	this.box.bar.vertical.addChild( this.box.bar.vertical.bg, this.box.bar.vertical.up, this.box.bar.vertical.down ) ;
 
 
-	this.box.bar.horizontal.bg.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc + 1 ) ; } ) ;
-	this.box.bar.vertical.bg.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr + 1, that.box.mapbox.tiled.mc ) ; } ) ;
+	this.box.bar.horizontal.left.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc - 1 ) ; } ) ;
+	this.box.bar.horizontal.right.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc + 1 ) ; } ) ;
+	this.box.bar.vertical.up.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr - 1, that.box.mapbox.tiled.mc ) ; } ) ;
+	this.box.bar.vertical.down.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr + 1, that.box.mapbox.tiled.mc ) ; } ) ;
 
 
 	// Replace all of this map box.
 	function TotalRefresh( pt, mr, mc ) {
-		if ( mr >= G.customer_height || mc >= G.customer_length )
+		if ( mr >= G.customer_height || mc >= G.customer_length || mr < 0 || mc < 0 )
 		 	return ;
 		// Initial must remove old tiled map.
 		pt.box.mapbox.tiled.removeAllChildren() ;
@@ -79,8 +89,6 @@ PreviewBox.prototype.OnTiledControl = function() {
 					var data = tiled[i+mr][j+mc] ;
 					var row = Math.floor( data.index / G.range ) ;
 					var column = data.index % G.range ;
-					console.log( row + "  " + column ) ;
-
 					pt.box.mapbox.tiled.single = new createjs.Container() ;
 					pt.box.mapbox.tiled.single.pic = new createjs.Bitmap( G.src + data.map + ".png" ) ;
 					pt.box.mapbox.tiled.single.pic.sourceRect = new createjs.Rectangle( column * G.size, row * G.size, G.size, G.size ) ;
