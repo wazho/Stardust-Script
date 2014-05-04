@@ -104,23 +104,16 @@ MaterialBox.prototype.OnTexture = function() {
 	this.box.list.texture.number = 1 ;
 	// Page change.
 	this.box.list.page = new createjs.Container() ;
-	this.box.list.page.x = 35, this.box.list.page.y = 330 ;
+	this.box.list.page.x = 15, this.box.list.page.y = 330 ;
 	this.box.list.page.prevPage = new createjs.Container() ;
 	this.box.list.page.prevPage.x = 0, this.box.list.page.prevPage.y = 0 ;
-	this.box.list.page.prevPage.bg = new createjs.Shape() ;
-	this.box.list.page.prevPage.bg.graphics.f( "#CCF356" ).r( 0, 0, 100, 50 ) ;
-	this.box.list.page.prevPage.bg.x = 0, this.box.list.page.prevPage.bg.y = 0 ;
-	this.box.list.page.prevPage.text = new createjs.Text( "<- Previous", "18px comic sans ms", "#000000" ) ;
-	this.box.list.page.prevPage.text.x = 5, this.box.list.page.prevPage.text.y = 17 ;
-	this.box.list.page.prevPage.addChild( this.box.list.page.prevPage.bg, this.box.list.page.prevPage.text ) ;
+	this.box.list.page.prevPage.bg = new createjs.Bitmap( "pic/map_build/previous.png" ) ;
+	this.box.list.page.prevPage.addChild( this.box.list.page.prevPage.bg ) ;
 	this.box.list.page.prevPage.on( "click", function( evt ) { Refresh( that, -1 ) ; } ) ;
 	this.box.list.page.nextPage = new createjs.Container() ;
-	this.box.list.page.nextPage.x = 120, this.box.list.page.nextPage.y = 0 ;
-	this.box.list.page.nextPage.bg = new createjs.Shape() ;
-	this.box.list.page.nextPage.bg.graphics.f( "#CCF356" ).r( 0, 0, 100, 50 ) ;
-	this.box.list.page.nextPage.text = new createjs.Text( "Next ->", "18px comic sans ms", "#000000" ) ;
-	this.box.list.page.nextPage.text.x = 18, this.box.list.page.nextPage.text.y = 17 ;
-	this.box.list.page.nextPage.addChild( this.box.list.page.nextPage.bg, this.box.list.page.nextPage.text ) ;
+	this.box.list.page.nextPage.x = 135, this.box.list.page.nextPage.y = 0 ;
+	this.box.list.page.nextPage.bg = new createjs.Bitmap( "pic/map_build/next.png" ) ;
+	this.box.list.page.nextPage.addChild( this.box.list.page.nextPage.bg ) ;
 	this.box.list.page.nextPage.on( "click", function( evt ) { Refresh( that, 1 ) ; } ) ;
 	this.box.list.page.addChild( this.box.list.page.prevPage, this.box.list.page.nextPage ) ;
 	// Selected for marking.
