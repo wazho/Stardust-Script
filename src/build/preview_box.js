@@ -11,7 +11,9 @@ PreviewBox.prototype.OnCreate = function( material ) {
 	this.box = new createjs.Container() ;
 	this.box.x = 0, this.box.y = 0 ;
 	this.box.bg = new createjs.Bitmap( "pic/map_build/background.jpg" ) ;
-	this.box.addChild( this.box.bg ) ;
+	this.box.logo = new createjs.Bitmap( "pic/map_build/logo.png" ) ;
+	this.box.logo.x = 15, this.box.logo.y = 15 ;
+	this.box.addChild( this.box.bg, this.box.logo ) ;
 	// Map box and silde bar.
 	this.box.mapbox = new createjs.Container() ;
 	this.box.mapbox.x = 37, this.box.mapbox.y = 70 ;
@@ -19,10 +21,7 @@ PreviewBox.prototype.OnCreate = function( material ) {
 	this.OnTiledControl() ;
 	// Map editor tools.
 	this.box.tool = new createjs.Container() ;
-	this.box.tool.x = 37, this.box.tool.y = 15 ;
-	this.box.tool.bg = new createjs.Shape() ;
-	this.box.tool.bg.graphics.f( "#AAFFBB" ).r( 0, 0, 576, 40 ) ;
-	this.box.tool.addChild( this.box.tool.bg ) ;
+	this.box.tool.x = 15, this.box.tool.y = 15 ;
 	// Add to top container.
 	this.box.addChild( this.box.mapbox, this.box.bar, this.box.tool ) ;
 } // OnCreate()
@@ -35,7 +34,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 	var tiled = this.box.mapbox.tiled_data = OnCreateTiled( G.customer_length, G.customer_height ) ;
 	// Map box container.
 	this.box.mapbox.bg = new createjs.Shape() ;
-	this.box.mapbox.bg.graphics.f( "#BBDDAA" ).r( 0, 0, 576, 448 ) ;
+	this.box.mapbox.bg.graphics.f( "#FFFFFF" ).r( 0, 0, 576, 448 ) ;
 	this.box.mapbox.addChild( this.box.mapbox.bg ) ;
 	// Map box tiled.
 	this.box.mapbox.tiled = new createjs.Container() ;
