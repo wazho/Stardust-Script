@@ -58,6 +58,9 @@
 				hide: { effect: "blind", duration: 500 },
 				buttons: {
 					"Done": function() {
+						G.customer_height = $( '#height' ).val() ;
+						G.customer_length = $( '#length' ).val() ;
+						preview.OnTiledControl() ;
 						$( this ).dialog( "close" ) ;
 					},
 					"Cancel": function() {
