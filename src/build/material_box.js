@@ -79,6 +79,8 @@ MaterialBox.prototype.OnCreate = function() {
 	this.box.list.x = 30, this.box.list.y = 130 ;
 	this.box.addChild( this.box.list ) ;
 	this.OnSelectEffect( this.box.selector.buttonF ) ;
+	// Initial.
+	this.OnTexture() ;
 	this.OnOption() ;
 } // OnCreate()
 
@@ -111,7 +113,7 @@ MaterialBox.prototype.OnTexture = function() {
 	this.box.list.page.prevPage.addChild( this.box.list.page.prevPage.bg ) ;
 	this.box.list.page.prevPage.on( "click", function( evt ) { Refresh( that, -1 ) ; } ) ;
 	this.box.list.page.nextPage = new createjs.Container() ;
-	this.box.list.page.nextPage.x = 135, this.box.list.page.nextPage.y = 0 ;
+	this.box.list.page.nextPage.x = 140, this.box.list.page.nextPage.y = 0 ;
 	this.box.list.page.nextPage.bg = new createjs.Bitmap( "pic/map_build/next.png" ) ;
 	this.box.list.page.nextPage.addChild( this.box.list.page.nextPage.bg ) ;
 	this.box.list.page.nextPage.on( "click", function( evt ) { Refresh( that, 1 ) ; } ) ;
@@ -130,28 +132,28 @@ MaterialBox.prototype.OnTexture = function() {
 	function Refresh( pt, num ) {
 		pt.box.list.texture.removeAllChildren() ;
 		pt.box.list.marked.visible = false ;
-		// Container background.
-		pt.box.list.texture.bg = new createjs.Shape() ;
-		pt.box.list.texture.bg.x = pt.box.list.texture.bg.y = 15 ;
-		pt.box.list.texture.bg.graphics.f( "#FFFFFF" ).r( 0, 0, 259, 259 ) ;
-		pt.box.list.texture.addChild( pt.box.list.texture.bg ) ;
 		// Change pic and drawing.
 		pt.box.list.texture.number += ( pt.box.list.texture.number + num > 0 ) ? num : 0 ;
 		pt.box.list.texture.pic = new createjs.Bitmap( G.src + pt.box.list.texture.number + ".png" ) ;
 		for ( i = 0 ; i < G.range ; i ++ )
 			for ( j = 0 ; j < G.range ; j ++ ) {
 				pt.box.list.texture.pic.sourceRect = new createjs.Rectangle( j * G.size, i * G.size, G.size, G.size ) ;
-				pt.box.list.texture.pic.name = pt.box.list.texture.number * 100 + ( j + 4 * i ) ;
+				pt.box.list.texture.pic.name = pt.box.list.texture.number * 100 + ( j + G.range * i ) ;
 				pt.box.list.texture.pic.x = 15 + j * ( G.size + 1 ), pt.box.list.texture.pic.y = 15 + i * ( G.size + 1 ) ;
 				pt.box.list.texture.addChild( pt.box.list.texture.pic.clone( false ) ) ;
 			} // for
+		// Add listening event.
+		for ( i = 0 ; i < G.range * G.range ; i ++ )
+			pt.box.list.texture.getChildAt( i ).on( "click", function( evt ) { MarkedSelected( that, this, G ) ; } ) ;
 		// Text info.
 		pt.box.list.picName = new createjs.Text( "Name: " + pt.box.list.texture.number, "18px comic sans ms", "#FFFFFF" ) ;
 		pt.box.list.picName.x = 35, pt.box.list.picName.y = 297 ;
 		pt.box.list.texture.addChild( pt.box.list.picName ) ;
-		// Add listening event.
-		for ( i = 0 ; i < G.range * G.range ; i ++ )
-			pt.box.list.texture.getChildAt( i ).on( "click", function( evt ) { MarkedSelected( that, this, G ) ; } ) ;
+		// Container background.
+		pt.box.list.texture.bg = new createjs.Shape() ;
+		pt.box.list.texture.bg.x = pt.box.list.texture.bg.y = 15 ;
+		pt.box.list.texture.bg.graphics.f( "#FFFFFF" ).r( 0, 0, 255 + G.range, 255 + G.range ) ;
+		pt.box.list.texture.addChildAt( pt.box.list.texture.bg, 0 ) ;
 
 		// Number of map : Math.floor( tiled.name / 100 )
 		// Index of tiled : tiled.name - Math.floor( tiled.name / 100 ) * 100
@@ -176,14 +178,14 @@ MaterialBox.prototype.OnWalkable = function() {
 	this.box.list.walkable = new createjs.Container() ;
 	this.box.list.walkable.yes = new createjs.Shape() ;
 	this.box.list.walkable.yes.name = "walkable" ;
-	this.box.list.walkable.yes.x = 15, this.box.list.walkable.yes.y = 15 ;
-	this.box.list.walkable.yes.graphics.f( "#00FF00" ).r( 0, 0, G.size, G.size ) ;
+	this.box.list.walkable.yes.regX = this.box.list.walkable.yes.regY = G.size / 2 ;
+	this.box.list.walkable.yes.graphics.f( "#00FF00" ).r( 45, 45, G.size, G.size ) ;
 	this.box.list.walkable.yes.alpha = 0.5 ;
 	this.box.list.walkable.yes.on( "click", function( evt ) { MarkedSelected( that, this ) ; } ) ;
 	this.box.list.walkable.no = new createjs.Shape() ;
 	this.box.list.walkable.no.name = "unwalkable" ;
-	this.box.list.walkable.no.x = 15, this.box.list.walkable.no.y = 95 ;
-	this.box.list.walkable.no.graphics.f( "#FF0000" ).r( 0, 0, G.size, G.size ) ;
+	this.box.list.walkable.no.regX = this.box.list.walkable.no.regY = G.size / 2 ;
+	this.box.list.walkable.no.graphics.f( "#FF0000" ).r( 45, 125, G.size, G.size ) ;
 	this.box.list.walkable.no.alpha = 0.5 ;
 	this.box.list.walkable.no.on( "click", function( evt ) { MarkedSelected( that, this ) ; } ) ;
 	this.box.list.walkable.addChild( this.box.list.walkable.yes, this.box.list.walkable.no ) ;
@@ -195,7 +197,8 @@ MaterialBox.prototype.OnWalkable = function() {
 	// Selected for marking.
 	this.box.list.marked = new createjs.Container() ;
 	this.box.list.marked.pane = new createjs.Shape() ;
-	this.box.list.marked.pane.graphics.s( "#FFFFFF" ).r( 0, 0, G.size + 1, G.size + 1 ) ;
+	this.box.list.marked.pane.regX = this.box.list.marked.pane.regY = G.size / 2 ;
+	this.box.list.marked.pane.graphics.s( "#FFFFFF" ).r( 45, 0, G.size + 1, G.size + 1 ) ;
 	this.box.list.marked.visible = false ;
 	this.box.list.marked.addChild( this.box.list.marked.pane ) ;
 	// Add to top container.
@@ -204,8 +207,7 @@ MaterialBox.prototype.OnWalkable = function() {
 	function MarkedSelected( pt, con ) {
 		pt.box.list.marked.name = con.name ;
 		pt.box.list.marked.visible = true ;
-		pt.box.list.marked.x = ( con.name == "walkable" ) ? 14 : 14 ;
-		pt.box.list.marked.y = ( con.name == "walkable" ) ? 14 : 94 ;
+		pt.box.list.marked.y = ( con.name == "walkable" ) ? 45 : 125 ;
 		pt.box.list.text1.color = ( con.name == "walkable" ) ? "#00FF00" : "#FFFFFF" ;
 		pt.box.list.text2.color = ( con.name == "walkable" ) ? "#FFFFFF" : "#FF0000" ;
 	} // MarkedSelected()

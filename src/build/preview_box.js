@@ -81,8 +81,9 @@ PreviewBox.prototype.OnTiledControl = function() {
 
 	// Replace all of this map box.
 	function TotalRefresh( pt, mr, mc ) {
-		if ( ( mr + G.height - 1 ) >= G.customer_height || ( mc + G.length - 1 ) >= G.customer_length || mr < 0 || mc < 0 )
-		 	return ;
+		if ( ( mr < 0 || mc < 0 ) || mr >= G.customer_height || mc >= G.customer_length )
+			return ;
+
 		// Initial must remove old tiled map.
 		pt.box.mapbox.tiled.removeAllChildren() ;
 		pt.box.mapbox.tiled.mr = mr, pt.box.mapbox.tiled.mc = mc ;
