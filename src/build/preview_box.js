@@ -36,7 +36,6 @@ PreviewBox.prototype.OnCreate = function( material ) {
 // 
 PreviewBox.prototype.OnTiledControl = function() {
 	var that = this ;
-	var G = new GlobalValues() ;
 	// Create tiled map data struct.
 	this.box.mapbox.tiled_data = OnCreateTiled( G.customer_length, G.customer_height ) ;
 	// Map box container.
@@ -87,6 +86,11 @@ PreviewBox.prototype.OnTiledControl = function() {
 		// Initial must remove old tiled map.
 		pt.box.mapbox.tiled.removeAllChildren() ;
 		pt.box.mapbox.tiled.mr = mr, pt.box.mapbox.tiled.mc = mc ;
+
+
+		console.log( G.customer_height + "  " + G.customer_length ) ;
+
+
 		for ( i = 0 ; i < G.height ; i ++ )
 			for ( j = 0 ; j < G.length ; j ++ ) {
 				if ( ( i + mr ) < G.customer_height && ( j + mc ) < G.customer_length ) {

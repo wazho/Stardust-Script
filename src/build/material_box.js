@@ -97,7 +97,6 @@ MaterialBox.prototype.OnSelectEffect = function( select ) {
 // 
 MaterialBox.prototype.OnTexture = function() {
 	var that = this ;
-	var G = new GlobalValues() ;
 	// Remove original list first.
 	this.box.list.removeAllChildren() ;
 	this.box.selector.statusPage = 1 ;
@@ -170,7 +169,6 @@ MaterialBox.prototype.OnTexture = function() {
 // 
 MaterialBox.prototype.OnWalkable = function() {
 	var that = this ;
-	var G = new GlobalValues() ;
 	// Remove original list first.
 	this.box.list.removeAllChildren() ;
 	this.box.selector.statusPage = 2 ;

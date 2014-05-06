@@ -19,7 +19,6 @@
 			stage = new createjs.Stage( "myCanvas" ) ;
     		document.body.style.cursor = "url('pic/cursor/normal_select.cur'), default" ;
 
-			var G = new GlobalValues() ;
 			var material = new MaterialBox() ;
 			var preview = new PreviewBox( material ) ;
 
@@ -101,8 +100,8 @@
 						var obj = {
 							tilePixel : G.size,
 							name : 'HelloWorld',
-							length : G.length,
-							height : G.height,
+							height : G.customer_height,
+							length : G.customer_length,
 							tileData : preview.box.mapbox.tiled_data,
 							objectData : [],
 							lightData : [],
@@ -126,8 +125,9 @@
 				buttons: {
 					"Set the json": function() {
 						var obj = eval ( "(" + $( '#jsonImport' ).val() + ")" ) ;
+						G.customer_height = obj.height ;
+						G.customer_length = obj.length ;
 						preview.box.mapbox.tiled_data = obj.tileData ;
-						console.log( JSON.stringify( preview.box.mapbox.tiled_data ) ) ;
 					},
 					"Cancel": function() {
 						$( this ).dialog( "close" ) ;
