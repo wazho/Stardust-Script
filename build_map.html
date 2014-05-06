@@ -103,7 +103,7 @@
 							name : 'HelloWorld',
 							length : G.length,
 							height : G.height,
-							tileData : [ preview.box.mapbox.tiled_data ],
+							tileData : preview.box.mapbox.tiled_data,
 							objectData : [],
 							lightData : [],
 							soundData : []
@@ -126,7 +126,7 @@
 				buttons: {
 					"Set the json": function() {
 						var obj = eval ( "(" + $( '#jsonImport' ).val() + ")" ) ;
-						preview.box.mapbox.tiled_data = obj.tileData[0] ;
+						preview.box.mapbox.tiled_data = obj.tileData ;
 						console.log( JSON.stringify( preview.box.mapbox.tiled_data ) ) ;
 					},
 					"Cancel": function() {

@@ -38,7 +38,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 	var that = this ;
 	var G = new GlobalValues() ;
 	// Create tiled map data struct.
-	var tiled = this.box.mapbox.tiled_data = OnCreateTiled( G.customer_length, G.customer_height ) ;
+	this.box.mapbox.tiled_data = OnCreateTiled( G.customer_length, G.customer_height ) ;
 	// Map box container.
 	this.box.mapbox.bg = new createjs.Shape() ;
 	this.box.mapbox.bg.graphics.f( "#FFFFFF" ).r( 0, 0, 576, 448 ) ;
@@ -90,7 +90,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 		for ( i = 0 ; i < G.height ; i ++ )
 			for ( j = 0 ; j < G.length ; j ++ ) {
 				if ( ( i + mr ) < G.customer_height && ( j + mc ) < G.customer_length ) {
-					var data = tiled[i+mr][j+mc] ;
+					var data = pt.box.mapbox.tiled_data[i+mr][j+mc] ;
 					var row = Math.floor( data.i / G.range ) ;
 					var column = data.i % G.range ;
 					pt.box.mapbox.tiled.single = new createjs.Container() ;
@@ -126,14 +126,14 @@ PreviewBox.prototype.OnTiledControl = function() {
 			var map = Math.floor( select / 100 ) ;
 			var index = select - Math.floor( ( select / 100 ) ) * 100 ;
 			// tilde map assign.
-			tiled[row][column].m = map ;
-			tiled[row][column].i = index ;
+			pt.box.mapbox.tiled_data[row][column].m = map ;
+			pt.box.mapbox.tiled_data[row][column].i = index ;
 		} // if
 		else if ( pt.material.box.selector.statusPage == 2 ) {
 			if ( select == "walkable" )
-				tiled[row][column].w = 1 ;
+				pt.box.mapbox.tiled_data[row][column].w = 1 ;
 			else if ( select == "unwalkable" )
-				tiled[row][column].w = 0 ;
+				pt.box.mapbox.tiled_data[row][column].w = 0 ;
 		} // else if
 		else if ( pt.material.box.selector.statusPage == 3 ) {
 
