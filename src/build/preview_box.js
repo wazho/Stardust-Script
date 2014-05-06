@@ -93,7 +93,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 					var row = Math.floor( data.i / G.range ) ;
 					var column = data.i % G.range ;
 					pt.box.mapbox.tiled.single = new createjs.Container() ;
-					pt.box.mapbox.tiled.single.pic = new createjs.Bitmap( G.src + data.m + ".png" ) ;
+					pt.box.mapbox.tiled.single.pic = new createjs.Bitmap( G.textureSrc + data.m + ".png" ) ;
 					pt.box.mapbox.tiled.single.pic.sourceRect = new createjs.Rectangle( column * G.size, row * G.size, G.size, G.size ) ;
 					// Mask for walkable / unwalkable.
 					pt.box.mapbox.tiled.single.mask = new createjs.Shape() ;

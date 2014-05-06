@@ -133,7 +133,7 @@ MaterialBox.prototype.OnTexture = function() {
 		pt.box.list.marked.visible = false ;
 		// Change pic and drawing.
 		pt.box.list.texture.number += ( pt.box.list.texture.number + num > 0 ) ? num : 0 ;
-		pt.box.list.texture.pic = new createjs.Bitmap( G.src + pt.box.list.texture.number + ".png" ) ;
+		pt.box.list.texture.pic = new createjs.Bitmap( G.textureSrc + pt.box.list.texture.number + ".png" ) ;
 		for ( i = 0 ; i < G.range ; i ++ )
 			for ( j = 0 ; j < G.range ; j ++ ) {
 				pt.box.list.texture.pic.sourceRect = new createjs.Rectangle( j * G.size, i * G.size, G.size, G.size ) ;
@@ -213,13 +213,50 @@ MaterialBox.prototype.OnWalkable = function() {
 
 // 
 MaterialBox.prototype.OnObject = function() {
+	var that = this ;
 	// Remove original list first.
 	this.box.list.removeAllChildren() ;
-	this.box.selector.statusPage = 3 ;
-	// List background.
-	this.box.list.bg = new createjs.Shape() ;
-	this.box.list.bg.graphics.f( "#FFF3DA" ).r( 0, 0, 290, 400 ) ;
-	this.box.list.addChild( this.box.list.bg ) ;
+	this.box.selector.statusPage = 1 ;
+	// Texture select container.
+	this.box.list.object2 = new createjs.Container() ;
+	this.box.list.object2.number = 1 ;
+	// Page change.
+	this.box.list.page = new createjs.Container() ;
+	this.box.list.page.x = 15, this.box.list.page.y = 330 ;
+	this.box.list.page.prevPage = new createjs.Container() ;
+	this.box.list.page.prevPage.x = 0, this.box.list.page.prevPage.y = 0 ;
+	this.box.list.page.prevPage.bg = new createjs.Bitmap( "pic/map_build/previous.png" ) ;
+	this.box.list.page.prevPage.addChild( this.box.list.page.prevPage.bg ) ;
+	this.box.list.page.prevPage.on( "click", function( evt ) { Refresh( that, -1 ) ; } ) ;
+	this.box.list.page.nextPage = new createjs.Container() ;
+	this.box.list.page.nextPage.x = 140, this.box.list.page.nextPage.y = 0 ;
+	this.box.list.page.nextPage.bg = new createjs.Bitmap( "pic/map_build/next.png" ) ;
+	this.box.list.page.nextPage.addChild( this.box.list.page.nextPage.bg ) ;
+	this.box.list.page.nextPage.on( "click", function( evt ) { Refresh( that, 1 ) ; } ) ;
+	this.box.list.page.addChild( this.box.list.page.prevPage, this.box.list.page.nextPage ) ;
+	// Add to top container.
+	this.box.list.addChild( this.box.list.object2, this.box.list.page ) ;
+	// Refresh map texture pics. 
+	Refresh( this, 0 ) ;
+
+	function Refresh( pt, num ) {
+		pt.box.list.object2.removeAllChildren() ;
+		pt.box.list.marked.visible = false ;
+		// Container background.
+		pt.box.list.object2.bg = new createjs.Shape() ;
+		pt.box.list.object2.bg.x = pt.box.list.object2.bg.y = 15 ;
+		pt.box.list.object2.bg.graphics.f( "#FFFFFF" ).r( 0, 0, 255 + G.range, 255 + G.range ) ;
+		// Change pic and drawing.
+		pt.box.list.object2.number += ( pt.box.list.object2.number + num > 0 ) ? num : 0 ;
+		pt.box.list.object2.pic = new createjs.Bitmap( G.objectSrc + pt.box.list.object2.number + ".png" ) ;
+		pt.box.list.object2.pic.regX = pt.box.list.object2.pic.getBounds().width / 2 ;
+		pt.box.list.object2.pic.regY = pt.box.list.object2.pic.getBounds().height / 2 ;
+		pt.box.list.object2.pic.x = pt.box.list.object2.pic.y = 15 + ( 255 + G.range ) / 2 ;
+		// Text info.
+		pt.box.list.picName = new createjs.Text( "Name: " + pt.box.list.object2.number, "18px comic sans ms", "#FFFFFF" ) ;
+		pt.box.list.picName.x = 35, pt.box.list.picName.y = 297 ;
+		pt.box.list.object2.addChild( pt.box.list.object2.bg, pt.box.list.object2.pic, pt.box.list.picName ) ;
+	} // Refresh()
 } // OnObject()
 
 // 
