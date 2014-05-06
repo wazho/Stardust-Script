@@ -271,7 +271,7 @@ MaterialBox.prototype.OnOption = function() {
 	this.box.list.newPage.text1 = new createjs.Text( "Create New Map", "20px comic sans ms", "#FFFFFF" ) ;
 	this.box.list.newPage.text1.x = 65, this.box.list.newPage.text1.y = 23 ;
 	this.box.list.newPage.addChild( this.box.list.newPage.bg, this.box.list.newPage.text1 ) ;
-	this.box.list.newPage.on( "click", function( evt ) { $( "#dialog_01" ).dialog( "open" ) ; } ) ;
+	this.box.list.newPage.on( "click", function( evt ) { $( "#dialog_newMap" ).dialog( "open" ) ; } ) ;
 	// Save button.
 	this.box.list.save = new createjs.Container() ;
 	this.box.list.save.x = 30, this.box.list.save.y = 230 ;
@@ -281,6 +281,7 @@ MaterialBox.prototype.OnOption = function() {
 	this.box.list.save.text1 = new createjs.Text( "Save/Load the Map", "18px comic sans ms", "#FFFFFF" ) ;
 	this.box.list.save.text1.x = 5, this.box.list.save.text1.y = 23 ;
 	this.box.list.save.addChild( this.box.list.save.bg, this.box.list.save.text1 ) ;
+	this.box.list.save.on( "click", function( evt ) { $( "#dialog_saveMap" ).dialog( "open" ) ; } ) ;
 	// Tutorial button.
 	this.box.list.tutorial = new createjs.Container() ;
 	this.box.list.tutorial.x = 30, this.box.list.tutorial.y = 280 ;

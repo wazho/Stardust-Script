@@ -91,14 +91,14 @@ PreviewBox.prototype.OnTiledControl = function() {
 			for ( j = 0 ; j < G.length ; j ++ ) {
 				if ( ( i + mr ) < G.customer_height && ( j + mc ) < G.customer_length ) {
 					var data = tiled[i+mr][j+mc] ;
-					var row = Math.floor( data.index / G.range ) ;
-					var column = data.index % G.range ;
+					var row = Math.floor( data.i / G.range ) ;
+					var column = data.i % G.range ;
 					pt.box.mapbox.tiled.single = new createjs.Container() ;
-					pt.box.mapbox.tiled.single.pic = new createjs.Bitmap( G.src + data.map + ".png" ) ;
+					pt.box.mapbox.tiled.single.pic = new createjs.Bitmap( G.src + data.m + ".png" ) ;
 					pt.box.mapbox.tiled.single.pic.sourceRect = new createjs.Rectangle( column * G.size, row * G.size, G.size, G.size ) ;
 					// Mask for walkable / unwalkable.
 					pt.box.mapbox.tiled.single.mask = new createjs.Shape() ;
-					if ( data.walkable == 1 )
+					if ( data.w == 1 )
 						pt.box.mapbox.tiled.single.mask.graphics.f( "#00FF00" ).r( 0, 0, G.size, G.size ) ;
 					else
 						pt.box.mapbox.tiled.single.mask.graphics.f( "#FF0000" ).r( 0, 0, G.size, G.size ) ;
@@ -126,14 +126,14 @@ PreviewBox.prototype.OnTiledControl = function() {
 			var map = Math.floor( select / 100 ) ;
 			var index = select - Math.floor( ( select / 100 ) ) * 100 ;
 			// tilde map assign.
-			tiled[row][column].map = map ;
-			tiled[row][column].index = index ;
+			tiled[row][column].m = map ;
+			tiled[row][column].i = index ;
 		} // if
 		else if ( pt.material.box.selector.statusPage == 2 ) {
 			if ( select == "walkable" )
-				tiled[row][column].walkable = 1 ;
+				tiled[row][column].w = 1 ;
 			else if ( select == "unwalkable" )
-				tiled[row][column].walkable = 0 ;
+				tiled[row][column].w = 0 ;
 		} // else if
 		else if ( pt.material.box.selector.statusPage == 3 ) {
 
@@ -162,9 +162,12 @@ PreviewBox.prototype.OnTiledControl = function() {
 		return tiled ;
 
 		function Tiled_Datastruct() {
-			this.map = 0 ;
-			this.index = 0 ;
-			this.walkable = 1 ;
+			// texture map number
+			this.m = 0 ;
+			// texture location index
+			this.i = 0 ;
+			// could walkable
+			this.w = 1 ;
 		} // Tiled_Datastruct()
 	} // OnCreateTiled()
 } // OnTiledControl()
