@@ -105,7 +105,7 @@ MaterialBox.prototype.OnTexture = function() {
 	this.box.list.texture.number = 1 ;
 	// Page change.
 	this.box.list.page = new createjs.Container() ;
-	this.box.list.page.x = 15, this.box.list.page.y = 330 ;
+	this.box.list.page.x = 15, this.box.list.page.y = 355 ;
 	this.box.list.page.prevPage = new createjs.Container() ;
 	this.box.list.page.prevPage.x = 0, this.box.list.page.prevPage.y = 0 ;
 	this.box.list.page.prevPage.bg = new createjs.Bitmap( "pic/map_build/previous.png" ) ;
@@ -147,9 +147,11 @@ MaterialBox.prototype.OnTexture = function() {
 		for ( i = 0 ; i < G.range * G.range ; i ++ )
 			pt.box.list.texture.getChildAt( i ).on( "click", function( evt ) { MarkedSelected( that, this, G ) ; } ) ;
 		// Text info.
-		pt.box.list.picName = new createjs.Text( "[" + pt.box.list.texture.number + "/" + texture_adding.length + "] " + texture_adding[pt.box.list.texture.number-1].decs, "18px comic sans ms", "#FFFFFF" ) ;
-		pt.box.list.picName.x = 15, pt.box.list.picName.y = 297 ;
-		pt.box.list.texture.addChild( pt.box.list.picName ) ;
+		pt.box.list.picNum = new createjs.Text( "[" + pt.box.list.texture.number + "/" + texture_adding.length + "]", "18px comic sans ms", "#FFFFFF" ) ;
+		pt.box.list.picNum.x = 15, pt.box.list.picNum.y = 297 ;
+		pt.box.list.picName = new createjs.Text( texture_adding[pt.box.list.texture.number-1].decs, "18px comic sans ms", "#FFFFFF" ) ;
+		pt.box.list.picName.x = 15, pt.box.list.picName.y = 322 ;
+		pt.box.list.texture.addChild( pt.box.list.picNum, pt.box.list.picName ) ;
 		// Container background.
 		pt.box.list.texture.bg = new createjs.Shape() ;
 		pt.box.list.texture.bg.x = pt.box.list.texture.bg.y = 15 ;

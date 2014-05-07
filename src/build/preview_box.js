@@ -48,7 +48,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 	this.box.mapbox.tiled.mr = 0, this.box.mapbox.tiled.mc = 0 ;
 	this.box.mapbox.addChild( this.box.mapbox.tiled ) ;
 	// Modify row, column for silde tiled map.
-	TotalRefresh( this, 0, 0 ) ;
+	TotalRefresh( this, 0, 0, -1, -1 ) ;
 	// Slide bar create.
 	this.box.bar.horizontal = new createjs.Container() ;
 	this.box.bar.horizontal.x = 37, this.box.bar.horizontal.y = 525 ;
@@ -66,58 +66,64 @@ PreviewBox.prototype.OnTiledControl = function() {
 	this.box.bar.vertical.down.x = -6, this.box.bar.vertical.down.y = 425 ;
 	this.box.bar.vertical.addChild( this.box.bar.vertical.up, this.box.bar.vertical.down ) ;
 	// Add listening events.
-	this.box.bar.horizontal.left.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc - 1 ) ; } ) ;
-	this.box.bar.horizontal.right.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc + 1 ) ; } ) ;
-	this.box.bar.vertical.up.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr - 1, that.box.mapbox.tiled.mc ) ; } ) ;
-	this.box.bar.vertical.down.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr + 1, that.box.mapbox.tiled.mc ) ; } ) ;
+	this.box.bar.horizontal.left.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc - 1, -1, -1 ) ; } ) ;
+	this.box.bar.horizontal.right.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc + 1, -1, -1 ) ; } ) ;
+	this.box.bar.vertical.up.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr - 1, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) ;
+	this.box.bar.vertical.down.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr + 1, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) ;
 	// [Special] button - material box listening event added.
-	this.material.box.selector.buttonA.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc ) ; } ) ;
-	this.material.box.selector.buttonB.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc ) ; } ) ;
-	this.material.box.selector.buttonC.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc ) ; } ) ;
-	this.material.box.selector.buttonD.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc ) ; } ) ;
-	this.material.box.selector.buttonE.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc ) ; } ) ;
-	this.material.box.selector.buttonF.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc ) ; } ) ;
+	this.material.box.selector.buttonA.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) ;
+	this.material.box.selector.buttonB.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) ;
+	this.material.box.selector.buttonC.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) ;
+	this.material.box.selector.buttonD.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) ;
+	this.material.box.selector.buttonE.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) ;
+	this.material.box.selector.buttonF.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) ;
 
 	// Replace all of this map box.
-	function TotalRefresh( pt, mr, mc ) {
+	function TotalRefresh( pt, mr, mc, specific_x, specific_y ) {
 		if ( ( mr < 0 || mc < 0 ) || mr >= G.customer_height || mc >= G.customer_length )
 			return ;
 
-		// Initial must remove old tiled map.
-		pt.box.mapbox.tiled.removeAllChildren() ;
-		pt.box.mapbox.tiled.mr = mr, pt.box.mapbox.tiled.mc = mc ;
-		for ( i = 0 ; i < G.height ; i ++ )
-			for ( j = 0 ; j < G.length ; j ++ ) {
-				if ( ( i + mr ) < G.customer_height && ( j + mc ) < G.customer_length ) {
-					console.log( "Wha?" ) ;
-					var data = pt.box.mapbox.tiled_data[i+mr][j+mc] ;
-					var row = Math.floor( data.i / G.range ) ;
-					var column = data.i % G.range ;
-					pt.box.mapbox.tiled.single = new createjs.Container() ;
-					pt.box.mapbox.tiled.single.pic = new createjs.Bitmap( G.textureSrc + data.m + ".png" ) ;
-					pt.box.mapbox.tiled.single.pic.sourceRect = new createjs.Rectangle( column * G.size, row * G.size, G.size, G.size ) ;
-					// Mask for walkable / unwalkable.
-					pt.box.mapbox.tiled.single.mask = new createjs.Shape() ;
-					if ( data.w == 1 )
-						pt.box.mapbox.tiled.single.mask.graphics.f( "#00FF00" ).r( 0, 0, G.size, G.size ) ;
-					else
-						pt.box.mapbox.tiled.single.mask.graphics.f( "#FF0000" ).r( 0, 0, G.size, G.size ) ;
-					pt.box.mapbox.tiled.single.mask.alpha = 0.2 ;
-					pt.box.mapbox.tiled.single.mask.visible = ( pt.material.box.selector.statusPage == 2 ) ? true : false ;
-					// Add to container.
-					pt.box.mapbox.tiled.single.addChild( pt.box.mapbox.tiled.single.pic, pt.box.mapbox.tiled.single.mask ) ;
-					pt.box.mapbox.tiled.single.name = i * G.length + j ;
-					pt.box.mapbox.tiled.single.x = j * G.size, pt.box.mapbox.tiled.single.y = i * G.size ;
-					pt.box.mapbox.tiled.addChild( pt.box.mapbox.tiled.single.clone( true ) ) ;
-				} // if
-			} // for
-		// Add listening event.
-		for ( i = 0 ; i < pt.box.mapbox.tiled.getNumChildren() ; i ++ )
-			pt.box.mapbox.tiled.getChildAt( i ).on( "click", function( evt ) { SingleRefresh( pt, this ) ; } ) ;
+		if ( specific_x != -1 && specific_y != -1 ) {
+			SingleRefresh( specific_x , specific_y ) ;
+		} // if
+		else {
+			// Initial must remove old tiled map.
+			pt.box.mapbox.tiled.removeAllChildren() ;
+			pt.box.mapbox.tiled.mr = mr, pt.box.mapbox.tiled.mc = mc ;
+			for ( i = 0 ; i < G.height ; i ++ )
+				for ( j = 0 ; j < G.length ; j ++ )
+					if ( ( i + mr ) < G.customer_height && ( j + mc ) < G.customer_length )
+						SingleRefresh( i , j ) ;
+			// Add listening event.
+			for ( i = 0 ; i < pt.box.mapbox.tiled.getNumChildren() ; i ++ )
+				pt.box.mapbox.tiled.getChildAt( i ).on( "click", function( evt ) { Refresh( pt, this ) ; } ) ;
+		} // else
+
+		function SingleRefresh( i, j ) {
+			var data = pt.box.mapbox.tiled_data[i+mr][j+mc] ;
+			var row = Math.floor( data.i / G.range ) ;
+			var column = data.i % G.range ;
+			pt.box.mapbox.tiled.single = new createjs.Container() ;
+			pt.box.mapbox.tiled.single.pic = new createjs.Bitmap( G.textureSrc + data.m + ".png" ) ;
+			pt.box.mapbox.tiled.single.pic.sourceRect = new createjs.Rectangle( column * G.size, row * G.size, G.size, G.size ) ;
+			// Mask for walkable / unwalkable.
+			pt.box.mapbox.tiled.single.mask = new createjs.Shape() ;
+			if ( data.w == 1 )
+				pt.box.mapbox.tiled.single.mask.graphics.f( "#00FF00" ).r( 0, 0, G.size, G.size ) ;
+			else
+				pt.box.mapbox.tiled.single.mask.graphics.f( "#FF0000" ).r( 0, 0, G.size, G.size ) ;
+			pt.box.mapbox.tiled.single.mask.alpha = 0.2 ;
+			pt.box.mapbox.tiled.single.mask.visible = ( pt.material.box.selector.statusPage == 2 ) ? true : false ;
+			// Add to container.
+			pt.box.mapbox.tiled.single.addChild( pt.box.mapbox.tiled.single.pic, pt.box.mapbox.tiled.single.mask ) ;
+			pt.box.mapbox.tiled.single.name = i * G.length + j ;
+			pt.box.mapbox.tiled.single.x = j * G.size, pt.box.mapbox.tiled.single.y = i * G.size ;
+			pt.box.mapbox.tiled.addChild( pt.box.mapbox.tiled.single.clone( true ) ) ;
+		} // SingleRefresh()
 	} // TotalRefresh()
 
 	// Focus one tiled, let it replace new one.
-	function SingleRefresh( pt, singleTiled ) {
+	function Refresh( pt, singleTiled ) {
 		// Get sileded tiled map data.
 		var select = pt.material.box.list.marked.name ;
 		var row = Math.floor( singleTiled.name / G.length ) + pt.box.mapbox.tiled.mr ;
@@ -145,8 +151,8 @@ PreviewBox.prototype.OnTiledControl = function() {
 
 		} // else if
 		// Redraw.
-		TotalRefresh( pt, pt.box.mapbox.tiled.mr, pt.box.mapbox.tiled.mc ) ;
-	} // SingleRefresh()
+		TotalRefresh( pt, pt.box.mapbox.tiled.mr, pt.box.mapbox.tiled.mc, row, column ) ;
+	} // Refresh()
 
 	// Create tiled map data struct.
 	function OnCreateTiled( length, height ) {
