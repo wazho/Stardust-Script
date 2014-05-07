@@ -244,19 +244,55 @@ MaterialBox.prototype.OnObject = function() {
 		pt.box.list.marked.visible = false ;
 		// Container background.
 		pt.box.list.objects.bg = new createjs.Shape() ;
-		pt.box.list.objects.bg.x = pt.box.list.objects.bg.y = 15 ;
-		pt.box.list.objects.bg.graphics.f( "#FFFFFF" ).r( 0, 0, 255 + G.range, 255 + G.range ) ;
+		pt.box.list.objects.bg.graphics.f( "#FFFFFF" ).r( 15, 15, 255 + G.range, 255 + G.range ) ;
 		// Change pic and drawing.
 		pt.box.list.objects.number += ( pt.box.list.objects.number + num > 0 ) ? num : 0 ;
 		pt.box.list.objects.pic = new createjs.Bitmap( G.objectSrc + pt.box.list.objects.number + ".png" ) ;
 		pt.box.list.objects.pic.regX = pt.box.list.objects.pic.getBounds().width / 2 ;
 		pt.box.list.objects.pic.regY = pt.box.list.objects.pic.getBounds().height / 2 ;
-		pt.box.list.objects.pic.x = pt.box.list.objects.pic.y = 15 + ( 255 + G.range ) / 2 ;
+		pt.box.list.objects.pic.x = pt.box.list.objects.pic.y = 15 + ( 255 + G.range ) / 2 ; ;
+		// Mask to covered and coverer.
+		pt.box.list.objects.cover = new createjs.Container() ;
+		pt.box.list.objects.cover.coverer = new createjs.Shape() ;
+		pt.box.list.objects.cover.coverer.graphics.f( "#00FF00" ).r( 15, 15, 255 + G.range, 145 ) ;
+		pt.box.list.objects.cover.coverer.alpha = 0.2 ;
+		pt.box.list.objects.cover.covered = new createjs.Shape() ;
+		pt.box.list.objects.cover.covered.graphics.f( "#FF0000" ).r( 15, 15 + 145, 255 + G.range, ( 255 + G.range ) - 145 ) ;
+		pt.box.list.objects.cover.covered.alpha = 0.2 ;
+		// Set front end / back end containers.
+		sampleContainerA = new createjs.Container() ;
+		sampleContainerA.x = 65, sampleContainerA.y = 75 ;
+		sampleContainerA.addChild( getFloatingSample() ) ;
+		sampleContainerB = new createjs.Container() ;
+		sampleContainerB.x = 65, sampleContainerB.y = 200 ;
+		sampleContainerB.addChild( getFloatingSample() ) ;
+		// Add front end / back end objects to 'object cover' container.
+		pt.box.list.objects.cover.addChild( sampleContainerA, pt.box.list.objects.pic, pt.box.list.objects.cover.coverer, sampleContainerB, pt.box.list.objects.cover.covered ) ; 
 		// Text info.
 		pt.box.list.picName = new createjs.Text( "Name: " + pt.box.list.objects.number, "18px comic sans ms", "#FFFFFF" ) ;
 		pt.box.list.picName.x = 35, pt.box.list.picName.y = 297 ;
-		pt.box.list.objects.addChild( pt.box.list.objects.bg, pt.box.list.objects.pic, pt.box.list.picName ) ;
+		// Add all to top container.
+		pt.box.list.objects.addChild( pt.box.list.objects.bg, pt.box.list.objects.cover, pt.box.list.picName ) ;
 	} // Refresh()
+
+	function getFloatingSample() {
+		var sample_sheet = new createjs.SpriteSheet( {
+			"images": ["pic/map_build/cover_sample.png"], 
+			"frames": { "width": 125, "height": 125, "regX": 63, "regY": 63, "count": 8 },
+			"animations": { "walk": { "frames": [0,1,2,3,4,5,6,7], "speed": 0.3 } }
+		} ) ;
+		var sample = new createjs.BitmapAnimation( sample_sheet ) ;
+		sample.gotoAndPlay( "walk" ) ;
+		createjs.Tween.get( sample, { loop: true } )
+			.call( function(){ sample.scaleX = -1 } )
+			.to( { x: 170 }, 1500, createjs.Ease.quadInOut )
+			.call( function(){ sample.scaleX = 1 } )
+			.to( { x: 0 }, 1500, createjs.Ease.quadInOut ) ;
+		createjs.Tween.get( sample, { loop: true } )
+			.to( { y: 15 }, 500, createjs.Ease.quadInOut )
+			.to( { y: 0 }, 500, createjs.Ease.quadInOut ) ;
+		return sample ;
+	} // getFloatingSample()
 } // OnObject()
 
 // 
@@ -295,8 +331,10 @@ MaterialBox.prototype.OnOption = function() {
 	this.box.list.pic.img.scaleX = this.box.list.pic.img.scaleY = 0.22 ;
 	this.box.list.pic.addChild( this.box.list.pic.bg, this.box.list.pic.img ) ;
 	this.box.list.author = new createjs.Text( "Made by Salmon (http://salmon.tw)", "12px comic sans ms", "#FFFFFF" ) ;
-	this.box.list.author.x = 48, this.box.list.author.y = 375 ;
-	this.box.list.addChild( this.box.list.pic, this.box.list.author ) ;
+	this.box.list.author.x = 48, this.box.list.author.y = 350 ;
+	this.box.list.comment = new createjs.Text( "Firefox browser has the best user experience.", "12px comic sans ms", "#FFFFFF" ) ;
+	this.box.list.comment.x = 12, this.box.list.comment.y = 368 ;
+	this.box.list.addChild( this.box.list.pic, this.box.list.author, this.box.list.comment ) ;
 	// Create new page button.
 	this.box.list.newPage = new createjs.Container() ;
 	this.box.list.newPage.x = 30, this.box.list.newPage.y = 180 ;
