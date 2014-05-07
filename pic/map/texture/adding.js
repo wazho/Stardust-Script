@@ -1,9 +1,9 @@
 var texture_adding = [
 	{	file : "1.png",
-		decs : "stone"
+		decs : "brick"
 	},
 	{	file : "2.png",
-		decs : "stone and brick"
+		decs : "brick and stone"
 	},
 	{	file : "3.png",
 		decs : "stone"

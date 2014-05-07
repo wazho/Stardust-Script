@@ -226,7 +226,7 @@ MaterialBox.prototype.OnObject = function() {
 	this.box.list.objects.number = 1 ;
 	// Page change.
 	this.box.list.page = new createjs.Container() ;
-	this.box.list.page.x = 15, this.box.list.page.y = 330 ;
+	this.box.list.page.x = 15, this.box.list.page.y = 355 ;
 	this.box.list.page.prevPage = new createjs.Container() ;
 	this.box.list.page.prevPage.x = 0, this.box.list.page.prevPage.y = 0 ;
 	this.box.list.page.prevPage.bg = new createjs.Bitmap( "pic/map_build/previous.png" ) ;
@@ -244,37 +244,46 @@ MaterialBox.prototype.OnObject = function() {
 	Refresh( this, 0 ) ;
 
 	function Refresh( pt, num ) {
+		if ( pt.box.list.objects.number + num > object_adding.length )
+			return ;
 		pt.box.list.objects.removeAllChildren() ;
 		pt.box.list.marked.visible = false ;
+		// Get the new object pic rule.
+		pt.box.list.objects.number += ( pt.box.list.objects.number + num > 0 ) ? num : 0 ;
+		var object_rule = object_adding[pt.box.list.objects.number-1] ;
 		// Container background.
 		pt.box.list.objects.bg = new createjs.Shape() ;
 		pt.box.list.objects.bg.graphics.f( "#FFFFFF" ).r( 15, 15, 255 + G.range, 255 + G.range ) ;
 		// Change pic and drawing.
-		pt.box.list.objects.number += ( pt.box.list.objects.number + num > 0 ) ? num : 0 ;
-		pt.box.list.objects.pic = new createjs.Bitmap( G.objectSrc + pt.box.list.objects.number + ".png" ) ;
+		pt.box.list.objects.pic = new createjs.Bitmap( G.objectSrc + object_rule.file ) ;
 		pt.box.list.objects.pic.regX = pt.box.list.objects.pic.getBounds().width / 2 ;
 		pt.box.list.objects.pic.regY = pt.box.list.objects.pic.getBounds().height / 2 ;
 		pt.box.list.objects.pic.x = pt.box.list.objects.pic.y = 15 + ( 255 + G.range ) / 2 ; ;
 		// Mask to covered and coverer.
 		pt.box.list.objects.cover = new createjs.Container() ;
 		pt.box.list.objects.cover.coverer = new createjs.Shape() ;
-		pt.box.list.objects.cover.coverer.graphics.f( "#00FF00" ).r( 15, 15, 255 + G.range, 145 ) ;
+		pt.box.list.objects.cover.coverer.graphics.f( "#00FF00" ).r( 15, 15, 255 + G.range, object_rule.divi ) ;
 		pt.box.list.objects.cover.coverer.alpha = 0.2 ;
 		pt.box.list.objects.cover.covered = new createjs.Shape() ;
-		pt.box.list.objects.cover.covered.graphics.f( "#FF0000" ).r( 15, 15 + 145, 255 + G.range, ( 255 + G.range ) - 145 ) ;
+		pt.box.list.objects.cover.covered.graphics.f( "#FF0000" ).r( 15, 15 + object_rule.divi, 255 + G.range, ( 255 + G.range ) - object_rule.divi ) ;
 		pt.box.list.objects.cover.covered.alpha = 0.2 ;
 		// Set front end / back end containers.
 		sampleContainerA = new createjs.Container() ;
-		sampleContainerA.x = 65, sampleContainerA.y = 75 ;
+		sampleContainerA.x = 65, sampleContainerA.y = object_rule.divi / 2 ;
+		sampleContainerA.visible = ( object_rule.divi >= 80 ) ? true : false ;
 		sampleContainerA.addChild( getFloatingSample() ) ;
 		sampleContainerB = new createjs.Container() ;
-		sampleContainerB.x = 65, sampleContainerB.y = 200 ;
+		sampleContainerB.x = 65, sampleContainerB.y = object_rule.divi + ( ( 255 + G.range ) - object_rule.divi ) / 5 * 2 ;
+		sampleContainerB.visible = ( 255 + G.range - object_rule.divi >= 80 ) ? true : false ;
 		sampleContainerB.addChild( getFloatingSample() ) ;
 		// Add front end / back end objects to 'object cover' container.
 		pt.box.list.objects.cover.addChild( sampleContainerA, pt.box.list.objects.pic, pt.box.list.objects.cover.coverer, sampleContainerB, pt.box.list.objects.cover.covered ) ; 
 		// Text info.
-		pt.box.list.picName = new createjs.Text( "Name: " + pt.box.list.objects.number, "18px comic sans ms", "#FFFFFF" ) ;
-		pt.box.list.picName.x = 35, pt.box.list.picName.y = 297 ;
+		pt.box.list.picNum = new createjs.Text( "[" + pt.box.list.objects.number + "/" + object_adding.length + "]", "18px comic sans ms", "#FFFFFF" ) ;
+		pt.box.list.picNum.x = 15, pt.box.list.picNum.y = 297 ;
+		pt.box.list.picName = new createjs.Text( object_rule.decs, "18px comic sans ms", "#FFFFFF" ) ;
+		pt.box.list.picName.x = 15, pt.box.list.picName.y = 322 ;
+		pt.box.list.objects.addChild( pt.box.list.picNum, pt.box.list.picName ) ;
 		// Add all to top container.
 		pt.box.list.objects.addChild( pt.box.list.objects.bg, pt.box.list.objects.cover, pt.box.list.picName ) ;
 	} // Refresh()
