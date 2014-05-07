@@ -1,3 +1,0 @@
-'1.png','stone_brick.png'
-'2.png','grass.png'
-'3.png','grass_and_stone_brick.png'

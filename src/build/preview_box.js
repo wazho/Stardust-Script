@@ -89,6 +89,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 		for ( i = 0 ; i < G.height ; i ++ )
 			for ( j = 0 ; j < G.length ; j ++ ) {
 				if ( ( i + mr ) < G.customer_height && ( j + mc ) < G.customer_length ) {
+					console.log( "Wha?" ) ;
 					var data = pt.box.mapbox.tiled_data[i+mr][j+mc] ;
 					var row = Math.floor( data.i / G.range ) ;
 					var column = data.i % G.range ;

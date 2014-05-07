@@ -12,6 +12,7 @@
 	<script src="src/build/global_values.js"></script>
 	<script src="src/build/material_box.js"></script>
 	<script src="src/build/preview_box.js"></script>
+	<script src="pic/map/texture/adding.js"></script>
 
 	<script>
 		var stage ;
@@ -26,7 +27,7 @@
 
 			// 換面更新幀數
 			createjs.Ticker.addEventListener( "tick", tick ) ;
-			createjs.Ticker.setFPS( 500 ) ;
+			createjs.Ticker.setFPS( 60 ) ;
 
 			function tick( event ) {
 				stage.update() ;

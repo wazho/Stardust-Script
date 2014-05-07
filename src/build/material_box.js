@@ -129,11 +129,13 @@ MaterialBox.prototype.OnTexture = function() {
 	Refresh( this, 0 ) ;
 
 	function Refresh( pt, num ) {
+		if ( pt.box.list.texture.number + num > texture_adding.length )
+			return ;
 		pt.box.list.texture.removeAllChildren() ;
 		pt.box.list.marked.visible = false ;
 		// Change pic and drawing.
 		pt.box.list.texture.number += ( pt.box.list.texture.number + num > 0 ) ? num : 0 ;
-		pt.box.list.texture.pic = new createjs.Bitmap( G.textureSrc + pt.box.list.texture.number + ".png" ) ;
+		pt.box.list.texture.pic = new createjs.Bitmap( G.textureSrc + texture_adding[pt.box.list.texture.number-1].file ) ;
 		for ( i = 0 ; i < G.range ; i ++ )
 			for ( j = 0 ; j < G.range ; j ++ ) {
 				pt.box.list.texture.pic.sourceRect = new createjs.Rectangle( j * G.size, i * G.size, G.size, G.size ) ;
@@ -145,8 +147,8 @@ MaterialBox.prototype.OnTexture = function() {
 		for ( i = 0 ; i < G.range * G.range ; i ++ )
 			pt.box.list.texture.getChildAt( i ).on( "click", function( evt ) { MarkedSelected( that, this, G ) ; } ) ;
 		// Text info.
-		pt.box.list.picName = new createjs.Text( "Name: " + pt.box.list.texture.number, "18px comic sans ms", "#FFFFFF" ) ;
-		pt.box.list.picName.x = 35, pt.box.list.picName.y = 297 ;
+		pt.box.list.picName = new createjs.Text( "[" + pt.box.list.texture.number + "/" + texture_adding.length + "] " + texture_adding[pt.box.list.texture.number-1].decs, "18px comic sans ms", "#FFFFFF" ) ;
+		pt.box.list.picName.x = 15, pt.box.list.picName.y = 297 ;
 		pt.box.list.texture.addChild( pt.box.list.picName ) ;
 		// Container background.
 		pt.box.list.texture.bg = new createjs.Shape() ;
@@ -216,7 +218,7 @@ MaterialBox.prototype.OnObject = function() {
 	var that = this ;
 	// Remove original list first.
 	this.box.list.removeAllChildren() ;
-	this.box.selector.statusPage = 1 ;
+	this.box.selector.statusPage = 3 ;
 	// Texture select container.
 	this.box.list.objects = new createjs.Container() ;
 	this.box.list.objects.number = 1 ;
