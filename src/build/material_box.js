@@ -257,11 +257,13 @@ MaterialBox.prototype.OnObject = function() {
 		pt.box.list.objects.bg.graphics.f( "#FFFFFF" ).r( 15, 15, bgSize, bgSize ) ;
 		// Change pic and drawing.
 		pt.box.list.objects.pic = new createjs.Bitmap( G.objectSrc + object_rule.file ) ;
-		pt.box.list.objects.pic.regX = pt.box.list.objects.pic.getBounds().width / 2 ;
-		pt.box.list.objects.pic.regY = pt.box.list.objects.pic.getBounds().height / 2 ;
+		var objectWidth = pt.box.list.objects.pic.getBounds().width ;
+		var objectHeight = pt.box.list.objects.pic.getBounds().height ;
+		pt.box.list.objects.pic.regX = objectWidth / 2 ;
+		pt.box.list.objects.pic.regY = objectHeight / 2 ;
 		pt.box.list.objects.pic.x = pt.box.list.objects.pic.y = 15 + ( bgSize ) / 2 ; ;
 		// Mask to covered and coverer.
-		var covererHeight = bgSize * object_rule.divi ;
+		var covererHeight = ( object_rule.divi > 0 ) ? ( ( object_rule.divi < 1 ) ? ( bgSize / 2 - objectHeight / 2 + object_rule.divi * objectHeight ) : bgSize ) : 0 ;
 		var coveredHeight = bgSize - covererHeight ;
 		pt.box.list.objects.cover = new createjs.Container() ;
 		pt.box.list.objects.cover.coverer = new createjs.Shape() ;
@@ -273,11 +275,11 @@ MaterialBox.prototype.OnObject = function() {
 		// Set front end / back end containers.
 		sampleContainerA = new createjs.Container() ;
 		sampleContainerA.x = 65, sampleContainerA.y = covererHeight / 2 ;
-		//sampleContainerA.visible = ( object_rule.divi >= 80 ) ? true : false ;
+		sampleContainerA.visible = ( covererHeight >= 80 ) ? true : false ;
 		sampleContainerA.addChild( getFloatingSample() ) ;
 		sampleContainerB = new createjs.Container() ;
-		sampleContainerB.x = 65, sampleContainerB.y = ( bgSize + coveredHeight ) / 2 ;
-		//sampleContainerB.visible = ( bgSize - object_rule.divi >= 80 ) ? true : false ;
+		sampleContainerB.x = 65, sampleContainerB.y = bgSize - coveredHeight / 2 ;
+		sampleContainerB.visible = ( coveredHeight >= 80 ) ? true : false ;
 		sampleContainerB.addChild( getFloatingSample() ) ;
 		// Add front end / back end objects to 'object cover' container.
 		pt.box.list.objects.cover.addChild( sampleContainerA, pt.box.list.objects.pic, pt.box.list.objects.cover.coverer, sampleContainerB, pt.box.list.objects.cover.covered ) ; 
