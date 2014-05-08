@@ -49,12 +49,12 @@ PreviewBox.prototype.OnTiledControl = function() {
 	this.box.mapbox.addChild( this.box.mapbox.tiled ) ;
 	// Map box objects.
 	this.box.mapbox.objects = new createjs.Container() ;
+	this.box.mapbox.objects.visible = false ;
 	this.box.mapbox.addChild( this.box.mapbox.objects ) ;
 	this.box.mapbox.objects.bg = new createjs.Shape() ;
 	this.box.mapbox.objects.bg.graphics.f( "#0000FF" ).r( G.size * G.length / 2, G.size * G.height / 2, G.size * G.length, G.size * G.height ) ;
 	this.box.mapbox.objects.bg.regX = G.size * G.length / 2, this.box.mapbox.objects.bg.regY = G.size * G.height / 2 ;
 	this.box.mapbox.objects.bg.alpha = 0.1 ;
-	this.box.mapbox.objects.bg.visible = false ;
 	this.box.mapbox.objects.addChild( this.box.mapbox.objects.bg ) ;
 	// Modify row, column for silde tiled map.
 	TotalRefresh( this, 0, 0, -1, -1 ) ;
@@ -99,8 +99,19 @@ PreviewBox.prototype.OnTiledControl = function() {
 			pt.box.mapbox.tiled.getChildAt( index ).on( "click", function( evt ) { Refresh( pt, this ) ; } ) ;
 		} // if
 		else {
+			// Initial must remove old tiled map.
+			pt.box.mapbox.tiled.removeAllChildren() ;
+			pt.box.mapbox.tiled.mr = mr, pt.box.mapbox.tiled.mc = mc ;
+			for ( i = 0 ; i < G.height ; i ++ )
+				for ( j = 0 ; j < G.length ; j ++ )
+					if ( ( i + mr ) < G.customer_height && ( j + mc ) < G.customer_length )
+						pt.box.mapbox.tiled.addChild( SingleRefresh( i , j ).clone( true ) ) ;
+			// Add listening event.
+			for ( i = 0 ; i < pt.box.mapbox.tiled.getNumChildren() ; i ++ )
+				pt.box.mapbox.tiled.getChildAt( i ).on( "click", function( evt ) { Refresh( pt, this ) ; } ) ;
+			
 			if ( pt.material.box.selector.statusPage == 3 ) {
-				pt.box.mapbox.objects.bg.visible = true ;
+				pt.box.mapbox.objects.visible = true ;
 				pt.box.mapbox.objects.bg.on( "dblclick", function( evt ) {
 					var object = pt.material.box.list.objects.pic.clone( false ) ;
 					object.scaleX = object.scaleY = 1 ;
@@ -125,17 +136,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 				} ) ;
 			} // if
 			else {
-				pt.box.mapbox.objects.bg.visible = false ;
-				// Initial must remove old tiled map.
-				pt.box.mapbox.tiled.removeAllChildren() ;
-				pt.box.mapbox.tiled.mr = mr, pt.box.mapbox.tiled.mc = mc ;
-				for ( i = 0 ; i < G.height ; i ++ )
-					for ( j = 0 ; j < G.length ; j ++ )
-						if ( ( i + mr ) < G.customer_height && ( j + mc ) < G.customer_length )
-							pt.box.mapbox.tiled.addChild( SingleRefresh( i , j ).clone( true ) ) ;
-				// Add listening event.
-				for ( i = 0 ; i < pt.box.mapbox.tiled.getNumChildren() ; i ++ )
-					pt.box.mapbox.tiled.getChildAt( i ).on( "click", function( evt ) { Refresh( pt, this ) ; } ) ;
+				pt.box.mapbox.objects.visible = false ;
 			} // else
 		} // else
 
