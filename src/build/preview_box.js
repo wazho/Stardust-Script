@@ -40,13 +40,20 @@ PreviewBox.prototype.OnTiledControl = function() {
 	this.box.mapbox.tiled_data = OnCreateTiled( G.customer_length, G.customer_height ) ;
 	// Map box container.
 	this.box.mapbox.bg = new createjs.Shape() ;
-	this.box.mapbox.bg.graphics.f( "#FFFFFF" ).r( 0, 0, 576, 448 ) ;
+	this.box.mapbox.bg.graphics.f( "#FFFFFF" ).r( 0, 0, G.size * G.length, G.size * G.height ) ;
 	this.box.mapbox.addChild( this.box.mapbox.bg ) ;
 	// Map box tiled.
 	this.box.mapbox.tiled = new createjs.Container() ;
 	this.box.mapbox.tiled.x = 0, this.box.mapbox.tiled.y = 0 ;
 	this.box.mapbox.tiled.mr = 0, this.box.mapbox.tiled.mc = 0 ;
 	this.box.mapbox.addChild( this.box.mapbox.tiled ) ;
+	// Map box objects.
+	this.box.mapbox.objects = new createjs.Container() ;
+	this.box.mapbox.objects.bg = new createjs.Shape() ;
+	this.box.mapbox.objects.bg.graphics.f( "#FF0000" ).r( 0, 0, G.size * G.length, G.size * G.height ) ;
+	this.box.mapbox.objects.bg.alpha = 0.1 ;
+	this.box.mapbox.objects.addChild( this.box.mapbox.objects.bg ) ;
+	this.box.mapbox.addChild( this.box.mapbox.objects ) ;
 	// Modify row, column for silde tiled map.
 	TotalRefresh( this, 0, 0, -1, -1 ) ;
 	// Slide bar create.
@@ -137,12 +144,14 @@ PreviewBox.prototype.OnTiledControl = function() {
 			// tilde map assign.
 			pt.box.mapbox.tiled_data[row][column].m = map ;
 			pt.box.mapbox.tiled_data[row][column].i = index ;
+			TotalRefresh( pt, pt.box.mapbox.tiled.mr, pt.box.mapbox.tiled.mc, row, column ) ;
 		} // if
 		else if ( pt.material.box.selector.statusPage == 2 ) {
 			if ( select == "walkable" )
 				pt.box.mapbox.tiled_data[row][column].w = 1 ;
 			else if ( select == "unwalkable" )
-				pt.box.mapbox.tiled_data[row][column].w = 0 ;
+				pt.box.mapbox.tiled_data[row][column].w = 0 ;	
+			TotalRefresh( pt, pt.box.mapbox.tiled.mr, pt.box.mapbox.tiled.mc, row, column ) ;
 		} // else if
 		else if ( pt.material.box.selector.statusPage == 3 ) {
 
@@ -153,8 +162,6 @@ PreviewBox.prototype.OnTiledControl = function() {
 		else if ( pt.material.box.selector.statusPage == 5 ) {
 
 		} // else if
-		// Redraw.
-		TotalRefresh( pt, pt.box.mapbox.tiled.mr, pt.box.mapbox.tiled.mc, row, column ) ;
 	} // Refresh()
 
 	// Create tiled map data struct.
