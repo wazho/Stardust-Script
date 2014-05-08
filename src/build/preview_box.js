@@ -87,6 +87,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 			var index = specific_x * G.customer_length + specific_y ;
 			pt.box.mapbox.tiled.removeChildAt( index ) ;
 			pt.box.mapbox.tiled.addChildAt( SingleRefresh( specific_x , specific_y ).clone( true ), index ) ;
+			pt.box.mapbox.tiled.getChildAt( index ).on( "click", function( evt ) { Refresh( pt, this ) ; } ) ;
 		} // if
 		else {
 			// Initial must remove old tiled map.

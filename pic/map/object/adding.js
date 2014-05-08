@@ -5,11 +5,11 @@ var object_adding = [
 	},
 	{	file : "2.png",
 		decs : "medium house", 
-		divi : 0.45
+		divi : 0.48
 	},
 	{	file : "3.png",
 		decs : "medium house (door)", 
-		divi : 0.45
+		divi : 0.48
 	},
 	{	file : "4.png",
 		decs : "big house", 
@@ -57,6 +57,14 @@ var object_adding = [
 	},
 	{	file : "15.png",
 		decs : "shiitake 2", 
+		divi : 0
+	},
+	{	file : "16.png",
+		decs : "shiitake 3", 
+		divi : 0
+	},
+	{	file : "17.png",
+		decs : "knight statue", 
 		divi : 0
 	}
 
