@@ -10,10 +10,9 @@ PreviewBox.prototype.OnCreate = function( material ) {
 	// Map preview box.
 	this.box = new createjs.Container() ;
 	this.box.x = 0, this.box.y = 0 ;
-	this.box.bg = new createjs.Bitmap( "pic/map_build/background.jpg" ) ;
+	this.box.bg = new createjs.Bitmap( "pic/map_build/background.png" ) ;
 	this.box.logo = new createjs.Bitmap( "pic/map_build/logo.png" ) ;
 	this.box.logo.x = 15, this.box.logo.y = 15 ;
-	this.box.addChild( this.box.bg, this.box.logo ) ;
 	// Map box and silde bar.
 	this.box.mapbox = new createjs.Container() ;
 	this.box.mapbox.x = 37, this.box.mapbox.y = 70 ;
@@ -30,7 +29,7 @@ PreviewBox.prototype.OnCreate = function( material ) {
 	this.box.tool.forward.x = 50, this.box.tool.forward.y = 0 ;
 	this.box.tool.addChild( this.box.tool.backward, this.box.tool.forward ) ;
 	// Add to top container.
-	this.box.addChild( this.box.mapbox, this.box.bar, this.box.tool ) ;
+	this.box.addChild( this.box.mapbox, this.box.bg, this.box.logo, this.box.bar, this.box.tool ) ;
 } // OnCreate()
 
 // 
@@ -109,7 +108,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 			// Add listening event.
 			for ( i = 0 ; i < pt.box.mapbox.tiled.getNumChildren() ; i ++ )
 				pt.box.mapbox.tiled.getChildAt( i ).on( "click", function( evt ) { Refresh( pt, this ) ; } ) ;
-			
+
 			if ( pt.material.box.selector.statusPage == 3 ) {
 				pt.box.mapbox.objects.visible = true ;
 				pt.box.mapbox.objects.bg.on( "dblclick", function( evt ) {
