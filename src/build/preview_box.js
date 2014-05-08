@@ -84,7 +84,9 @@ PreviewBox.prototype.OnTiledControl = function() {
 			return ;
 
 		if ( specific_x != -1 && specific_y != -1 ) {
-			SingleRefresh( specific_x , specific_y ) ;
+			var index = specific_x * G.customer_length + specific_y ;
+			pt.box.mapbox.tiled.removeChildAt( index ) ;
+			pt.box.mapbox.tiled.addChildAt( SingleRefresh( specific_x , specific_y ).clone( true ), index ) ;
 		} // if
 		else {
 			// Initial must remove old tiled map.
@@ -93,7 +95,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 			for ( i = 0 ; i < G.height ; i ++ )
 				for ( j = 0 ; j < G.length ; j ++ )
 					if ( ( i + mr ) < G.customer_height && ( j + mc ) < G.customer_length )
-						SingleRefresh( i , j ) ;
+						pt.box.mapbox.tiled.addChild( SingleRefresh( i , j ).clone( true ) ) ;
 			// Add listening event.
 			for ( i = 0 ; i < pt.box.mapbox.tiled.getNumChildren() ; i ++ )
 				pt.box.mapbox.tiled.getChildAt( i ).on( "click", function( evt ) { Refresh( pt, this ) ; } ) ;
@@ -103,22 +105,22 @@ PreviewBox.prototype.OnTiledControl = function() {
 			var data = pt.box.mapbox.tiled_data[i+mr][j+mc] ;
 			var row = Math.floor( data.i / G.range ) ;
 			var column = data.i % G.range ;
-			pt.box.mapbox.tiled.single = new createjs.Container() ;
-			pt.box.mapbox.tiled.single.pic = new createjs.Bitmap( G.textureSrc + data.m + ".png" ) ;
-			pt.box.mapbox.tiled.single.pic.sourceRect = new createjs.Rectangle( column * G.size, row * G.size, G.size, G.size ) ;
+			var singleTile = new createjs.Container() ;
+			singleTile.pic = new createjs.Bitmap( G.textureSrc + data.m + ".png" ) ;
+			singleTile.pic.sourceRect = new createjs.Rectangle( column * G.size, row * G.size, G.size, G.size ) ;
 			// Mask for walkable / unwalkable.
-			pt.box.mapbox.tiled.single.mask = new createjs.Shape() ;
+			singleTile.mask = new createjs.Shape() ;
 			if ( data.w == 1 )
-				pt.box.mapbox.tiled.single.mask.graphics.f( "#00FF00" ).r( 0, 0, G.size, G.size ) ;
+				singleTile.mask.graphics.f( "#00FF00" ).r( 0, 0, G.size, G.size ) ;
 			else
-				pt.box.mapbox.tiled.single.mask.graphics.f( "#FF0000" ).r( 0, 0, G.size, G.size ) ;
-			pt.box.mapbox.tiled.single.mask.alpha = 0.2 ;
-			pt.box.mapbox.tiled.single.mask.visible = ( pt.material.box.selector.statusPage == 2 ) ? true : false ;
+				singleTile.mask.graphics.f( "#FF0000" ).r( 0, 0, G.size, G.size ) ;
+			singleTile.mask.alpha = 0.2 ;
+			singleTile.mask.visible = ( pt.material.box.selector.statusPage == 2 ) ? true : false ;
 			// Add to container.
-			pt.box.mapbox.tiled.single.addChild( pt.box.mapbox.tiled.single.pic, pt.box.mapbox.tiled.single.mask ) ;
-			pt.box.mapbox.tiled.single.name = i * G.length + j ;
-			pt.box.mapbox.tiled.single.x = j * G.size, pt.box.mapbox.tiled.single.y = i * G.size ;
-			pt.box.mapbox.tiled.addChild( pt.box.mapbox.tiled.single.clone( true ) ) ;
+			singleTile.addChild( singleTile.pic, singleTile.mask ) ;
+			singleTile.name = i * G.length + j ;
+			singleTile.x = j * G.size, singleTile.y = i * G.size ;
+			return singleTile ;
 		} // SingleRefresh()
 	} // TotalRefresh()
 

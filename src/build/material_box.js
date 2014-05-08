@@ -252,29 +252,32 @@ MaterialBox.prototype.OnObject = function() {
 		pt.box.list.objects.number += ( pt.box.list.objects.number + num > 0 ) ? num : 0 ;
 		var object_rule = object_adding[pt.box.list.objects.number-1] ;
 		// Container background.
+		var bgSize = 255 + G.range ;
 		pt.box.list.objects.bg = new createjs.Shape() ;
-		pt.box.list.objects.bg.graphics.f( "#FFFFFF" ).r( 15, 15, 255 + G.range, 255 + G.range ) ;
+		pt.box.list.objects.bg.graphics.f( "#FFFFFF" ).r( 15, 15, bgSize, bgSize ) ;
 		// Change pic and drawing.
 		pt.box.list.objects.pic = new createjs.Bitmap( G.objectSrc + object_rule.file ) ;
 		pt.box.list.objects.pic.regX = pt.box.list.objects.pic.getBounds().width / 2 ;
 		pt.box.list.objects.pic.regY = pt.box.list.objects.pic.getBounds().height / 2 ;
-		pt.box.list.objects.pic.x = pt.box.list.objects.pic.y = 15 + ( 255 + G.range ) / 2 ; ;
+		pt.box.list.objects.pic.x = pt.box.list.objects.pic.y = 15 + ( bgSize ) / 2 ; ;
 		// Mask to covered and coverer.
+		var covererHeight = bgSize * object_rule.divi ;
+		var coveredHeight = bgSize - covererHeight ;
 		pt.box.list.objects.cover = new createjs.Container() ;
 		pt.box.list.objects.cover.coverer = new createjs.Shape() ;
-		pt.box.list.objects.cover.coverer.graphics.f( "#00FF00" ).r( 15, 15, 255 + G.range, object_rule.divi ) ;
+		pt.box.list.objects.cover.coverer.graphics.f( "#00FF00" ).r( 15, 15, bgSize, covererHeight ) ;
 		pt.box.list.objects.cover.coverer.alpha = 0.2 ;
 		pt.box.list.objects.cover.covered = new createjs.Shape() ;
-		pt.box.list.objects.cover.covered.graphics.f( "#FF0000" ).r( 15, 15 + object_rule.divi, 255 + G.range, ( 255 + G.range ) - object_rule.divi ) ;
+		pt.box.list.objects.cover.covered.graphics.f( "#FF0000" ).r( 15, 15 + covererHeight, bgSize, coveredHeight ) ;
 		pt.box.list.objects.cover.covered.alpha = 0.2 ;
 		// Set front end / back end containers.
 		sampleContainerA = new createjs.Container() ;
-		sampleContainerA.x = 65, sampleContainerA.y = object_rule.divi / 2 ;
-		sampleContainerA.visible = ( object_rule.divi >= 80 ) ? true : false ;
+		sampleContainerA.x = 65, sampleContainerA.y = covererHeight / 2 ;
+		//sampleContainerA.visible = ( object_rule.divi >= 80 ) ? true : false ;
 		sampleContainerA.addChild( getFloatingSample() ) ;
 		sampleContainerB = new createjs.Container() ;
-		sampleContainerB.x = 65, sampleContainerB.y = object_rule.divi + ( ( 255 + G.range ) - object_rule.divi ) / 5 * 2 ;
-		sampleContainerB.visible = ( 255 + G.range - object_rule.divi >= 80 ) ? true : false ;
+		sampleContainerB.x = 65, sampleContainerB.y = ( bgSize + coveredHeight ) / 2 ;
+		//sampleContainerB.visible = ( bgSize - object_rule.divi >= 80 ) ? true : false ;
 		sampleContainerB.addChild( getFloatingSample() ) ;
 		// Add front end / back end objects to 'object cover' container.
 		pt.box.list.objects.cover.addChild( sampleContainerA, pt.box.list.objects.pic, pt.box.list.objects.cover.coverer, sampleContainerB, pt.box.list.objects.cover.covered ) ; 
