@@ -3,8 +3,8 @@ function GlobalValues() {
 	this.range = 8 ;
 	this.length = 18 ;
 	this.height = 14 ;
-	this.customer_length = 6 ;
-	this.customer_height = 4 ;
+	this.customer_length = 10 ;
+	this.customer_height = 5 ;
 	this.textureSrc = "pic/map/texture/" ;
 	this.objectSrc = "pic/map/object/" ;
 } // Tiled_Datastruct()
