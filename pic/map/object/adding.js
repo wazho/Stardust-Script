@@ -12,7 +12,8 @@ var object_adding = [
 		divi : 0.45
 	},
 	{	file : "4.png",
-		decs : "big house"
+		decs : "big house", 
+		divi : 0.51
 	},
 	{	file : "5.png",
 		decs : "fruit vendor", 

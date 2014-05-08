@@ -261,7 +261,9 @@ MaterialBox.prototype.OnObject = function() {
 		var objectHeight = pt.box.list.objects.pic.getBounds().height ;
 		pt.box.list.objects.pic.regX = objectWidth / 2 ;
 		pt.box.list.objects.pic.regY = objectHeight / 2 ;
-		pt.box.list.objects.pic.x = pt.box.list.objects.pic.y = 15 + ( bgSize ) / 2 ; ;
+		if ( objectWidth > bgSize || objectHeight > bgSize )
+			pt.box.list.objects.pic.scaleX = pt.box.list.objects.pic.scaleY = ( objectWidth > objectHeight ) ? ( bgSize / objectWidth ) : ( bgSize / objectHeight ) ;
+		pt.box.list.objects.pic.x = pt.box.list.objects.pic.y = 15 + ( bgSize ) / 2 ;
 		// Mask to covered and coverer.
 		var covererHeight = ( object_rule.divi > 0 ) ? ( ( object_rule.divi < 1 ) ? ( bgSize / 2 - objectHeight / 2 + object_rule.divi * objectHeight ) : bgSize ) : 0 ;
 		var coveredHeight = bgSize - covererHeight ;
@@ -302,9 +304,9 @@ MaterialBox.prototype.OnObject = function() {
 		var sample = new createjs.BitmapAnimation( sample_sheet ) ;
 		sample.gotoAndPlay( "walk" ) ;
 		createjs.Tween.get( sample, { loop: true } )
-			.call( function(){ sample.scaleX = -1 } )
+			.call( function(){ sample.scaleX *= -1 } )
 			.to( { x: 170 }, 1500, createjs.Ease.quadInOut )
-			.call( function(){ sample.scaleX = 1 } )
+			.call( function(){ sample.scaleX *= -1 } )
 			.to( { x: 0 }, 1500, createjs.Ease.quadInOut ) ;
 		createjs.Tween.get( sample, { loop: true } )
 			.to( { y: 15 }, 500, createjs.Ease.quadInOut )
