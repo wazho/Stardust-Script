@@ -95,19 +95,6 @@ PreviewBox.prototype.OnTiledControl = function() {
 	this.material.box.selector.buttonE.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) ;
 	this.material.box.selector.buttonF.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) ;
 
-	function AddingObject( evt ) {
-		var object = that.material.box.list.objects.pic.clone( false ) ;
-		object.scaleX = object.scaleY = 1 ;
-		object.x = evt.stageX - that.box.mapbox.x, object.y = evt.stageY - that.box.mapbox.y ;
-		that.box.mapbox.objects.addChild( object ) ;
-		object.on( "mousedown", function( evt ) { previous = { x: evt.stageX, y: evt.stageY } ; } ) ;
-		object.on( "pressmove", function( evt ) {
-			var difX = evt.stageX - previous.x, difY = evt.stageY - previous.y ;
-			object.x += difX, object.y += difY ;
-			previous = { x: evt.stageX, y: evt.stageY } ;
-		} ) ;
-	} // AddingObject()
-
 	// Replace all of this map box.
 	function TotalRefresh( pt, mr, mc, s_row, s_column ) {
 		if ( ( mr < 0 || mc < 0 ) || mr >= G.customer_height || mc >= G.customer_length )
@@ -212,4 +199,46 @@ PreviewBox.prototype.OnTiledControl = function() {
 			this.w = 1 ;
 		} // Tiled_Datastruct()
 	} // OnCreateTiled()
+
+	function AddingObject( evt ) {
+		// Add the container for object on mapbox.
+		var controller = new createjs.Container() ;
+		// Copy the selected object.
+		controller.objects = that.material.box.list.objects.pic.clone( false ) ;
+		controller.objects.x = controller.objects.regX, controller.objects.y = controller.objects.regY ;
+		controller.objects.scaleX = controller.objects.scaleY = 1 ;
+		controller.addChild( controller.objects ) ;
+		// Adjust the location of this container.
+		controller.regX = controller.objects.regX, controller.regY = controller.objects.regY ;
+		controller.bg = new createjs.Shape() ;
+		controller.bg.graphics.f( "#FF0000" ).r( 0, 0, controller.getBounds().width, controller.getBounds().height ) ;
+		controller.bg.alpha = 0.3 ;
+		controller.bg.visible = false ;
+
+
+		controller.addChildAt( controller.bg, 0 ) ;
+		controller.x = evt.stageX - that.box.mapbox.x, controller.y = evt.stageY - that.box.mapbox.y ;
+
+		console.log( controller.getBounds() + "   " + controller.objects.x ) ;
+
+		that.box.mapbox.objects.addChild( controller ) ;
+
+		stage.enableMouseOver( 20 ) ;
+
+		controller.on( "mousedown", function( evt ) {
+			previous = { x: evt.stageX, y: evt.stageY } ;
+			controller.bg.visible = true ;
+		} ) ;
+		controller.on( "rollout", function( evt ) {
+			console.log( "mouseout" ) ;
+			controller.bg.visible = false ;
+		} ) ;
+
+
+		controller.on( "pressmove", function( evt ) {
+			var difX = evt.stageX - previous.x, difY = evt.stageY - previous.y ;
+			controller.x += difX, controller.y += difY ;
+			previous = { x: evt.stageX, y: evt.stageY } ;
+		} ) ;
+	} // AddingObject()
 } // OnTiledControl()
