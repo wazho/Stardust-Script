@@ -55,6 +55,15 @@ PreviewBox.prototype.OnTiledControl = function() {
 	this.box.mapbox.objects.bg.regX = G.size * G.length / 2, this.box.mapbox.objects.bg.regY = G.size * G.height / 2 ;
 	this.box.mapbox.objects.bg.alpha = 0.1 ;
 	this.box.mapbox.objects.addChild( this.box.mapbox.objects.bg ) ;
+	// Objects listening events.
+	var previous ;
+	this.box.mapbox.objects.bg.on( "dblclick", function( evt ) { AddingObject( evt ) } ) ;
+	this.box.mapbox.objects.bg.on( "mousedown", function( evt ) { previous = { x: evt.stageX, y: evt.stageY } ; } ) ;
+	this.box.mapbox.objects.bg.on( "pressmove", function( evt ) {
+		var difX = evt.stageX - previous.x, difY = evt.stageY - previous.y ;
+		previous = { x: evt.stageX, y: evt.stageY } ;
+		that.box.mapbox.objects.x += difX, that.box.mapbox.objects.y += difY ;
+	} ) ;
 	// Modify row, column for silde tiled map.
 	TotalRefresh( this, 0, 0, -1, -1 ) ;
 	// Slide bar create.
@@ -86,6 +95,19 @@ PreviewBox.prototype.OnTiledControl = function() {
 	this.material.box.selector.buttonE.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) ;
 	this.material.box.selector.buttonF.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) ;
 
+	function AddingObject( evt ) {
+		var object = that.material.box.list.objects.pic.clone( false ) ;
+		object.scaleX = object.scaleY = 1 ;
+		object.x = evt.stageX - that.box.mapbox.x, object.y = evt.stageY - that.box.mapbox.y ;
+		that.box.mapbox.objects.addChild( object ) ;
+		object.on( "mousedown", function( evt ) { previous = { x: evt.stageX, y: evt.stageY } ; } ) ;
+		object.on( "pressmove", function( evt ) {
+			var difX = evt.stageX - previous.x, difY = evt.stageY - previous.y ;
+			object.x += difX, object.y += difY ;
+			previous = { x: evt.stageX, y: evt.stageY } ;
+		} ) ;
+	} // AddingObject()
+
 	// Replace all of this map box.
 	function TotalRefresh( pt, mr, mc, s_row, s_column ) {
 		if ( ( mr < 0 || mc < 0 ) || mr >= G.customer_height || mc >= G.customer_length )
@@ -110,55 +132,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 			for ( i = 0 ; i < pt.box.mapbox.tiled.getNumChildren() ; i ++ )
 				pt.box.mapbox.tiled.getChildAt( i ).on( "click", function( evt ) { Refresh( pt, this ) ; } ) ;
 
-			if ( pt.material.box.selector.statusPage == 3 ) {
-
-
-
-
-
-				pt.box.mapbox.objects.visible = true ;
-				pt.box.mapbox.objects.bg.on( "dblclick", function( evt ) {
-					var object = pt.material.box.list.objects.pic.clone( false ) ;
-					object.scaleX = object.scaleY = 1 ;
-					object.x = evt.stageX - that.box.mapbox.x, object.y = evt.stageY - that.box.mapbox.y ;
-					pt.box.mapbox.objects.addChild( object ) ;
-					console.log( "double click" ) ;
-
-
-					object.on( "mousedown", function( evt ) { previous = { x: evt.stageX, y: evt.stageY } ; } ) ;
-					object.on( "pressmove", function( evt ) {
-						var difX = evt.stageX - previous.x, difY = evt.stageY - previous.y ;
-						object.x += difX, object.y += difY ;
-						previous = { x: evt.stageX, y: evt.stageY } ;
-					} ) ;
-
-				} ) ;
-
-				var previous;
-				pt.box.mapbox.objects.bg.on( "mousedown", function( evt ) {
-					previous = { x: evt.stageX, y: evt.stageY } ;
-					console.log( "down" ) ;
-				} ) ;
-
-				pt.box.mapbox.objects.bg.on( "pressmove", function( evt ) {
-					var difX = evt.stageX - previous.x ;
-					var difY = evt.stageY - previous.y ;
-
-					previous = { x: evt.stageX, y: evt.stageY } ;
-					pt.box.mapbox.objects.x += difX ;
-					pt.box.mapbox.objects.y += difY ;
-				} ) ;
-
-
-
-
-
-
-			} // if
-			else {
-				pt.box.mapbox.objects.visible = false ;
-			} // else
-
+			pt.box.mapbox.objects.visible = ( pt.material.box.selector.statusPage == 3 ) ? true : false ;
 		} // else
 
 		function SingleRefresh( i, j ) {
