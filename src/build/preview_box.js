@@ -87,14 +87,15 @@ PreviewBox.prototype.OnTiledControl = function() {
 	this.material.box.selector.buttonF.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) ;
 
 	// Replace all of this map box.
-	function TotalRefresh( pt, mr, mc, specific_x, specific_y ) {
+	function TotalRefresh( pt, mr, mc, s_row, s_column ) {
 		if ( ( mr < 0 || mc < 0 ) || mr >= G.customer_height || mc >= G.customer_length )
 			return ;
 
-		if ( specific_x != -1 && specific_y != -1 ) {
-			var index = specific_x * G.customer_length + specific_y ;
+		if ( s_row != -1 && s_column != -1 ) {
+			var row = s_row - mr, column = s_column - mc ;
+			var index = row * ( ( ( G.length > G.customer_length ) ? G.customer_length : G.length ) - mc ) + column ;
 			pt.box.mapbox.tiled.removeChildAt( index ) ;
-			pt.box.mapbox.tiled.addChildAt( SingleRefresh( specific_x , specific_y ).clone( true ), index ) ;
+			pt.box.mapbox.tiled.addChildAt( SingleRefresh( row , column ).clone( true ), index ) ;
 			pt.box.mapbox.tiled.getChildAt( index ).on( "click", function( evt ) { Refresh( pt, this ) ; } ) ;
 		} // if
 		else {
@@ -137,6 +138,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 			else {
 				pt.box.mapbox.objects.visible = false ;
 			} // else
+
 		} // else
 
 		function SingleRefresh( i, j ) {
@@ -159,7 +161,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 			singleTile.name = i * G.length + j ;
 			singleTile.x = j * G.size, singleTile.y = i * G.size ;
 			return singleTile ;
-		} // SingleRefresh()
+		} // SingleRefresh()	
 	} // TotalRefresh()
 
 	// Focus one tiled, let it replace new one.
