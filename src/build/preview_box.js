@@ -216,10 +216,27 @@ PreviewBox.prototype.OnTiledControl = function() {
 		controller.bg.alpha = 0 ;
 		// Setting tools location.
 		controller.tools = new createjs.Container() ;
-		controller.tools.cancel = G.cacheObjectsController[0] ;
-		controller.tools.cancel.scaleX = controller.tools.cancel.scaleY = 0.25 ;
+		controller.tools.cancel = G.cacheObjectsController[0].clone( false ) ;
+		controller.tools.cancel.scaleX = controller.tools.cancel.scaleY = 0.15 ;
+		controller.tools.cancel.x = controller.getBounds().width + 22, controller.tools.cancel.y = 0 ;
+		controller.tools.flip = G.cacheObjectsController[1].clone( false ) ;
+		controller.tools.flip.scaleX = controller.tools.flip.scaleY = 0.15 ;
+		controller.tools.flip.x = controller.getBounds().width + 22, controller.tools.flip.y = 22 ;
+		controller.tools.up = G.cacheObjectsController[2].clone( false ) ;
+		controller.tools.up.scaleX = controller.tools.up.scaleY = 0.15 ;
+		controller.tools.up.x = -22, controller.tools.up.y = 0 ;
+		controller.tools.down = G.cacheObjectsController[3].clone( false ) ;
+		controller.tools.down.scaleX = controller.tools.down.scaleY = 0.15 ;
+		controller.tools.down.x = -22, controller.tools.down.y = 22 ;
 		controller.tools.alpha = 0 ;
-		controller.tools.addChild( controller.tools.cancel ) ;
+		controller.tools.zoom_in = G.cacheObjectsController[4].clone( false ) ;
+		controller.tools.zoom_in.scaleX = controller.tools.zoom_in.scaleY = 0.15 ;
+		controller.tools.zoom_in.x = -22, controller.tools.zoom_in.y = 44 ;
+		controller.tools.zoom_out = G.cacheObjectsController[5].clone( false ) ;
+		controller.tools.zoom_out.scaleX = controller.tools.zoom_out.scaleY = 0.15 ;
+		controller.tools.zoom_out.x = -22, controller.tools.zoom_out.y = 66 ;
+		controller.tools.alpha = 0 ;
+		controller.tools.addChild( controller.tools.cancel, controller.tools.flip, controller.tools.up, controller.tools.down, controller.tools.zoom_in, controller.tools.zoom_out ) ;
 		// Add to the top container.
 		controller.addChildAt( controller.bg ) ;
 		controller.addChild( controller.tools ) ;
@@ -234,7 +251,6 @@ PreviewBox.prototype.OnTiledControl = function() {
 			controller.tools.alpha = 1 ;
 		} ) ;
 		controller.on( "rollout", function( evt ) {
-			console.log( "mouseout" ) ;
 			createjs.Tween.get( controller.bg ).to( { alpha: 0 }, 500 ) ;
 			createjs.Tween.get( controller.tools ).to( { alpha: 0 }, 500 ) ;
 		} ) ;
