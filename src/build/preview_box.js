@@ -127,11 +127,9 @@ PreviewBox.prototype.OnTiledControl = function() {
 
 					object.on( "mousedown", function( evt ) { previous = { x: evt.stageX, y: evt.stageY } ; } ) ;
 					object.on( "pressmove", function( evt ) {
-						var difX = evt.stageX - previous.x ;
-						var difY = evt.stageY - previous.y ;
+						var difX = evt.stageX - previous.x, difY = evt.stageY - previous.y ;
+						object.x += difX, object.y += difY ;
 						previous = { x: evt.stageX, y: evt.stageY } ;
-						object.x += difX ;
-						object.y += difY ;
 					} ) ;
 
 				} ) ;
