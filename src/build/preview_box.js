@@ -111,6 +111,11 @@ PreviewBox.prototype.OnTiledControl = function() {
 				pt.box.mapbox.tiled.getChildAt( i ).on( "click", function( evt ) { Refresh( pt, this ) ; } ) ;
 
 			if ( pt.material.box.selector.statusPage == 3 ) {
+
+
+
+
+
 				pt.box.mapbox.objects.visible = true ;
 				pt.box.mapbox.objects.bg.on( "dblclick", function( evt ) {
 					var object = pt.material.box.list.objects.pic.clone( false ) ;
@@ -118,6 +123,17 @@ PreviewBox.prototype.OnTiledControl = function() {
 					object.x = evt.stageX - that.box.mapbox.x, object.y = evt.stageY - that.box.mapbox.y ;
 					pt.box.mapbox.objects.addChild( object ) ;
 					console.log( "double click" ) ;
+
+
+					object.on( "mousedown", function( evt ) { previous = { x: evt.stageX, y: evt.stageY } ; } ) ;
+					object.on( "pressmove", function( evt ) {
+						var difX = evt.stageX - previous.x ;
+						var difY = evt.stageY - previous.y ;
+						previous = { x: evt.stageX, y: evt.stageY } ;
+						object.x += difX ;
+						object.y += difY ;
+					} ) ;
+
 				} ) ;
 
 				var previous;
@@ -134,6 +150,12 @@ PreviewBox.prototype.OnTiledControl = function() {
 					pt.box.mapbox.objects.x += difX ;
 					pt.box.mapbox.objects.y += difY ;
 				} ) ;
+
+
+
+
+
+
 			} // if
 			else {
 				pt.box.mapbox.objects.visible = false ;
