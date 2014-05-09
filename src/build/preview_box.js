@@ -203,6 +203,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 	function AddingObject( evt ) {
 		// Add the container for object on mapbox.
 		var controller = new createjs.Container() ;
+		controller.x = evt.stageX - that.box.mapbox.x, controller.y = evt.stageY - that.box.mapbox.y ;
 		// Copy the selected object.
 		controller.objects = that.material.box.list.objects.pic.clone( false ) ;
 		controller.objects.x = controller.objects.regX + 10, controller.objects.y = controller.objects.regY + 10 ;
@@ -210,25 +211,31 @@ PreviewBox.prototype.OnTiledControl = function() {
 		controller.addChild( controller.objects ) ;
 		// Adjust the location of this container.
 		controller.regX = controller.objects.regX + 10, controller.regY = controller.objects.regY + 10 ;
+		controller.bg = new createjs.Shape() ;
+		controller.bg.graphics.f( "#FF0000" ).s( "#000000" ).r( 0, 0, controller.getBounds().width + 20, controller.getBounds().height + 20 ) ;
+		controller.bg.alpha = 0 ;
+		// Setting tools location.
 		controller.tools = new createjs.Container() ;
-		controller.tools.bg = new createjs.Shape() ;
-		controller.tools.bg.graphics.f( "#FF0000" ).s( "#000000" ).r( 0, 0, controller.getBounds().width + 20, controller.getBounds().height + 20 ) ;
+		controller.tools.cancel = G.cacheObjectsController[0] ;
+		controller.tools.cancel.scaleX = controller.tools.cancel.scaleY = 0.25 ;
 		controller.tools.alpha = 0 ;
-		controller.tools.addChild( controller.tools.bg ) ;
-
-		controller.addChildAt( controller.tools, 0 ) ;
-		controller.x = evt.stageX - that.box.mapbox.x, controller.y = evt.stageY - that.box.mapbox.y ;
-		
+		controller.tools.addChild( controller.tools.cancel ) ;
+		// Add to the top container.
+		controller.addChildAt( controller.bg ) ;
+		controller.addChild( controller.tools ) ;
 		that.box.mapbox.objects.addChild( controller ) ;
 
-		stage.enableMouseOver( 20 ) ;
 
+
+		stage.enableMouseOver( 20 ) ;
 		controller.on( "mousedown", function( evt ) {
 			previous = { x: evt.stageX, y: evt.stageY } ;
-			controller.tools.alpha = 0.3 ;
+			controller.bg.alpha = 0.3 ;
+			controller.tools.alpha = 1 ;
 		} ) ;
 		controller.on( "rollout", function( evt ) {
 			console.log( "mouseout" ) ;
+			createjs.Tween.get( controller.bg ).to( { alpha: 0 }, 500 ) ;
 			createjs.Tween.get( controller.tools ).to( { alpha: 0 }, 500 ) ;
 		} ) ;
 		controller.on( "pressmove", function( evt ) {
