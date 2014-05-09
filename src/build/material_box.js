@@ -12,8 +12,11 @@ MaterialBox.prototype.OnCreate = function() {
 	// Material selector container.
 	this.box.selector = new createjs.Container() ;
 	this.box.selector.x = 25, this.box.selector.y = 25 ;
-	this.box.addChild( this.box.selector ) ;
 	this.box.selector.statusPage = 0 ;
+	// Material list container.
+	this.box.list = new createjs.Container() ;
+	this.box.list.x = 30, this.box.list.y = 130 ;
+	this.box.addChild( this.box.selector, this.box.list ) ;
 	// Material selector button - texture.
 	this.box.selector.buttonA = new createjs.Container() ;
 	this.box.selector.buttonA.x = 0, this.box.selector.buttonA.y = 0 ;
@@ -23,7 +26,13 @@ MaterialBox.prototype.OnCreate = function() {
 	this.box.selector.buttonA.text = new createjs.Text( "Texture", "14px comic sans ms", "#FFFFFF" ) ;
 	this.box.selector.buttonA.text.x = 50, this.box.selector.buttonA.text.y = 35 ;
 	this.box.selector.buttonA.addChild( this.box.selector.buttonA.bg, this.box.selector.buttonA.text ) ;
-	this.box.selector.buttonA.on( "click", function( evt ) { that.OnSelectEffect( that.box.selector.buttonA ) ; that.OnTexture() ; } ) ;
+	this.box.selector.buttonA.on( "click", function( evt ) {
+									createjs.Tween.get( that.box.list )
+									.call( function(){ that.OnSelectEffect( that.box.selector.buttonA ) ; } )
+									.to( { alpha: 0 }, 300 )
+									.call( function(){ that.OnTexture() ; } )
+									.to( { alpha: 1 }, 300 )
+								} ) ;
 	// Material selector button - walkable.
 	this.box.selector.buttonB = new createjs.Container() ;
 	this.box.selector.buttonB.x = 100, this.box.selector.buttonB.y = 0 ;
@@ -33,7 +42,13 @@ MaterialBox.prototype.OnCreate = function() {
 	this.box.selector.buttonB.text = new createjs.Text( "Walk", "14px comic sans ms", "#FFFFFF" ) ;
 	this.box.selector.buttonB.text.x = 58, this.box.selector.buttonB.text.y = 35 ;
 	this.box.selector.buttonB.addChild( this.box.selector.buttonB.bg, this.box.selector.buttonB.text ) ;
-	this.box.selector.buttonB.on( "click", function( evt ) { that.OnSelectEffect( that.box.selector.buttonB ) ; that.OnWalkable() ; } ) ;
+	this.box.selector.buttonB.on( "click", function( evt ) {
+									createjs.Tween.get( that.box.list )
+									.call( function(){ that.OnSelectEffect( that.box.selector.buttonB ) ; } )
+									.to( { alpha: 0 }, 300 )
+									.call( function(){ that.OnWalkable() ; } )
+									.to( { alpha: 1 }, 300 )
+								} ) ;
 	// Material selector button - object.
 	this.box.selector.buttonC = new createjs.Container() ;
 	this.box.selector.buttonC.x = 200, this.box.selector.buttonC.y = 0 ;
@@ -43,7 +58,13 @@ MaterialBox.prototype.OnCreate = function() {
 	this.box.selector.buttonC.text = new createjs.Text( "Object", "14px comic sans ms", "#FFFFFF" ) ;
 	this.box.selector.buttonC.text.x = 50, this.box.selector.buttonC.text.y = 35 ;
 	this.box.selector.buttonC.addChild( this.box.selector.buttonC.bg, this.box.selector.buttonC.text ) ;
-	this.box.selector.buttonC.on( "click", function( evt ) { that.OnSelectEffect( that.box.selector.buttonC ) ; that.OnObject() ; } ) ;
+	this.box.selector.buttonC.on( "click", function( evt ) {
+									createjs.Tween.get( that.box.list )
+									.call( function(){ that.OnSelectEffect( that.box.selector.buttonC ) ; } )
+									.to( { alpha: 0 }, 300 )
+									.call( function(){ that.OnObject() ; } )
+									.to( { alpha: 1 }, 300 )
+								} ) ;
 	// Material selector button - light.
 	this.box.selector.buttonD = new createjs.Container() ;
 	this.box.selector.buttonD.x = 45, this.box.selector.buttonD.y = 45 ;
@@ -53,7 +74,13 @@ MaterialBox.prototype.OnCreate = function() {
 	this.box.selector.buttonD.text = new createjs.Text( "Light", "14px comic sans ms", "#FFFFFF" ) ;
 	this.box.selector.buttonD.text.x = -32, this.box.selector.buttonD.text.y = 35 ;
 	this.box.selector.buttonD.addChild( this.box.selector.buttonD.bg, this.box.selector.buttonD.text ) ;
-	this.box.selector.buttonD.on( "click", function( evt ) { that.OnSelectEffect( that.box.selector.buttonD ) ; that.OnLight() ; } ) ;
+	this.box.selector.buttonD.on( "click", function( evt ) {
+									createjs.Tween.get( that.box.list )
+									.call( function(){ that.OnSelectEffect( that.box.selector.buttonD ) ; } )
+									.to( { alpha: 0 }, 300 )
+									.call( function(){ that.OnLight() ; } )
+									.to( { alpha: 1 }, 300 )
+								} ) ;
 	// Material selector button - sound.
 	this.box.selector.buttonE = new createjs.Container() ;
 	this.box.selector.buttonE.x = 145, this.box.selector.buttonE.y = 45 ;
@@ -63,7 +90,13 @@ MaterialBox.prototype.OnCreate = function() {
 	this.box.selector.buttonE.text = new createjs.Text( "Sound", "14px comic sans ms", "#FFFFFF" ) ;
 	this.box.selector.buttonE.text.x = -35, this.box.selector.buttonE.text.y = 35 ;
 	this.box.selector.buttonE.addChild( this.box.selector.buttonE.bg, this.box.selector.buttonE.text ) ;
-	this.box.selector.buttonE.on( "click", function( evt ) { that.OnSelectEffect( that.box.selector.buttonE ) ; that.OnSound() ; } ) ;
+	this.box.selector.buttonE.on( "click", function( evt ) {
+									createjs.Tween.get( that.box.list )
+									.call( function(){ that.OnSelectEffect( that.box.selector.buttonE ) ; } )
+									.to( { alpha: 0 }, 300 )
+									.call( function(){ that.OnSound() ; } )
+									.to( { alpha: 1 }, 300 )
+								} ) ;
 	// Material selector button - option.
 	this.box.selector.buttonF = new createjs.Container() ;
 	this.box.selector.buttonF.x = 245, this.box.selector.buttonF.y = 45 ;
@@ -73,13 +106,15 @@ MaterialBox.prototype.OnCreate = function() {
 	this.box.selector.buttonF.text = new createjs.Text( "Option", "14px comic sans ms", "#FFFFFF" ) ;
 	this.box.selector.buttonF.text.x = -40, this.box.selector.buttonF.text.y = 35 ;
 	this.box.selector.buttonF.addChild( this.box.selector.buttonF.bg, this.box.selector.buttonF.text ) ;
-	this.box.selector.buttonF.on( "click", function( evt ) { that.OnSelectEffect( that.box.selector.buttonF ) ; that.OnOption() ; } ) ;
-	// Material list container.
-	this.box.list = new createjs.Container() ;
-	this.box.list.x = 30, this.box.list.y = 130 ;
-	this.box.addChild( this.box.list ) ;
-	this.OnSelectEffect( this.box.selector.buttonF ) ;
+	this.box.selector.buttonF.on( "click", function( evt ) {
+									createjs.Tween.get( that.box.list )
+									.call( function(){ that.OnSelectEffect( that.box.selector.buttonF ) ; } )
+									.to( { alpha: 0 }, 300 )
+									.call( function(){ that.OnOption() ; } )
+									.to( { alpha: 1 }, 300 )
+								} ) ;
 	// Initial.
+	this.OnSelectEffect( this.box.selector.buttonF ) ;
 	this.OnTexture() ;
 	this.OnOption() ;
 } // OnCreate()
