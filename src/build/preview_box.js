@@ -210,30 +210,27 @@ PreviewBox.prototype.OnTiledControl = function() {
 		controller.addChild( controller.objects ) ;
 		// Adjust the location of this container.
 		controller.regX = controller.objects.regX + 10, controller.regY = controller.objects.regY + 10 ;
-		controller.bg = new createjs.Shape() ;
-		controller.bg.graphics.f( "#FF0000" ).s( "#000000" ).r( 0, 0, controller.getBounds().width + 20, controller.getBounds().height + 20 ) ;
-		controller.bg.alpha = 0.3 ;
-		controller.bg.visible = false ;
+		controller.tools = new createjs.Container() ;
+		controller.tools.bg = new createjs.Shape() ;
+		controller.tools.bg.graphics.f( "#FF0000" ).s( "#000000" ).r( 0, 0, controller.getBounds().width + 20, controller.getBounds().height + 20 ) ;
+		controller.tools.alpha = 0 ;
+		controller.tools.addChild( controller.tools.bg ) ;
 
-
-		controller.addChildAt( controller.bg, 0 ) ;
+		controller.addChildAt( controller.tools, 0 ) ;
 		controller.x = evt.stageX - that.box.mapbox.x, controller.y = evt.stageY - that.box.mapbox.y ;
-
-
+		
 		that.box.mapbox.objects.addChild( controller ) ;
 
 		stage.enableMouseOver( 20 ) ;
 
 		controller.on( "mousedown", function( evt ) {
 			previous = { x: evt.stageX, y: evt.stageY } ;
-			controller.bg.visible = true ;
+			controller.tools.alpha = 0.3 ;
 		} ) ;
 		controller.on( "rollout", function( evt ) {
 			console.log( "mouseout" ) ;
-			controller.bg.visible = false ;
+			createjs.Tween.get( controller.tools ).to( { alpha: 0 }, 500 ) ;
 		} ) ;
-
-
 		controller.on( "pressmove", function( evt ) {
 			var difX = evt.stageX - previous.x, difY = evt.stageY - previous.y ;
 			controller.x += difX, controller.y += difY ;
