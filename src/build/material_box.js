@@ -129,17 +129,18 @@ MaterialBox.prototype.OnTexture = function() {
 	Refresh( this, 0 ) ;
 
 	function Refresh( pt, num ) {
-		if ( pt.box.list.texture.number + num > texture_adding.length )
+		var selectNum = pt.box.list.texture.number ;
+		if ( selectNum + num > texture_adding.length )
 			return ;
 		pt.box.list.texture.removeAllChildren() ;
 		pt.box.list.marked.visible = false ;
 		// Change pic and drawing.
-		pt.box.list.texture.number += ( pt.box.list.texture.number + num > 0 ) ? num : 0 ;
-		pt.box.list.texture.pic = new createjs.Bitmap( G.textureSrc + texture_adding[pt.box.list.texture.number-1].file ) ;
+		selectNum = pt.box.list.texture.number += ( selectNum + num > 0 ) ? num : 0 ;
+		pt.box.list.texture.pic = G.cacheTexture[selectNum-1] ;
 		for ( i = 0 ; i < G.range ; i ++ )
 			for ( j = 0 ; j < G.range ; j ++ ) {
 				pt.box.list.texture.pic.sourceRect = new createjs.Rectangle( j * G.size, i * G.size, G.size, G.size ) ;
-				pt.box.list.texture.pic.name = pt.box.list.texture.number * 100 + ( j + G.range * i ) ;
+				pt.box.list.texture.pic.name = selectNum * 100 + ( j + G.range * i ) ;
 				pt.box.list.texture.pic.x = 15 + j * ( G.size + 1 ), pt.box.list.texture.pic.y = 15 + i * ( G.size + 1 ) ;
 				pt.box.list.texture.addChild( pt.box.list.texture.pic.clone( false ) ) ;
 			} // for
@@ -147,9 +148,9 @@ MaterialBox.prototype.OnTexture = function() {
 		for ( i = 0 ; i < G.range * G.range ; i ++ )
 			pt.box.list.texture.getChildAt( i ).on( "click", function( evt ) { MarkedSelected( that, this, G ) ; } ) ;
 		// Text info.
-		pt.box.list.picNum = new createjs.Text( "[" + pt.box.list.texture.number + "/" + texture_adding.length + "]", "18px comic sans ms", "#FFFFFF" ) ;
+		pt.box.list.picNum = new createjs.Text( "[" + selectNum + "/" + texture_adding.length + "]", "18px comic sans ms", "#FFFFFF" ) ;
 		pt.box.list.picNum.x = 15, pt.box.list.picNum.y = 297 ;
-		pt.box.list.picName = new createjs.Text( texture_adding[pt.box.list.texture.number-1].decs, "18px comic sans ms", "#FFFFFF" ) ;
+		pt.box.list.picName = new createjs.Text( texture_adding[selectNum-1].decs, "18px comic sans ms", "#FFFFFF" ) ;
 		pt.box.list.picName.x = 15, pt.box.list.picName.y = 322 ;
 		pt.box.list.texture.addChild( pt.box.list.picNum, pt.box.list.picName ) ;
 		// Container background.
@@ -244,19 +245,21 @@ MaterialBox.prototype.OnObject = function() {
 	Refresh( this, 0 ) ;
 
 	function Refresh( pt, num ) {
-		if ( pt.box.list.objects.number + num > object_adding.length )
+		// First initial.
+		var selectNum = pt.box.list.objects.number ;
+		if ( selectNum + num > object_adding.length )
 			return ;
 		pt.box.list.objects.removeAllChildren() ;
 		pt.box.list.marked.visible = false ;
 		// Get the new object pic rule.
-		pt.box.list.objects.number += ( pt.box.list.objects.number + num > 0 ) ? num : 0 ;
-		var object_rule = object_adding[pt.box.list.objects.number-1] ;
+		selectNum = pt.box.list.objects.number += ( selectNum + num > 0 ) ? num : 0 ;
+		var object_rule = object_adding[selectNum-1] ;
 		// Container background.
 		var bgSize = 255 + G.range ;
 		pt.box.list.objects.bg = new createjs.Shape() ;
 		pt.box.list.objects.bg.graphics.f( "#FFFFFF" ).r( 15, 15, bgSize, bgSize ) ;
 		// Change pic and drawing.
-		pt.box.list.objects.pic = new createjs.Bitmap( G.objectSrc + object_rule.file ) ;
+		pt.box.list.objects.pic = G.cacheObjects[selectNum-1] ; //new createjs.Bitmap( G.objectSrc + object_rule.file ) ;
 		var objectWidth = pt.box.list.objects.pic.getBounds().width ;
 		var objectHeight = pt.box.list.objects.pic.getBounds().height ;
 		pt.box.list.objects.pic.regX = objectWidth / 2 ;

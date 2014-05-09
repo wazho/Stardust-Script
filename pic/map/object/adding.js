@@ -65,7 +65,7 @@ var object_adding = [
 	},
 	{	file : "17.png",
 		decs : "knight statue", 
-		divi : 0
+		divi : 0.43
 	}
 
 ] ;
