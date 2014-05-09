@@ -88,12 +88,12 @@ PreviewBox.prototype.OnTiledControl = function() {
 	this.box.bar.vertical.up.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr - 1, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) ;
 	this.box.bar.vertical.down.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr + 1, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) ;
 	// [Special] button - material box listening event added.
-	this.material.box.selector.buttonA.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) ;
-	this.material.box.selector.buttonB.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) ;
-	this.material.box.selector.buttonC.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) ;
-	this.material.box.selector.buttonD.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) ;
-	this.material.box.selector.buttonE.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) ;
-	this.material.box.selector.buttonF.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) ;
+	this.material.box.selector.buttonA.on( "click", function( evt ) { createjs.Tween.get( this ).wait( 400 ).call( function() { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) } ) ;
+	this.material.box.selector.buttonB.on( "click", function( evt ) { createjs.Tween.get( this ).wait( 400 ).call( function() { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) } ) ;
+	this.material.box.selector.buttonC.on( "click", function( evt ) { createjs.Tween.get( this ).wait( 400 ).call( function() { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) } ) ;
+	this.material.box.selector.buttonD.on( "click", function( evt ) { createjs.Tween.get( this ).wait( 400 ).call( function() { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) } ) ;
+	this.material.box.selector.buttonE.on( "click", function( evt ) { createjs.Tween.get( this ).wait( 400 ).call( function() { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) } ) ;
+	this.material.box.selector.buttonF.on( "click", function( evt ) { createjs.Tween.get( this ).wait( 400 ).call( function() { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) } ) ;
 
 	// Replace all of this map box.
 	function TotalRefresh( pt, mr, mc, s_row, s_column ) {
