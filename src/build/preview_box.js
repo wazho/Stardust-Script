@@ -205,13 +205,13 @@ PreviewBox.prototype.OnTiledControl = function() {
 		var controller = new createjs.Container() ;
 		// Copy the selected object.
 		controller.objects = that.material.box.list.objects.pic.clone( false ) ;
-		controller.objects.x = controller.objects.regX, controller.objects.y = controller.objects.regY ;
+		controller.objects.x = controller.objects.regX + 10, controller.objects.y = controller.objects.regY + 10 ;
 		controller.objects.scaleX = controller.objects.scaleY = 1 ;
 		controller.addChild( controller.objects ) ;
 		// Adjust the location of this container.
-		controller.regX = controller.objects.regX, controller.regY = controller.objects.regY ;
+		controller.regX = controller.objects.regX + 10, controller.regY = controller.objects.regY + 10 ;
 		controller.bg = new createjs.Shape() ;
-		controller.bg.graphics.f( "#FF0000" ).r( 0, 0, controller.getBounds().width, controller.getBounds().height ) ;
+		controller.bg.graphics.f( "#FF0000" ).s( "#000000" ).r( 0, 0, controller.getBounds().width + 20, controller.getBounds().height + 20 ) ;
 		controller.bg.alpha = 0.3 ;
 		controller.bg.visible = false ;
 
@@ -219,7 +219,6 @@ PreviewBox.prototype.OnTiledControl = function() {
 		controller.addChildAt( controller.bg, 0 ) ;
 		controller.x = evt.stageX - that.box.mapbox.x, controller.y = evt.stageY - that.box.mapbox.y ;
 
-		console.log( controller.getBounds() + "   " + controller.objects.x ) ;
 
 		that.box.mapbox.objects.addChild( controller ) ;
 
