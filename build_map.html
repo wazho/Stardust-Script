@@ -38,9 +38,11 @@
 
 			var callMe = new createjs.Shape() ;
 			callMe.graphics.f( "#FF0000" ).r( 0, 0, 70, 70 ) ;
-			callMe.on( "click", function(){ 
-				for ( i = 1 ; i < preview.box.mapbox.objects.getNumChildren() ; i ++ )
-					console.log( preview.box.mapbox.tiled.mr + "," + preview.box.mapbox.tiled.mc + "  Objects num: " + preview.box.mapbox.objects.getChildAt(i).name + "  x: " + preview.box.mapbox.objects.getChildAt(i).storeX + " y: " + preview.box.mapbox.objects.getChildAt(i).storeY ) ; } ) ;
+			callMe.on( "click", function(){
+				for ( i = 1 ; i < preview.box.mapbox.objects.getNumChildren() ; i ++ ) {
+					console.log( JSON.stringify( preview.box.mapbox.objects.getChildAt( i ).name ) ) ;
+				} // for
+			} ) ;
 
 			stage.addChild( callMe ) ;
 

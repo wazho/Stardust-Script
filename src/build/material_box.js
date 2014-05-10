@@ -388,11 +388,17 @@ MaterialBox.prototype.OnOption = function() {
 	this.box.list.pic.img = new createjs.Bitmap( "pic/husky.png" ) ;
 	this.box.list.pic.img.scaleX = this.box.list.pic.img.scaleY = 0.22 ;
 	this.box.list.pic.addChild( this.box.list.pic.bg, this.box.list.pic.img ) ;
-	this.box.list.author = new createjs.Text( "Made by Salmon (http://salmon.tw)", "12px comic sans ms", "#FFFFFF" ) ;
-	this.box.list.author.x = 48, this.box.list.author.y = 350 ;
-	this.box.list.comment = new createjs.Text( "Firefox browser has the best user experience.", "12px comic sans ms", "#FFFFFF" ) ;
-	this.box.list.comment.x = 12, this.box.list.comment.y = 368 ;
-	this.box.list.addChild( this.box.list.pic, this.box.list.author, this.box.list.comment ) ;
+	this.box.list.footer = new createjs.Container() ;
+	this.box.list.footer.x = 22, this.box.list.footer.y = 350 ;
+	this.box.list.footer.author = new createjs.Text( "Made by Salmon (http://salmon.tw)", "12px comic sans ms", "#FFFFFF" ) ;
+	this.box.list.footer.author.x = 38, this.box.list.footer.author.y = 15 ;
+	this.box.list.footer.comment = new createjs.Text( "Firefox browser has the best user experience.", "12px comic sans ms", "#FFFFFF" ) ;
+	this.box.list.footer.comment.x = 0, this.box.list.footer.comment.y = 33 ;
+	this.box.list.footer.fficon = new createjs.Bitmap( "pic/map_build/logo_mozilla.png" ) ;
+	this.box.list.footer.fficon.x = 3, this.box.list.footer.fficon.y = 5 ;
+	this.box.list.footer.fficon.scaleX = this.box.list.footer.fficon.scaleY = 0.11 ;
+	this.box.list.footer.addChild( this.box.list.footer.author, this.box.list.footer.comment, this.box.list.footer.fficon ) ;
+	this.box.list.addChild( this.box.list.pic, this.box.list.footer ) ;
 	// Create new page button.
 	this.box.list.newPage = new createjs.Container() ;
 	this.box.list.newPage.x = 30, this.box.list.newPage.y = 180 ;

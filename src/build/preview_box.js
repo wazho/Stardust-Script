@@ -46,6 +46,12 @@ PreviewBox.prototype.OnTiledControl = function() {
 	this.box.mapbox.tiled.x = 0, this.box.mapbox.tiled.y = 0 ;
 	this.box.mapbox.tiled.mr = 0, this.box.mapbox.tiled.mc = 0 ;
 	this.box.mapbox.addChild( this.box.mapbox.tiled ) ;
+
+
+	// Create onjects map data struct.
+	this.box.mapbox.object_data = OnCreateObject() ;
+
+
 	// Map box objects.
 	this.box.mapbox.objects = new createjs.Container() ;
 	this.box.mapbox.objects.visible = false ;
@@ -200,6 +206,28 @@ PreviewBox.prototype.OnTiledControl = function() {
 			this.w = 1 ;
 		} // Tiled_Datastruct()
 	} // OnCreateTiled()
+
+	// Create object map data struct.
+	function OnCreateObject() {
+		// Assign null for array memory.
+		var object = new Array() ;
+		object[0] = 2323 ;
+		object[1] = 234323 ;
+		console.log( object.length ) ;
+
+		return object ;
+
+		function Object_Datastruct() {
+			// object pic number
+			this.n = 0 ;
+			// object storage real x
+			this.rx = 0 ;
+			// object storage real y
+			this.ry = 1 ;
+			// object scale
+			this.s = 1 ;
+		} // Tiled_Datastruct()
+	} // OnCreateObject()
 
 	function AddingObject( evt ) {
 		// Reject to put the object out of range.
