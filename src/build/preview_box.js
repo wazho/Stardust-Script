@@ -234,7 +234,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 		controller.tools.flip.bg = new createjs.Shape() ;
 		controller.tools.flip.bg.graphics.f( "#FFFFFF" ).r( controller.getBounds().width + 21, 22, 22, 22 ) ;
 		controller.tools.flip.addChild( controller.tools.flip.bg, controller.tools.flip.icon ) ;
-		controller.tools.flip.on( "click", function(){ console.log( "flip goood." ) } ) ;
+		controller.tools.flip.on( "click", function(){ controller.objects.scaleX *= -1 ; } ) ;
 		// Up.
 		controller.tools.up = new createjs.Container() ;
 		controller.tools.up.icon = G.cacheObjectsController[2].clone( false ) ;
@@ -274,7 +274,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 		// Total icon add to this container.
 		controller.tools.addChild( controller.tools.cancel, controller.tools.flip, controller.tools.up, controller.tools.down, controller.tools.zoom_in, controller.tools.zoom_out ) ;
 		// Add to the top container.
-		controller.addChildAt( controller.bg ) ;
+		controller.addChildAt( controller.bg, 0 ) ;
 		controller.addChild( controller.tools ) ;
 		that.box.mapbox.objects.addChild( controller ) ;
 
