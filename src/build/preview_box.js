@@ -90,10 +90,12 @@ PreviewBox.prototype.OnTiledControl = function() {
 
 	// Replace all of this map box.
 	function TotalRefresh( pt, mr, mc, s_row, s_column ) {
+		// Condition of cancel slide.
 		if ( ( mr < 0 || mc < 0 ) || mr >= G.customer_height || mc >= G.customer_length )
 			return ;
-
+		// Tiled refresh.
 		if ( s_row != -1 && s_column != -1 ) {
+			// This is just a single fresh.
 			var row = s_row - mr, column = s_column - mc ;
 			var index = row * ( ( ( G.length > G.customer_length ) ? G.customer_length : G.length ) - mc ) + column ;
 			pt.box.mapbox.tiled.removeChildAt( index ) ;
@@ -114,7 +116,13 @@ PreviewBox.prototype.OnTiledControl = function() {
 
 			pt.box.mapbox.objects.visible = ( pt.material.box.selector.statusPage == 3 ) ? true : false ;
 		} // else
+		// Objects refresh.
+		for ( i = 1 ; i < pt.box.mapbox.objects.getNumChildren() ; i ++ ) {
+			pt.box.mapbox.objects.getChildAt( i ).x = pt.box.mapbox.objects.getChildAt( i ).storeX - mc * G.size ;
+			pt.box.mapbox.objects.getChildAt( i ).y = pt.box.mapbox.objects.getChildAt( i ).storeY - mr * G.size ;
+		} // for
 
+		// Single tile for refreshing.
 		function SingleRefresh( i, j ) {
 			var data = pt.box.mapbox.tiled_data[i+mr][j+mc] ;
 			var row = Math.floor( data.i / G.range ) ;
@@ -197,6 +205,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 		// Add the container for object on mapbox.
 		var controller = new createjs.Container() ;
 		controller.x = evt.stageX - that.box.mapbox.x, controller.y = evt.stageY - that.box.mapbox.y ;
+		controller.storeX = controller.x + that.box.mapbox.tiled.mr * G.size, controller.storeY = controller.y + that.box.mapbox.tiled.mc * G.size ;
 		that.box.mapbox.objects.addChild( controller ) ;
 		// Copy the selected object.
 		controller.objects = that.material.box.list.objects.pic.clone( false ) ;
@@ -288,6 +297,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 		controller.on( "pressmove", function( evt ) {
 			var difX = evt.stageX - previous.x, difY = evt.stageY - previous.y ;
 			controller.x += difX, controller.y += difY ;
+			controller.storeX = controller.x + that.box.mapbox.tiled.mr * G.size, controller.storeY = controller.y + that.box.mapbox.tiled.mc * G.size ;
 			previous = { x: evt.stageX, y: evt.stageY } ;
 		} ) ;
 	} // AddingObject()
