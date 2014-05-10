@@ -103,7 +103,8 @@ PreviewBox.prototype.OnTiledControl = function() {
 		if ( s_row != -1 && s_column != -1 ) {
 			// This is just a single fresh.
 			var row = s_row - mr, column = s_column - mc ;
-			var index = row * ( ( ( G.length > G.customer_length ) ? G.customer_length : G.length ) - mc ) + column ;
+			var index = row * ( ( G.length > G.customer_length ) ? G.customer_length : G.length ) + column ;
+			console.log( index ) ;
 			pt.box.mapbox.tiled.removeChildAt( index ) ;
 			pt.box.mapbox.tiled.addChildAt( SingleRefresh( row , column ).clone( true ), index ) ;
 			pt.box.mapbox.tiled.getChildAt( index ).on( "click", function( evt ) { Refresh( pt, this ) ; } ) ;
@@ -149,40 +150,31 @@ PreviewBox.prototype.OnTiledControl = function() {
 			singleTile.name = i * G.length + j ;
 			singleTile.x = j * G.size, singleTile.y = i * G.size ;
 			return singleTile ;
-		} // SingleRefresh()	
+		} // SingleRefresh()
+
+		// Focus one tiled, let it replace new one.
+		function Refresh( pt, singleTiled ) {
+			// Get sileded tiled map data.
+			var select = pt.material.box.list.marked.name ;
+			var row = Math.floor( singleTiled.name / G.length ) + pt.box.mapbox.tiled.mr ;
+			var column = ( singleTiled.name % G.length ) + pt.box.mapbox.tiled.mc ;
+			if ( pt.material.box.selector.statusPage == 1 ) {
+				var map = Math.floor( select / 100 ) ;
+				var index = select - Math.floor( ( select / 100 ) ) * 100 ;
+				// tilde map assign.
+				pt.box.mapbox.tiled_data[row][column].m = map ;
+				pt.box.mapbox.tiled_data[row][column].i = index ;
+				TotalRefresh( pt, pt.box.mapbox.tiled.mr, pt.box.mapbox.tiled.mc, row, column ) ;
+			} // if
+			else if ( pt.material.box.selector.statusPage == 2 ) {
+				if ( select == "walkable" )
+					pt.box.mapbox.tiled_data[row][column].w = 1 ;
+				else if ( select == "unwalkable" )
+					pt.box.mapbox.tiled_data[row][column].w = 0 ;	
+				TotalRefresh( pt, pt.box.mapbox.tiled.mr, pt.box.mapbox.tiled.mc, row, column ) ;
+			} // else if
+		} // Refresh()	
 	} // TotalRefresh()
-
-	// Focus one tiled, let it replace new one.
-	function Refresh( pt, singleTiled ) {
-		// Get sileded tiled map data.
-		var select = pt.material.box.list.marked.name ;
-		var row = Math.floor( singleTiled.name / G.length ) + pt.box.mapbox.tiled.mr ;
-		var column = ( singleTiled.name % G.length ) + pt.box.mapbox.tiled.mc ;
-		if ( pt.material.box.selector.statusPage == 1 ) {
-			var map = Math.floor( select / 100 ) ;
-			var index = select - Math.floor( ( select / 100 ) ) * 100 ;
-			// tilde map assign.
-			pt.box.mapbox.tiled_data[row][column].m = map ;
-			pt.box.mapbox.tiled_data[row][column].i = index ;
-			TotalRefresh( pt, pt.box.mapbox.tiled.mr, pt.box.mapbox.tiled.mc, row, column ) ;
-		} // if
-		else if ( pt.material.box.selector.statusPage == 2 ) {
-			if ( select == "walkable" )
-				pt.box.mapbox.tiled_data[row][column].w = 1 ;
-			else if ( select == "unwalkable" )
-				pt.box.mapbox.tiled_data[row][column].w = 0 ;	
-			TotalRefresh( pt, pt.box.mapbox.tiled.mr, pt.box.mapbox.tiled.mc, row, column ) ;
-		} // else if
-		else if ( pt.material.box.selector.statusPage == 3 ) {
-
-		} // else if
-		else if ( pt.material.box.selector.statusPage == 4 ) {
-
-		} // else if
-		else if ( pt.material.box.selector.statusPage == 5 ) {
-
-		} // else if
-	} // Refresh()
 
 	// Create tiled map data struct.
 	function OnCreateTiled( length, height ) {
