@@ -56,14 +56,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 	this.box.mapbox.objects.bg.alpha = 0.1 ;
 	this.box.mapbox.objects.addChild( this.box.mapbox.objects.bg ) ;
 	// Objects listening events.
-	var previous ;
 	this.box.mapbox.objects.bg.on( "dblclick", function( evt ) { AddingObject( evt ) } ) ;
-	this.box.mapbox.objects.bg.on( "mousedown", function( evt ) { previous = { x: evt.stageX, y: evt.stageY } ; } ) ;
-	this.box.mapbox.objects.bg.on( "pressmove", function( evt ) {
-		var difX = evt.stageX - previous.x, difY = evt.stageY - previous.y ;
-		previous = { x: evt.stageX, y: evt.stageY } ;
-		that.box.mapbox.objects.x += difX, that.box.mapbox.objects.y += difY ;
-	} ) ;
 	// Modify row, column for silde tiled map.
 	TotalRefresh( this, 0, 0, -1, -1 ) ;
 	// Slide bar create.
@@ -210,6 +203,8 @@ PreviewBox.prototype.OnTiledControl = function() {
 		controller.objects.x = controller.objects.regX + 10, controller.objects.y = controller.objects.regY + 10 ;
 		controller.objects.scaleX = controller.objects.scaleY = 1 ;
 		controller.addChild( controller.objects ) ;
+		// Object container assign the name (pic number).
+		controller.name = controller.objects.name ;
 		// Adjust the location of this container.
 		controller.regX = controller.objects.regX + 10, controller.regY = controller.objects.regY + 10 ;
 		controller.bg = new createjs.Shape() ;
@@ -240,25 +235,25 @@ PreviewBox.prototype.OnTiledControl = function() {
 		controller.tools.up = new createjs.Container() ;
 		controller.tools.up.icon = G.cacheObjectsController[2].clone( false ) ;
 		controller.tools.up.icon.scaleX = controller.tools.up.icon.scaleY = 0.15 ;
-		controller.tools.up.icon.x = -22, controller.tools.up.icon.y = 0 ;
+		controller.tools.up.icon.x = -22, controller.tools.up.icon.y = 1 ;
 		controller.tools.up.bg = new createjs.Shape() ;
 		controller.tools.up.bg.graphics.f( "#FFFFFF" ).r( -25, 0, 25, 22 ) ;
 		controller.tools.up.addChild( controller.tools.up.bg, controller.tools.up.icon ) ;
-		controller.tools.up.on( "click", function(){ that.box.mapbox.objects.swapChildren( controller, that.box.mapbox.objects.getChildAt( that.box.mapbox.objects.getNumChildren() - 1 ) ) ; } ) ;
+		controller.tools.up.on( "click", function(){ that.box.mapbox.objects.addChild( controller ) ; } ) ;
 		// Down.
 		controller.tools.down = new createjs.Container() ;
 		controller.tools.down.icon = G.cacheObjectsController[3].clone( false ) ;
 		controller.tools.down.icon.scaleX = controller.tools.down.icon.scaleY = 0.15 ;
-		controller.tools.down.icon.x = -22, controller.tools.down.icon.y = 22 ;
+		controller.tools.down.icon.x = -22, controller.tools.down.icon.y = 23 ;
 		controller.tools.down.bg = new createjs.Shape() ;
 		controller.tools.down.bg.graphics.f( "#FFFFFF" ).r( -25, 22, 25, 22 ) ;
 		controller.tools.down.addChild( controller.tools.down.bg, controller.tools.down.icon ) ;
-		controller.tools.down.on( "click", function(){ that.box.mapbox.objects.swapChildren( controller, that.box.mapbox.objects.getChildAt( 1 ) ) ; } ) ;
+		controller.tools.down.on( "click", function(){ that.box.mapbox.objects.addChildAt( controller, 1 ) ; } ) ;
 		// Zoom in.
 		controller.tools.zoom_in = new createjs.Container() ;
 		controller.tools.zoom_in.icon = G.cacheObjectsController[4].clone( false ) ;
 		controller.tools.zoom_in.icon.scaleX = controller.tools.zoom_in.icon.scaleY = 0.15 ;
-		controller.tools.zoom_in.icon.x = -22, controller.tools.zoom_in.icon.y = 44 ;
+		controller.tools.zoom_in.icon.x = -22, controller.tools.zoom_in.icon.y = 45 ;
 		controller.tools.zoom_in.bg = new createjs.Shape() ;
 		controller.tools.zoom_in.bg.graphics.f( "#FFFFFF" ).r( -25, 44, 25, 22 ) ;
 		controller.tools.zoom_in.addChild( controller.tools.zoom_in.bg, controller.tools.zoom_in.icon ) ;
@@ -267,7 +262,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 		controller.tools.zoom_out = new createjs.Container() ;
 		controller.tools.zoom_out.icon = G.cacheObjectsController[5].clone( false ) ;
 		controller.tools.zoom_out.icon.scaleX = controller.tools.zoom_out.icon.scaleY = 0.15 ;
-		controller.tools.zoom_out.icon.x = -22, controller.tools.zoom_out.icon.y = 66 ;
+		controller.tools.zoom_out.icon.x = -22, controller.tools.zoom_out.icon.y = 67 ;
 		controller.tools.zoom_out.bg = new createjs.Shape() ;
 		controller.tools.zoom_out.bg.graphics.f( "#FFFFFF" ).r( -25, 66, 25, 22 ) ;
 		controller.tools.zoom_out.addChild( controller.tools.zoom_out.bg, controller.tools.zoom_out.icon ) ;

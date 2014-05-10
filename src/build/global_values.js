@@ -13,8 +13,10 @@ function GlobalValues() {
 	for ( i = 0 ; i < texture_adding.length ; i ++ )
 		this.cacheTexture[i] = new createjs.Bitmap( this.textureSrc + texture_adding[i].file ) ;
 	this.cacheObjects = new Array( object_adding.length ) ;
-	for ( i = 0 ; i < object_adding.length ; i ++ )
+	for ( i = 0 ; i < object_adding.length ; i ++ ) {
 		this.cacheObjects[i] = new createjs.Bitmap( this.objectSrc + object_adding[i].file ) ;
+		this.cacheObjects[i].name = ( i + 1 ) ;
+	} // for
 	this.cacheObjectsController = new Array( 6 ) ;
 	this.cacheObjectsController[0] = new createjs.Bitmap( this.objectConSrc + "object_cancel.png" ) ;
 	this.cacheObjectsController[1] = new createjs.Bitmap( this.objectConSrc + "object_flip.png" ) ;

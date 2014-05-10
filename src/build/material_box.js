@@ -294,7 +294,7 @@ MaterialBox.prototype.OnObject = function() {
 		pt.box.list.objects.bg = new createjs.Shape() ;
 		pt.box.list.objects.bg.graphics.f( "#FFFFFF" ).r( 15, 15, bgSize, bgSize ) ;
 		// Change pic and drawing.
-		pt.box.list.objects.pic = G.cacheObjects[selectNum-1] ; //new createjs.Bitmap( G.objectSrc + object_rule.file ) ;
+		pt.box.list.objects.pic = G.cacheObjects[selectNum-1] ;
 		var objectWidth = pt.box.list.objects.pic.getBounds().width ;
 		var objectHeight = pt.box.list.objects.pic.getBounds().height ;
 		pt.box.list.objects.pic.regX = objectWidth / 2 ;
