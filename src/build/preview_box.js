@@ -216,6 +216,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 		controller.bg.alpha = 0 ;
 		// Setting tools location.
 		controller.tools = new createjs.Container() ;
+		controller.tools.alpha = 0 ;
 		// Cancel.
 		controller.tools.cancel = new createjs.Container() ;
 		controller.tools.cancel.icon = G.cacheObjectsController[0].clone( false ) ;
@@ -223,7 +224,6 @@ PreviewBox.prototype.OnTiledControl = function() {
 		controller.tools.cancel.icon.x = controller.getBounds().width + 22, controller.tools.cancel.y = 0 ;
 		controller.tools.cancel.bg = new createjs.Shape() ;
 		controller.tools.cancel.bg.graphics.f( "#FFFFFF" ).r( controller.getBounds().width + 21, 0, 22, 22 ) ;
-		controller.tools.cancel.bg.alpha = 0.7 ;
 		controller.tools.cancel.addChild( controller.tools.cancel.bg, controller.tools.cancel.icon ) ;
 		controller.tools.cancel.on( "click", function(){ console.log( "cancel goood." ) } ) ;
 		// Flip.
@@ -233,39 +233,58 @@ PreviewBox.prototype.OnTiledControl = function() {
 		controller.tools.flip.icon.x = controller.getBounds().width + 22, controller.tools.flip.icon.y = 22 ;
 		controller.tools.flip.bg = new createjs.Shape() ;
 		controller.tools.flip.bg.graphics.f( "#FFFFFF" ).r( controller.getBounds().width + 21, 22, 22, 22 ) ;
-		controller.tools.flip.bg.alpha = 0.7 ;
 		controller.tools.flip.addChild( controller.tools.flip.bg, controller.tools.flip.icon ) ;
 		controller.tools.flip.on( "click", function(){ console.log( "flip goood." ) } ) ;
-
-
-
-		controller.tools.up = G.cacheObjectsController[2].clone( false ) ;
-		controller.tools.up.scaleX = controller.tools.up.scaleY = 0.15 ;
-		controller.tools.up.x = -22, controller.tools.up.y = 0 ;
-		controller.tools.down = G.cacheObjectsController[3].clone( false ) ;
-		controller.tools.down.scaleX = controller.tools.down.scaleY = 0.15 ;
-		controller.tools.down.x = -22, controller.tools.down.y = 22 ;
-		controller.tools.alpha = 0 ;
-		controller.tools.zoom_in = G.cacheObjectsController[4].clone( false ) ;
-		controller.tools.zoom_in.scaleX = controller.tools.zoom_in.scaleY = 0.15 ;
-		controller.tools.zoom_in.x = -22, controller.tools.zoom_in.y = 44 ;
-		controller.tools.zoom_out = G.cacheObjectsController[5].clone( false ) ;
-		controller.tools.zoom_out.scaleX = controller.tools.zoom_out.scaleY = 0.15 ;
-		controller.tools.zoom_out.x = -22, controller.tools.zoom_out.y = 66 ;
-		controller.tools.alpha = 0 ;
+		// Up.
+		controller.tools.up = new createjs.Container() ;
+		controller.tools.up.icon = G.cacheObjectsController[2].clone( false ) ;
+		controller.tools.up.icon.scaleX = controller.tools.up.icon.scaleY = 0.15 ;
+		controller.tools.up.icon.x = -22, controller.tools.up.icon.y = 0 ;
+		controller.tools.up.bg = new createjs.Shape() ;
+		controller.tools.up.bg.graphics.f( "#FFFFFF" ).r( -25, 0, 25, 22 ) ;
+		controller.tools.up.addChild( controller.tools.up.bg, controller.tools.up.icon ) ;
+		controller.tools.up.on( "click", function(){ console.log( "up goood." ) } ) ;
+		// Down.
+		controller.tools.down = new createjs.Container() ;
+		controller.tools.down.icon = G.cacheObjectsController[3].clone( false ) ;
+		controller.tools.down.icon.scaleX = controller.tools.down.icon.scaleY = 0.15 ;
+		controller.tools.down.icon.x = -22, controller.tools.down.icon.y = 22 ;
+		controller.tools.down.bg = new createjs.Shape() ;
+		controller.tools.down.bg.graphics.f( "#FFFFFF" ).r( -25, 22, 25, 22 ) ;
+		controller.tools.down.addChild( controller.tools.down.bg, controller.tools.down.icon ) ;
+		controller.tools.down.on( "click", function(){ console.log( "down goood." ) } ) ;
+		// Zoom in.
+		controller.tools.zoom_in = new createjs.Container() ;
+		controller.tools.zoom_in.icon = G.cacheObjectsController[4].clone( false ) ;
+		controller.tools.zoom_in.icon.scaleX = controller.tools.zoom_in.icon.scaleY = 0.15 ;
+		controller.tools.zoom_in.icon.x = -22, controller.tools.zoom_in.icon.y = 44 ;
+		controller.tools.zoom_in.bg = new createjs.Shape() ;
+		controller.tools.zoom_in.bg.graphics.f( "#FFFFFF" ).r( -25, 44, 25, 22 ) ;
+		controller.tools.zoom_in.addChild( controller.tools.zoom_in.bg, controller.tools.zoom_in.icon ) ;
+		controller.tools.zoom_in.on( "click", function(){ console.log( "zoom_in goood." ) } ) ;
+		// Zoom out.
+		controller.tools.zoom_out = new createjs.Container() ;
+		controller.tools.zoom_out.icon = G.cacheObjectsController[5].clone( false ) ;
+		controller.tools.zoom_out.icon.scaleX = controller.tools.zoom_out.icon.scaleY = 0.15 ;
+		controller.tools.zoom_out.icon.x = -22, controller.tools.zoom_out.icon.y = 66 ;
+		controller.tools.zoom_out.bg = new createjs.Shape() ;
+		controller.tools.zoom_out.bg.graphics.f( "#FFFFFF" ).r( -25, 66, 25, 22 ) ;
+		controller.tools.zoom_out.addChild( controller.tools.zoom_out.bg, controller.tools.zoom_out.icon ) ;
+		controller.tools.zoom_out.on( "click", function(){ console.log( "zoom_out goood." ) } ) ;
+		// Total icon add to this container.
 		controller.tools.addChild( controller.tools.cancel, controller.tools.flip, controller.tools.up, controller.tools.down, controller.tools.zoom_in, controller.tools.zoom_out ) ;
 		// Add to the top container.
 		controller.addChildAt( controller.bg ) ;
 		controller.addChild( controller.tools ) ;
 		that.box.mapbox.objects.addChild( controller ) ;
 
-
-
+		// Add listening events.
 		stage.enableMouseOver( 20 ) ;
 		controller.on( "mousedown", function( evt ) {
 			previous = { x: evt.stageX, y: evt.stageY } ;
 			controller.bg.alpha = 0.3 ;
 			controller.tools.alpha = 1 ;
+			controller.tools.cancel.bg.alpha = controller.tools.flip.bg.alpha = controller.tools.up.bg.alpha = controller.tools.down.bg.alpha = controller.tools.zoom_in.bg.alpha = controller.tools.zoom_out.bg.alpha = 0.7 ;
 		} ) ;
 		controller.on( "rollout", function( evt ) {
 			createjs.Tween.get( controller.bg ).to( { alpha: 0 }, 500 ) ;
