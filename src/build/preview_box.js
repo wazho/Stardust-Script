@@ -204,6 +204,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 		// Add the container for object on mapbox.
 		var controller = new createjs.Container() ;
 		controller.x = evt.stageX - that.box.mapbox.x, controller.y = evt.stageY - that.box.mapbox.y ;
+		that.box.mapbox.objects.addChild( controller ) ;
 		// Copy the selected object.
 		controller.objects = that.material.box.list.objects.pic.clone( false ) ;
 		controller.objects.x = controller.objects.regX + 10, controller.objects.y = controller.objects.regY + 10 ;
@@ -243,7 +244,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 		controller.tools.up.bg = new createjs.Shape() ;
 		controller.tools.up.bg.graphics.f( "#FFFFFF" ).r( -25, 0, 25, 22 ) ;
 		controller.tools.up.addChild( controller.tools.up.bg, controller.tools.up.icon ) ;
-		controller.tools.up.on( "click", function(){ console.log( "up goood." ) } ) ;
+		controller.tools.up.on( "click", function(){ that.box.mapbox.objects.swapChildren( controller, that.box.mapbox.objects.getChildAt( that.box.mapbox.objects.getNumChildren() - 1 ) ) ; } ) ;
 		// Down.
 		controller.tools.down = new createjs.Container() ;
 		controller.tools.down.icon = G.cacheObjectsController[3].clone( false ) ;
@@ -252,7 +253,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 		controller.tools.down.bg = new createjs.Shape() ;
 		controller.tools.down.bg.graphics.f( "#FFFFFF" ).r( -25, 22, 25, 22 ) ;
 		controller.tools.down.addChild( controller.tools.down.bg, controller.tools.down.icon ) ;
-		controller.tools.down.on( "click", function(){ console.log( "down goood." ) } ) ;
+		controller.tools.down.on( "click", function(){ that.box.mapbox.objects.swapChildren( controller, that.box.mapbox.objects.getChildAt( 1 ) ) ; } ) ;
 		// Zoom in.
 		controller.tools.zoom_in = new createjs.Container() ;
 		controller.tools.zoom_in.icon = G.cacheObjectsController[4].clone( false ) ;
@@ -261,7 +262,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 		controller.tools.zoom_in.bg = new createjs.Shape() ;
 		controller.tools.zoom_in.bg.graphics.f( "#FFFFFF" ).r( -25, 44, 25, 22 ) ;
 		controller.tools.zoom_in.addChild( controller.tools.zoom_in.bg, controller.tools.zoom_in.icon ) ;
-		controller.tools.zoom_in.on( "click", function(){ console.log( "zoom_in goood." ) } ) ;
+		controller.tools.zoom_in.on( "click", function(){ controller.scaleX *= 1.05, controller.scaleY *= 1.05 ; } ) ;
 		// Zoom out.
 		controller.tools.zoom_out = new createjs.Container() ;
 		controller.tools.zoom_out.icon = G.cacheObjectsController[5].clone( false ) ;
@@ -270,13 +271,12 @@ PreviewBox.prototype.OnTiledControl = function() {
 		controller.tools.zoom_out.bg = new createjs.Shape() ;
 		controller.tools.zoom_out.bg.graphics.f( "#FFFFFF" ).r( -25, 66, 25, 22 ) ;
 		controller.tools.zoom_out.addChild( controller.tools.zoom_out.bg, controller.tools.zoom_out.icon ) ;
-		controller.tools.zoom_out.on( "click", function(){ console.log( "zoom_out goood." ) } ) ;
+		controller.tools.zoom_out.on( "click", function(){ controller.scaleX *= 0.95, controller.scaleY *= 0.95 ; } ) ;
 		// Total icon add to this container.
 		controller.tools.addChild( controller.tools.cancel, controller.tools.flip, controller.tools.up, controller.tools.down, controller.tools.zoom_in, controller.tools.zoom_out ) ;
 		// Add to the top container.
 		controller.addChildAt( controller.bg, 0 ) ;
 		controller.addChild( controller.tools ) ;
-		that.box.mapbox.objects.addChild( controller ) ;
 
 		// Add listening events.
 		stage.enableMouseOver( 20 ) ;
