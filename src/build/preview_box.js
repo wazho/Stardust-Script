@@ -225,7 +225,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 		controller.tools.cancel.bg = new createjs.Shape() ;
 		controller.tools.cancel.bg.graphics.f( "#FFFFFF" ).r( controller.getBounds().width + 21, 0, 22, 22 ) ;
 		controller.tools.cancel.addChild( controller.tools.cancel.bg, controller.tools.cancel.icon ) ;
-		controller.tools.cancel.on( "click", function(){ console.log( "cancel goood." ) } ) ;
+		controller.tools.cancel.on( "click", function(){ controller.removeAllChildren() ; } ) ;
 		// Flip.
 		controller.tools.flip = new createjs.Container() ;
 		controller.tools.flip.icon = G.cacheObjectsController[1].clone( false ) ;
