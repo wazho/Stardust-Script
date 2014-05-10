@@ -205,7 +205,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 		// Add the container for object on mapbox.
 		var controller = new createjs.Container() ;
 		controller.x = evt.stageX - that.box.mapbox.x, controller.y = evt.stageY - that.box.mapbox.y ;
-		controller.storeX = controller.x + that.box.mapbox.tiled.mr * G.size, controller.storeY = controller.y + that.box.mapbox.tiled.mc * G.size ;
+		controller.storeX = controller.x + that.box.mapbox.tiled.mc * G.size, controller.storeY = controller.y + that.box.mapbox.tiled.mr * G.size ;
 		that.box.mapbox.objects.addChild( controller ) ;
 		// Copy the selected object.
 		controller.objects = that.material.box.list.objects.pic.clone( false ) ;
