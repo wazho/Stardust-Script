@@ -216,12 +216,29 @@ PreviewBox.prototype.OnTiledControl = function() {
 		controller.bg.alpha = 0 ;
 		// Setting tools location.
 		controller.tools = new createjs.Container() ;
-		controller.tools.cancel = G.cacheObjectsController[0].clone( false ) ;
-		controller.tools.cancel.scaleX = controller.tools.cancel.scaleY = 0.15 ;
-		controller.tools.cancel.x = controller.getBounds().width + 22, controller.tools.cancel.y = 0 ;
-		controller.tools.flip = G.cacheObjectsController[1].clone( false ) ;
-		controller.tools.flip.scaleX = controller.tools.flip.scaleY = 0.15 ;
-		controller.tools.flip.x = controller.getBounds().width + 22, controller.tools.flip.y = 22 ;
+		// Cancel.
+		controller.tools.cancel = new createjs.Container() ;
+		controller.tools.cancel.icon = G.cacheObjectsController[0].clone( false ) ;
+		controller.tools.cancel.icon.scaleX = controller.tools.cancel.icon.scaleY = 0.15 ;
+		controller.tools.cancel.icon.x = controller.getBounds().width + 22, controller.tools.cancel.y = 0 ;
+		controller.tools.cancel.bg = new createjs.Shape() ;
+		controller.tools.cancel.bg.graphics.f( "#FFFFFF" ).r( controller.getBounds().width + 21, 0, 22, 22 ) ;
+		controller.tools.cancel.bg.alpha = 0.7 ;
+		controller.tools.cancel.addChild( controller.tools.cancel.bg, controller.tools.cancel.icon ) ;
+		controller.tools.cancel.on( "click", function(){ console.log( "cancel goood." ) } ) ;
+		// Flip.
+		controller.tools.flip = new createjs.Container() ;
+		controller.tools.flip.icon = G.cacheObjectsController[1].clone( false ) ;
+		controller.tools.flip.icon.scaleX = controller.tools.flip.icon.scaleY = 0.15 ;
+		controller.tools.flip.icon.x = controller.getBounds().width + 22, controller.tools.flip.icon.y = 22 ;
+		controller.tools.flip.bg = new createjs.Shape() ;
+		controller.tools.flip.bg.graphics.f( "#FFFFFF" ).r( controller.getBounds().width + 21, 22, 22, 22 ) ;
+		controller.tools.flip.bg.alpha = 0.7 ;
+		controller.tools.flip.addChild( controller.tools.flip.bg, controller.tools.flip.icon ) ;
+		controller.tools.flip.on( "click", function(){ console.log( "flip goood." ) } ) ;
+
+
+
 		controller.tools.up = G.cacheObjectsController[2].clone( false ) ;
 		controller.tools.up.scaleX = controller.tools.up.scaleY = 0.15 ;
 		controller.tools.up.x = -22, controller.tools.up.y = 0 ;
