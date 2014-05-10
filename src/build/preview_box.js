@@ -202,9 +202,13 @@ PreviewBox.prototype.OnTiledControl = function() {
 	} // OnCreateTiled()
 
 	function AddingObject( evt ) {
+		var mouseX = evt.stageX - that.box.mapbox.x, mouseY = evt.stageY - that.box.mapbox.y ;
+		if ( mouseX > ( G.customer_length - that.box.mapbox.tiled.mc ) * G.size || mouseY > ( G.customer_height - that.box.mapbox.tiled.mr ) * G.size )
+			console.log( "Out." ) ;
+
 		// Add the container for object on mapbox.
 		var controller = new createjs.Container() ;
-		controller.x = evt.stageX - that.box.mapbox.x, controller.y = evt.stageY - that.box.mapbox.y ;
+		controller.x = mouseX, controller.y = mouseY ;
 		controller.storeX = controller.x + that.box.mapbox.tiled.mc * G.size, controller.storeY = controller.y + that.box.mapbox.tiled.mr * G.size ;
 		that.box.mapbox.objects.addChild( controller ) ;
 		// Copy the selected object.
@@ -297,7 +301,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 		controller.on( "pressmove", function( evt ) {
 			var difX = evt.stageX - previous.x, difY = evt.stageY - previous.y ;
 			controller.x += difX, controller.y += difY ;
-			controller.storeX = controller.x + that.box.mapbox.tiled.mr * G.size, controller.storeY = controller.y + that.box.mapbox.tiled.mc * G.size ;
+			controller.storeX = controller.x + that.box.mapbox.tiled.mc * G.size, controller.storeY = controller.y + that.box.mapbox.tiled.mr * G.size ;
 			previous = { x: evt.stageX, y: evt.stageY } ;
 		} ) ;
 	} // AddingObject()
