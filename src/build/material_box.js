@@ -370,7 +370,7 @@ MaterialBox.prototype.OnSound = function() {
 	this.box.list.addChild( this.box.list.bg ) ;
 } // OnSound()
 
-// 
+// The function of showing box when option buntton click.
 MaterialBox.prototype.OnOption = function() {
 	// Remove original list first.
 	this.box.list.removeAllChildren() ;

@@ -66,6 +66,50 @@ var object_adding = [
 	{	file : "17.png",
 		decs : "knight statue", 
 		divi : 0.43
+	},
+	{	file : "18.png",
+		decs : "log growth ring", 
+		divi : 0.40
+	},
+	{	file : "19.png",
+		decs : "flower 1", 
+		divi : 0
+	},
+	{	file : "20.png",
+		decs : "flower 2", 
+		divi : 0
+	},
+	{	file : "21.png",
+		decs : "palmae 1", 
+		divi : 0.72
+	},
+	{	file : "22.png",
+		decs : "palmae 2", 
+		divi : 0.68
+	},
+	{	file : "23.png",
+		decs : "street light 1", 
+		divi : 0.86
+	},
+	{	file : "24.png",
+		decs : "street light 2", 
+		divi : 0.86
+	},
+	{	file : "25.png",
+		decs : "bench", 
+		divi : 0.30
+	},
+	{	file : "26.png",
+		decs : "fence 1", 
+		divi : 0.70
+	},
+	{	file : "27.png",
+		decs : "fence 2", 
+		divi : 1
+	},
+	{	file : "28.png",
+		decs : "cask", 
+		divi : 0.30
 	}
 
 ] ;
