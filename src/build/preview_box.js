@@ -186,10 +186,10 @@ PreviewBox.prototype.OnTiledControl = function() {
 		// Data structure created.
 		for ( i = 0 ; i < height ; i ++ )
 			for ( j = 0 ; j < length ; j ++ )
-				tiled[i][j] = new Tiled_Datastruct() ;
+				tiled[i][j] = new TiledDatastruct() ;
 		return tiled ;
 
-		function Tiled_Datastruct() {
+		function TiledDatastruct() {
 			// texture map number
 			this.m = 0 ;
 			// texture location index
@@ -209,7 +209,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 
 		return object ;
 
-		function Object_Datastruct() {
+		function ObjectDatastruct() {
 			// object pic number
 			this.n = 0 ;
 			// object storage real x
@@ -243,68 +243,8 @@ PreviewBox.prototype.OnTiledControl = function() {
 		controller.bg = new createjs.Shape() ;
 		controller.bg.graphics.f( "#FF0000" ).s( "#000000" ).r( 0, 0, controller.getBounds().width + 20, controller.getBounds().height + 20 ) ;
 		controller.bg.alpha = 0 ;
-		// Setting tools location.
-		controller.tools = new createjs.Container() ;
-		controller.tools.alpha = 0 ;
-		// Cancel.
-		controller.tools.cancel = new createjs.Container() ;
-		controller.tools.cancel.icon = G.cacheObjectsController[0].clone( false ) ;
-		controller.tools.cancel.icon.scaleX = controller.tools.cancel.icon.scaleY = 0.15 ;
-		controller.tools.cancel.icon.x = controller.getBounds().width + 22, controller.tools.cancel.y = 0 ;
-		controller.tools.cancel.bg = new createjs.Shape() ;
-		controller.tools.cancel.bg.graphics.f( "#FFFFFF" ).r( controller.getBounds().width + 21, 0, 22, 22 ) ;
-		controller.tools.cancel.addChild( controller.tools.cancel.bg, controller.tools.cancel.icon ) ;
-		controller.tools.cancel.on( "click", function(){ that.box.mapbox.objects.removeChild( controller ) ; } ) ;
-		// Flip.
-		controller.tools.flip = new createjs.Container() ;
-		controller.tools.flip.icon = G.cacheObjectsController[1].clone( false ) ;
-		controller.tools.flip.icon.scaleX = controller.tools.flip.icon.scaleY = 0.15 ;
-		controller.tools.flip.icon.x = controller.getBounds().width + 22, controller.tools.flip.icon.y = 22 ;
-		controller.tools.flip.bg = new createjs.Shape() ;
-		controller.tools.flip.bg.graphics.f( "#FFFFFF" ).r( controller.getBounds().width + 21, 22, 22, 22 ) ;
-		controller.tools.flip.addChild( controller.tools.flip.bg, controller.tools.flip.icon ) ;
-		controller.tools.flip.on( "click", function(){ controller.objects.scaleX *= -1 ; } ) ;
-		// Up.
-		controller.tools.up = new createjs.Container() ;
-		controller.tools.up.icon = G.cacheObjectsController[2].clone( false ) ;
-		controller.tools.up.icon.scaleX = controller.tools.up.icon.scaleY = 0.15 ;
-		controller.tools.up.icon.x = -22, controller.tools.up.icon.y = 1 ;
-		controller.tools.up.bg = new createjs.Shape() ;
-		controller.tools.up.bg.graphics.f( "#FFFFFF" ).r( -25, 0, 25, 22 ) ;
-		controller.tools.up.addChild( controller.tools.up.bg, controller.tools.up.icon ) ;
-		controller.tools.up.on( "click", function(){ that.box.mapbox.objects.addChild( controller ) ; } ) ;
-		// Down.
-		controller.tools.down = new createjs.Container() ;
-		controller.tools.down.icon = G.cacheObjectsController[3].clone( false ) ;
-		controller.tools.down.icon.scaleX = controller.tools.down.icon.scaleY = 0.15 ;
-		controller.tools.down.icon.x = -22, controller.tools.down.icon.y = 23 ;
-		controller.tools.down.bg = new createjs.Shape() ;
-		controller.tools.down.bg.graphics.f( "#FFFFFF" ).r( -25, 22, 25, 22 ) ;
-		controller.tools.down.addChild( controller.tools.down.bg, controller.tools.down.icon ) ;
-		controller.tools.down.on( "click", function(){ that.box.mapbox.objects.addChildAt( controller, 1 ) ; } ) ;
-		// Zoom in.
-		controller.tools.zoom_in = new createjs.Container() ;
-		controller.tools.zoom_in.icon = G.cacheObjectsController[4].clone( false ) ;
-		controller.tools.zoom_in.icon.scaleX = controller.tools.zoom_in.icon.scaleY = 0.15 ;
-		controller.tools.zoom_in.icon.x = -22, controller.tools.zoom_in.icon.y = 45 ;
-		controller.tools.zoom_in.bg = new createjs.Shape() ;
-		controller.tools.zoom_in.bg.graphics.f( "#FFFFFF" ).r( -25, 44, 25, 22 ) ;
-		controller.tools.zoom_in.addChild( controller.tools.zoom_in.bg, controller.tools.zoom_in.icon ) ;
-		controller.tools.zoom_in.on( "click", function(){ controller.scaleX *= 1.05, controller.scaleY *= 1.05 ; } ) ;
-		// Zoom out.
-		controller.tools.zoom_out = new createjs.Container() ;
-		controller.tools.zoom_out.icon = G.cacheObjectsController[5].clone( false ) ;
-		controller.tools.zoom_out.icon.scaleX = controller.tools.zoom_out.icon.scaleY = 0.15 ;
-		controller.tools.zoom_out.icon.x = -22, controller.tools.zoom_out.icon.y = 67 ;
-		controller.tools.zoom_out.bg = new createjs.Shape() ;
-		controller.tools.zoom_out.bg.graphics.f( "#FFFFFF" ).r( -25, 66, 25, 22 ) ;
-		controller.tools.zoom_out.addChild( controller.tools.zoom_out.bg, controller.tools.zoom_out.icon ) ;
-		controller.tools.zoom_out.on( "click", function(){ controller.scaleX *= 0.95, controller.scaleY *= 0.95 ; } ) ;
-		// Total icon add to this container.
-		controller.tools.addChild( controller.tools.cancel, controller.tools.flip, controller.tools.up, controller.tools.down, controller.tools.zoom_in, controller.tools.zoom_out ) ;
-		// Add to the top container.
-		controller.addChildAt( controller.bg, 0 ) ;
-		controller.addChild( controller.tools ) ;
+
+		controller.tools = ToolsBox() ;
 
 		// Add listening events.
 		stage.enableMouseOver( 20 ) ;
@@ -320,13 +260,83 @@ PreviewBox.prototype.OnTiledControl = function() {
 		} ) ;
 		controller.on( "pressmove", function( evt ) {
 			var difX = evt.stageX - previous.x, difY = evt.stageY - previous.y ;
-			// Reject to put the object out of range.
-			if ( controller.x + difX < 0 || controller.y + difY < 0 || controller.x + difX > ( G.customer_length - that.box.mapbox.tiled.mc ) * G.size || controller.y + difY > ( G.customer_height - that.box.mapbox.tiled.mr ) * G.size )
-				return ;
-			// Changing x, y.
-			controller.x += difX, controller.y += difY ;
-			controller.storeX = controller.x + that.box.mapbox.tiled.mc * G.size, controller.storeY = controller.y + that.box.mapbox.tiled.mr * G.size ;
-			previous = { x: evt.stageX, y: evt.stageY } ;
+			// Reject to put the object not out of range.
+			if ( controller.x + difX >= 0 && controller.x + difX <= ( G.customer_length - that.box.mapbox.tiled.mc ) * G.size ) {
+				controller.x += difX ;
+				controller.storeX = controller.x + that.box.mapbox.tiled.mc * G.size ;
+				previous.x = evt.stageX ;
+			} // if
+			if ( controller.y + difY >= 0 && controller.y + difY <= ( G.customer_height - that.box.mapbox.tiled.mr ) * G.size ) {
+				controller.y += difY ;
+				controller.storeY = controller.y + that.box.mapbox.tiled.mr * G.size ;
+				previous.y = evt.stageY ;
+			} // if
 		} ) ;
+
+		function ToolsBox() {
+			// Setting tools location.
+			var tools = new createjs.Container() ;
+			tools.alpha = 0 ;
+			// Cancel.
+			tools.cancel = new createjs.Container() ;
+			tools.cancel.icon = G.cacheObjectsController[0].clone( false ) ;
+			tools.cancel.icon.scaleX = tools.cancel.icon.scaleY = 0.15 ;
+			tools.cancel.icon.x = controller.getBounds().width + 22, tools.cancel.y = 0 ;
+			tools.cancel.bg = new createjs.Shape() ;
+			tools.cancel.bg.graphics.f( "#FFFFFF" ).r( controller.getBounds().width + 21, 0, 22, 22 ) ;
+			tools.cancel.addChild( tools.cancel.bg, tools.cancel.icon ) ;
+			tools.cancel.on( "click", function(){ that.box.mapbox.objects.removeChild( controller ) ; } ) ;
+			// Flip.
+			tools.flip = new createjs.Container() ;
+			tools.flip.icon = G.cacheObjectsController[1].clone( false ) ;
+			tools.flip.icon.scaleX = tools.flip.icon.scaleY = 0.15 ;
+			tools.flip.icon.x = controller.getBounds().width + 22, tools.flip.icon.y = 22 ;
+			tools.flip.bg = new createjs.Shape() ;
+			tools.flip.bg.graphics.f( "#FFFFFF" ).r( controller.getBounds().width + 21, 22, 22, 22 ) ;
+			tools.flip.addChild( tools.flip.bg, tools.flip.icon ) ;
+			tools.flip.on( "click", function(){ controller.objects.scaleX *= -1 ; } ) ;
+			// Up.
+			tools.up = new createjs.Container() ;
+			tools.up.icon = G.cacheObjectsController[2].clone( false ) ;
+			tools.up.icon.scaleX = tools.up.icon.scaleY = 0.15 ;
+			tools.up.icon.x = -22, tools.up.icon.y = 1 ;
+			tools.up.bg = new createjs.Shape() ;
+			tools.up.bg.graphics.f( "#FFFFFF" ).r( -25, 0, 25, 22 ) ;
+			tools.up.addChild( tools.up.bg, tools.up.icon ) ;
+			tools.up.on( "click", function(){ that.box.mapbox.objects.addChild( controller ) ; } ) ;
+			// Down.
+			tools.down = new createjs.Container() ;
+			tools.down.icon = G.cacheObjectsController[3].clone( false ) ;
+			tools.down.icon.scaleX = tools.down.icon.scaleY = 0.15 ;
+			tools.down.icon.x = -22, tools.down.icon.y = 23 ;
+			tools.down.bg = new createjs.Shape() ;
+			tools.down.bg.graphics.f( "#FFFFFF" ).r( -25, 22, 25, 22 ) ;
+			tools.down.addChild( tools.down.bg, tools.down.icon ) ;
+			tools.down.on( "click", function(){ that.box.mapbox.objects.addChildAt( controller, 1 ) ; } ) ;
+			// Zoom in.
+			tools.zoom_in = new createjs.Container() ;
+			tools.zoom_in.icon = G.cacheObjectsController[4].clone( false ) ;
+			tools.zoom_in.icon.scaleX = tools.zoom_in.icon.scaleY = 0.15 ;
+			tools.zoom_in.icon.x = -22, tools.zoom_in.icon.y = 45 ;
+			tools.zoom_in.bg = new createjs.Shape() ;
+			tools.zoom_in.bg.graphics.f( "#FFFFFF" ).r( -25, 44, 25, 22 ) ;
+			tools.zoom_in.addChild( tools.zoom_in.bg, tools.zoom_in.icon ) ;
+			tools.zoom_in.on( "click", function(){ controller.scaleX *= 1.05, controller.scaleY *= 1.05 ; } ) ;
+			// Zoom out.
+			tools.zoom_out = new createjs.Container() ;
+			tools.zoom_out.icon = G.cacheObjectsController[5].clone( false ) ;
+			tools.zoom_out.icon.scaleX = tools.zoom_out.icon.scaleY = 0.15 ;
+			tools.zoom_out.icon.x = -22, tools.zoom_out.icon.y = 67 ;
+			tools.zoom_out.bg = new createjs.Shape() ;
+			tools.zoom_out.bg.graphics.f( "#FFFFFF" ).r( -25, 66, 25, 22 ) ;
+			tools.zoom_out.addChild( tools.zoom_out.bg, tools.zoom_out.icon ) ;
+			tools.zoom_out.on( "click", function(){ controller.scaleX *= 0.95, controller.scaleY *= 0.95 ; } ) ;
+			// Total icon add to this container.
+			tools.addChild( tools.cancel, tools.flip, tools.up, tools.down, tools.zoom_in, tools.zoom_out ) ;
+			// Add to the top container.
+			controller.addChildAt( controller.bg, 0 ) ;
+			controller.addChild( tools ) ;
+			return tools ;
+		} // ToolsBox()
 	} // AddingObject()
 } // OnTiledControl()
