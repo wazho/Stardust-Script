@@ -35,9 +35,8 @@
 			} // tick()
 
 
-
 			var callMe = new createjs.Shape() ;
-			callMe.graphics.f( "#FF0000" ).r( 0, 0, 70, 70 ) ;
+			callMe.graphics.f( "#000000" ).r( 0, 0, 30, 30 ) ;
 			callMe.on( "click", function(){
 				for ( i = 1 ; i < preview.box.mapbox.objects.getNumChildren() ; i ++ ) {
 					console.log( JSON.stringify( preview.box.mapbox.objects.getChildAt( i ).name ) ) ;

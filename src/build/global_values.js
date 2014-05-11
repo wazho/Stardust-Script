@@ -9,6 +9,12 @@ function GlobalValues() {
 	this.objectSrc = "pic/map/object/" ;
 	this.objectConSrc = "pic/map_build/" ;
 
+	this.sampleSheet = new createjs.SpriteSheet( {
+		"images": ["pic/map_build/cover_sample.png"], 
+		"frames": { "width": 125, "height": 125, "regX": 63, "regY": 63, "count": 8 },
+		"animations": { "walk": { "frames": [0,1,2,3,4,5,6,7], "speed": 0.3 } }
+	} ) ;
+	this.cacheSample = new createjs.Sprite( this.sampleSheet ) ;
 	this.cacheTexture = new Array( texture_adding.length ) ;
 	for ( i = 0 ; i < texture_adding.length ; i ++ )
 		this.cacheTexture[i] = new createjs.Bitmap( this.textureSrc + texture_adding[i].file ) ;

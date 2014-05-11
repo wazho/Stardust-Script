@@ -129,7 +129,7 @@ MaterialBox.prototype.OnSelectEffect = function( select ) {
 	select.text.color = "#FF0000" ;
 } // OnSelectEffect()
 
-// 
+// The function of showing box when texture buntton click.
 MaterialBox.prototype.OnTexture = function() {
 	var that = this ;
 	// Remove original list first.
@@ -206,7 +206,7 @@ MaterialBox.prototype.OnTexture = function() {
 	} // Refresh()
 } // OnTexture()
 
-// 
+// The function of showing box when walkable buntton click.
 MaterialBox.prototype.OnWalkable = function() {
 	var that = this ;
 	// Remove original list first.
@@ -251,7 +251,7 @@ MaterialBox.prototype.OnWalkable = function() {
 	} // MarkedSelected()
 } // OnWalkable()
 
-// 
+// The function of showing box when object buntton click.
 MaterialBox.prototype.OnObject = function() {
 	var that = this ;
 	// Remove original list first.
@@ -334,12 +334,7 @@ MaterialBox.prototype.OnObject = function() {
 	} // Refresh()
 
 	function getFloatingSample() {
-		var sample_sheet = new createjs.SpriteSheet( {
-			"images": ["pic/map_build/cover_sample.png"], 
-			"frames": { "width": 125, "height": 125, "regX": 63, "regY": 63, "count": 8 },
-			"animations": { "walk": { "frames": [0,1,2,3,4,5,6,7], "speed": 0.3 } }
-		} ) ;
-		var sample = new createjs.BitmapAnimation( sample_sheet ) ;
+		var sample = G.cacheSample.clone( false ) ;
 		sample.gotoAndPlay( "walk" ) ;
 		createjs.Tween.get( sample, { loop: true } )
 			.call( function(){ sample.scaleX *= -1 } )
