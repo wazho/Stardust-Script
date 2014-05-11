@@ -31,7 +31,7 @@ MaterialBox.prototype.OnCreate = function() {
 									.call( function(){ that.OnSelectEffect( that.box.selector.buttonA ) ; } )
 									.to( { alpha: 0, x: 300 }, 500 )
 									.call( function(){ that.OnTexture() ; } )
-									.to( { alpha: 1, x: 0 }, 500 )
+									.to( { alpha: 1, x: 30 }, 500 )
 								} ) ;
 	// Material selector button - walkable.
 	this.box.selector.buttonB = new createjs.Container() ;
@@ -47,7 +47,7 @@ MaterialBox.prototype.OnCreate = function() {
 									.call( function(){ that.OnSelectEffect( that.box.selector.buttonB ) ; } )
 									.to( { alpha: 0, x: 300 }, 500 )
 									.call( function(){ that.OnWalkable() ; } )
-									.to( { alpha: 1, x: 0 }, 500 )
+									.to( { alpha: 1, x: 30 }, 500 )
 								} ) ;
 	// Material selector button - object.
 	this.box.selector.buttonC = new createjs.Container() ;
@@ -63,7 +63,7 @@ MaterialBox.prototype.OnCreate = function() {
 									.call( function(){ that.OnSelectEffect( that.box.selector.buttonC ) ; } )
 									.to( { alpha: 0, x: 300 }, 500 )
 									.call( function(){ that.OnObject() ; } )
-									.to( { alpha: 1, x: 0 }, 500 )
+									.to( { alpha: 1, x: 30 }, 500 )
 								} ) ;
 	// Material selector button - light.
 	this.box.selector.buttonD = new createjs.Container() ;
@@ -79,7 +79,7 @@ MaterialBox.prototype.OnCreate = function() {
 									.call( function(){ that.OnSelectEffect( that.box.selector.buttonD ) ; } )
 									.to( { alpha: 0, x: 300 }, 500 )
 									.call( function(){ that.OnLight() ; } )
-									.to( { alpha: 1, x: 0 }, 500 )
+									.to( { alpha: 1, x: 30 }, 500 )
 								} ) ;
 	// Material selector button - sound.
 	this.box.selector.buttonE = new createjs.Container() ;
@@ -95,7 +95,7 @@ MaterialBox.prototype.OnCreate = function() {
 									.call( function(){ that.OnSelectEffect( that.box.selector.buttonE ) ; } )
 									.to( { alpha: 0, x: 300 }, 500 )
 									.call( function(){ that.OnSound() ; } )
-									.to( { alpha: 1, x: 0 }, 500 )
+									.to( { alpha: 1, x: 30 }, 500 )
 								} ) ;
 	// Material selector button - option.
 	this.box.selector.buttonF = new createjs.Container() ;
@@ -111,7 +111,7 @@ MaterialBox.prototype.OnCreate = function() {
 									.call( function(){ that.OnSelectEffect( that.box.selector.buttonF ) ; } )
 									.to( { alpha: 0, x: 300 }, 500 )
 									.call( function(){ that.OnOption() ; } )
-									.to( { alpha: 1, x: 0 }, 500 )
+									.to( { alpha: 1, x: 30 }, 500 )
 								} ) ;
 	// Initial.
 	this.OnSelectEffect( this.box.selector.buttonF ) ;

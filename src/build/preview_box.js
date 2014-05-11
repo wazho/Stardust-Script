@@ -48,8 +48,12 @@ PreviewBox.prototype.OnTiledControl = function() {
 	this.box.mapbox.addChild( this.box.mapbox.tiled ) ;
 
 
+
+
 	// Create onjects map data struct.
-	this.box.mapbox.object_data = OnCreateObject() ;
+	this.box.mapbox.object_data = new Array() ;
+
+
 
 
 	// Map box objects.
@@ -62,7 +66,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 	this.box.mapbox.objects.bg.alpha = 0.1 ;
 	this.box.mapbox.objects.addChild( this.box.mapbox.objects.bg ) ;
 	// Objects listening events.
-	this.box.mapbox.objects.bg.on( "dblclick", function( evt ) { AddingObject( evt ) } ) ;
+	this.box.mapbox.objects.bg.on( "dblclick", function( evt ) { OnCreateObject( evt ) } ) ;
 	// Modify row, column for silde tiled map.
 	TotalRefresh( this, 0, 0, -1, -1 ) ;
 	// Slide bar create.
@@ -104,7 +108,6 @@ PreviewBox.prototype.OnTiledControl = function() {
 			// This is just a single fresh.
 			var row = s_row - mr, column = s_column - mc ;
 			var index = row * ( ( G.length > G.customer_length ) ? G.customer_length : G.length ) + column ;
-			console.log( index ) ;
 			pt.box.mapbox.tiled.removeChildAt( index ) ;
 			pt.box.mapbox.tiled.addChildAt( SingleRefresh( row , column ).clone( true ), index ) ;
 			pt.box.mapbox.tiled.getChildAt( index ).on( "click", function( evt ) { Refresh( pt, this ) ; } ) ;
@@ -199,36 +202,14 @@ PreviewBox.prototype.OnTiledControl = function() {
 		} // Tiled_Datastruct()
 	} // OnCreateTiled()
 
-	// Create object map data struct.
-	function OnCreateObject() {
-		// Assign null for array memory.
-		var object = new Array() ;
-		object[0] = 2323 ;
-		object[1] = 234323 ;
-		console.log( object.length ) ;
-
-		return object ;
-
-		function ObjectDatastruct() {
-			// object pic number
-			this.n = 0 ;
-			// object storage real x
-			this.rx = 0 ;
-			// object storage real y
-			this.ry = 1 ;
-			// object scale
-			this.s = 1 ;
-		} // Tiled_Datastruct()
-	} // OnCreateObject()
-
-	function AddingObject( evt ) {
+	function OnCreateObject( evt ) {
 		// Reject to put the object out of range.
 		var mouseX = evt.stageX - that.box.mapbox.x, mouseY = evt.stageY - that.box.mapbox.y ;
 		if ( mouseX > ( G.customer_length - that.box.mapbox.tiled.mc ) * G.size || mouseY > ( G.customer_height - that.box.mapbox.tiled.mr ) * G.size )
 			return ;
 		// Add the container for object on mapbox.
 		var controller = new createjs.Container() ;
-		controller.x = mouseX, controller.y = mouseY ;
+		controller.x = Math.ceil( mouseX ), controller.y = Math.ceil( mouseY ) ;
 		controller.storeX = controller.x + that.box.mapbox.tiled.mc * G.size, controller.storeY = controller.y + that.box.mapbox.tiled.mr * G.size ;
 		that.box.mapbox.objects.addChild( controller ) ;
 		// Copy the selected object.
@@ -243,7 +224,15 @@ PreviewBox.prototype.OnTiledControl = function() {
 		controller.bg = new createjs.Shape() ;
 		controller.bg.graphics.f( "#FF0000" ).s( "#000000" ).r( 0, 0, controller.getBounds().width + 20, controller.getBounds().height + 20 ) ;
 		controller.bg.alpha = 0 ;
-
+		// Store to data.
+		var index = that.box.mapbox.object_data.length ;
+		that.box.mapbox.object_data[index] = new ObjectDatastruct() ;
+		that.box.mapbox.object_data[index].n = controller.name ;
+		that.box.mapbox.object_data[index].o = that.box.mapbox.objects.getNumChildren() - 1 ;
+		that.box.mapbox.object_data[index].rx = controller.storeX ;
+		that.box.mapbox.object_data[index].ry = controller.storeY ;
+		that.box.mapbox.object_data[index].s = controller.scaleX ;
+		// Get tools.
 		controller.tools = ToolsBox() ;
 
 		// Add listening events.
@@ -263,12 +252,12 @@ PreviewBox.prototype.OnTiledControl = function() {
 			// Reject to put the object not out of range.
 			if ( controller.x + difX >= 0 && controller.x + difX <= ( G.customer_length - that.box.mapbox.tiled.mc ) * G.size ) {
 				controller.x += difX ;
-				controller.storeX = controller.x + that.box.mapbox.tiled.mc * G.size ;
+				controller.storeX = Math.ceil( controller.x + that.box.mapbox.tiled.mc * G.size ) ;
 				previous.x = evt.stageX ;
 			} // if
 			if ( controller.y + difY >= 0 && controller.y + difY <= ( G.customer_height - that.box.mapbox.tiled.mr ) * G.size ) {
 				controller.y += difY ;
-				controller.storeY = controller.y + that.box.mapbox.tiled.mr * G.size ;
+				controller.storeY = Math.ceil( controller.y + that.box.mapbox.tiled.mr * G.size ) ;
 				previous.y = evt.stageY ;
 			} // if
 		} ) ;
@@ -338,5 +327,19 @@ PreviewBox.prototype.OnTiledControl = function() {
 			controller.addChild( tools ) ;
 			return tools ;
 		} // ToolsBox()
-	} // AddingObject()
+
+		// Create object map data struct.
+		function ObjectDatastruct() {
+			// object pic number
+			this.n = 0 ;
+			// object order number
+			this.o = 0 ;
+			// object storage real x
+			this.rx = 0 ;
+			// object storage real y
+			this.ry = 0 ;                            
+			// object scale
+			this.s = 1 ;
+		} // Tiled_Datastruct()
+	} // OnCreateObject()
 } // OnTiledControl()

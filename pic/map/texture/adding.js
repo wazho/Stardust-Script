@@ -23,5 +23,4 @@ var texture_adding = [
 	{	file : "8.png",
 		decs : "sand"
 	}
-
 ] ;

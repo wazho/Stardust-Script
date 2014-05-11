@@ -33,20 +33,7 @@
 			function tick( event ) {
 				stage.update() ;
 			} // tick()
-
-
-			var callMe = new createjs.Shape() ;
-			callMe.graphics.f( "#000000" ).r( 0, 0, 30, 30 ) ;
-			callMe.on( "click", function(){
-				for ( i = 1 ; i < preview.box.mapbox.objects.getNumChildren() ; i ++ ) {
-					console.log( JSON.stringify( preview.box.mapbox.objects.getChildAt( i ).name ) ) ;
-				} // for
-			} ) ;
-
-			stage.addChild( callMe ) ;
-
-
-
+			
 			// jQuery Setting.
 			$( '#dialog_newMap' ).dialog({
 				autoOpen: false,
@@ -121,7 +108,7 @@
 							height : G.customer_height,
 							length : G.customer_length,
 							tileData : preview.box.mapbox.tiled_data,
-							objectData : [],
+							objectData : preview.box.mapbox.object_data,
 							lightData : [],
 							soundData : []
 						} ;
@@ -145,7 +132,27 @@
 						var obj = eval ( "(" + $( '#jsonImport' ).val() + ")" ) ;
 						G.customer_height = obj.height ;
 						G.customer_length = obj.length ;
+						// Tiled data.
 						preview.box.mapbox.tiled_data = obj.tileData ;
+						// Objects data.
+						console.log( preview.box.mapbox.objects.getNumChildren() ) ;
+						preview.box.mapbox.object_data = obj.objectData ;
+						for ( i = 1 ; i < preview.box.mapbox.objects.getNumChildren() ; i ++ )
+							preview.box.mapbox.object_data.removeChildAt( i ) ;
+						for ( i = 0 ; i < obj.objectData.length ; i ++ ) {
+							var container = new createjs.Container() ;
+							container.x = container.storeX = obj.objectData[i].rx ;
+							container.y = container.storeY = obj.objectData[i].ry ;
+							preview.box.mapbox.objects.addChild( container ) ;
+							container.objects = G.cacheObjects[obj.objectData[i].n-1].clone( false ) ;
+							container.objects.x = container.objects.regX + 10, container.objects.y = container.objects.regY + 10 ;
+							container.objects.scaleX = container.objects.scaleY = obj.objectData[i].s ;
+							container.addChild( container.objects ) ;
+							container.regX = container.objects.regX + 10, container.regY = container.objects.regY + 10 ;
+							container.bg = new createjs.Shape() ;
+							container.bg.graphics.f( "#FF0000" ).s( "#000000" ).r( 0, 0, container.getBounds().width + 20, container.getBounds().height + 20 ) ;
+							container.bg.alpha = 0 ;
+						} // for
 					},
 					"Cancel": function() {
 						$( this ).dialog( "close" ) ;
