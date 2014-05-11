@@ -33,7 +33,7 @@
 			function tick( event ) {
 				stage.update() ;
 			} // tick()
-			
+
 			// jQuery Setting.
 			$( '#dialog_newMap' ).dialog({
 				autoOpen: false,
@@ -143,8 +143,9 @@
 							var container = new createjs.Container() ;
 							container.x = container.storeX = obj.objectData[i].rx ;
 							container.y = container.storeY = obj.objectData[i].ry ;
-							preview.box.mapbox.objects.addChild( container ) ;
+							container.order = obj.objectData[i].o ;
 							container.objects = G.cacheObjects[obj.objectData[i].n-1].clone( false ) ;
+							console.log( container.objects.regX + "  " + container.objects.regY ) ;
 							container.objects.x = container.objects.regX + 10, container.objects.y = container.objects.regY + 10 ;
 							container.objects.scaleX = container.objects.scaleY = obj.objectData[i].s ;
 							container.addChild( container.objects ) ;
@@ -152,6 +153,9 @@
 							container.bg = new createjs.Shape() ;
 							container.bg.graphics.f( "#FF0000" ).s( "#000000" ).r( 0, 0, container.getBounds().width + 20, container.getBounds().height + 20 ) ;
 							container.bg.alpha = 0 ;
+							container.tools = preview.GetToolsBox( container ) ;
+							preview.ToolsBoxListener( container ) ;
+							preview.box.mapbox.objects.addChild( container ) ;
 						} // for
 					},
 					"Cancel": function() {

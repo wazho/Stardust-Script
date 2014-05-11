@@ -35,27 +35,19 @@ PreviewBox.prototype.OnCreate = function( material ) {
 // 
 PreviewBox.prototype.OnTiledControl = function() {
 	var that = this ;
-	// Create tiled map data struct.
-	this.box.mapbox.tiled_data = OnCreateTiled( G.customer_length, G.customer_height ) ;
 	// Map box container.
 	this.box.mapbox.bg = new createjs.Shape() ;
 	this.box.mapbox.bg.graphics.f( "#FFFFFF" ).r( 0, 0, G.size * G.length, G.size * G.height ) ;
 	this.box.mapbox.addChild( this.box.mapbox.bg ) ;
+	// Create tiled map data struct.
+	this.box.mapbox.tiled_data = OnCreateTiled( G.customer_length, G.customer_height ) ;
 	// Map box tiled.
 	this.box.mapbox.tiled = new createjs.Container() ;
 	this.box.mapbox.tiled.x = 0, this.box.mapbox.tiled.y = 0 ;
 	this.box.mapbox.tiled.mr = 0, this.box.mapbox.tiled.mc = 0 ;
 	this.box.mapbox.addChild( this.box.mapbox.tiled ) ;
-
-
-
-
 	// Create onjects map data struct.
 	this.box.mapbox.object_data = new Array() ;
-
-
-
-
 	// Map box objects.
 	this.box.mapbox.objects = new createjs.Container() ;
 	this.box.mapbox.objects.visible = false ;
@@ -109,8 +101,8 @@ PreviewBox.prototype.OnTiledControl = function() {
 			var row = s_row - mr, column = s_column - mc ;
 			var index = row * ( ( G.length > G.customer_length ) ? G.customer_length : G.length ) + column ;
 			pt.box.mapbox.tiled.removeChildAt( index ) ;
-			pt.box.mapbox.tiled.addChildAt( SingleRefresh( row , column ).clone( true ), index ) ;
-			pt.box.mapbox.tiled.getChildAt( index ).on( "click", function( evt ) { Refresh( pt, this ) ; } ) ;
+			pt.box.mapbox.tiled.addChildAt( SingleTileRefresh( row , column ).clone( true ), index ) ;
+			pt.box.mapbox.tiled.getChildAt( index ).on( "click", function( evt ) { SingleTileReplace( pt, this ) ; } ) ;
 		} // if
 		else {
 			// Initial must remove old tiled map.
@@ -119,11 +111,10 @@ PreviewBox.prototype.OnTiledControl = function() {
 			for ( i = 0 ; i < G.height ; i ++ )
 				for ( j = 0 ; j < G.length ; j ++ )
 					if ( ( i + mr ) < G.customer_height && ( j + mc ) < G.customer_length )
-						pt.box.mapbox.tiled.addChild( SingleRefresh( i , j ).clone( true ) ) ;
+						pt.box.mapbox.tiled.addChild( SingleTileRefresh( i , j ).clone( true ) ) ;
 			// Add listening event.
 			for ( i = 0 ; i < pt.box.mapbox.tiled.getNumChildren() ; i ++ )
-				pt.box.mapbox.tiled.getChildAt( i ).on( "click", function( evt ) { Refresh( pt, this ) ; } ) ;
-
+				pt.box.mapbox.tiled.getChildAt( i ).on( "click", function( evt ) { SingleTileReplace( pt, this ) ; } ) ;
 			pt.box.mapbox.objects.visible = ( pt.material.box.selector.statusPage == 3 ) ? true : false ;
 		} // else
 		// Objects refresh.
@@ -133,7 +124,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 		} // for
 
 		// Single tile for refreshing.
-		function SingleRefresh( i, j ) {
+		function SingleTileRefresh( i, j ) {
 			var data = pt.box.mapbox.tiled_data[i+mr][j+mc] ;
 			var row = Math.floor( data.i / G.range ) ;
 			var column = data.i % G.range ;
@@ -153,10 +144,10 @@ PreviewBox.prototype.OnTiledControl = function() {
 			singleTile.name = i * G.length + j ;
 			singleTile.x = j * G.size, singleTile.y = i * G.size ;
 			return singleTile ;
-		} // SingleRefresh()
+		} // SingleTileRefresh()
 
 		// Focus one tiled, let it replace new one.
-		function Refresh( pt, singleTiled ) {
+		function SingleTileReplace( pt, singleTiled ) {
 			// Get sileded tiled map data.
 			var select = pt.material.box.list.marked.name ;
 			var row = Math.floor( singleTiled.name / G.length ) + pt.box.mapbox.tiled.mr ;
@@ -176,7 +167,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 					pt.box.mapbox.tiled_data[row][column].w = 0 ;	
 				TotalRefresh( pt, pt.box.mapbox.tiled.mr, pt.box.mapbox.tiled.mc, row, column ) ;
 			} // else if
-		} // Refresh()	
+		} // SingleTileReplace()	
 	} // TotalRefresh()
 
 	// Create tiled map data struct.
@@ -228,105 +219,15 @@ PreviewBox.prototype.OnTiledControl = function() {
 		var index = that.box.mapbox.object_data.length ;
 		that.box.mapbox.object_data[index] = new ObjectDatastruct() ;
 		that.box.mapbox.object_data[index].n = controller.name ;
-		that.box.mapbox.object_data[index].o = that.box.mapbox.objects.getNumChildren() - 1 ;
+		that.box.mapbox.object_data[index].o = index ;
 		that.box.mapbox.object_data[index].rx = controller.storeX ;
 		that.box.mapbox.object_data[index].ry = controller.storeY ;
 		that.box.mapbox.object_data[index].s = controller.scaleX ;
+		controller.order = index ;
 		// Get tools.
-		controller.tools = ToolsBox() ;
-
-		// Add listening events.
-		stage.enableMouseOver( 20 ) ;
-		controller.on( "mousedown", function( evt ) {
-			previous = { x: evt.stageX, y: evt.stageY } ;
-			controller.bg.alpha = 0.3 ;
-			controller.tools.alpha = 1 ;
-			controller.tools.cancel.bg.alpha = controller.tools.flip.bg.alpha = controller.tools.up.bg.alpha = controller.tools.down.bg.alpha = controller.tools.zoom_in.bg.alpha = controller.tools.zoom_out.bg.alpha = 0.7 ;
-		} ) ;
-		controller.on( "rollout", function( evt ) {
-			createjs.Tween.get( controller.bg ).to( { alpha: 0 }, 500 ) ;
-			createjs.Tween.get( controller.tools ).to( { alpha: 0 }, 500 ) ;
-		} ) ;
-		controller.on( "pressmove", function( evt ) {
-			var difX = evt.stageX - previous.x, difY = evt.stageY - previous.y ;
-			// Reject to put the object not out of range.
-			if ( controller.x + difX >= 0 && controller.x + difX <= ( G.customer_length - that.box.mapbox.tiled.mc ) * G.size ) {
-				controller.x += difX ;
-				controller.storeX = Math.ceil( controller.x + that.box.mapbox.tiled.mc * G.size ) ;
-				previous.x = evt.stageX ;
-			} // if
-			if ( controller.y + difY >= 0 && controller.y + difY <= ( G.customer_height - that.box.mapbox.tiled.mr ) * G.size ) {
-				controller.y += difY ;
-				controller.storeY = Math.ceil( controller.y + that.box.mapbox.tiled.mr * G.size ) ;
-				previous.y = evt.stageY ;
-			} // if
-		} ) ;
-
-		function ToolsBox() {
-			// Setting tools location.
-			var tools = new createjs.Container() ;
-			tools.alpha = 0 ;
-			// Cancel.
-			tools.cancel = new createjs.Container() ;
-			tools.cancel.icon = G.cacheObjectsController[0].clone( false ) ;
-			tools.cancel.icon.scaleX = tools.cancel.icon.scaleY = 0.15 ;
-			tools.cancel.icon.x = controller.getBounds().width + 22, tools.cancel.y = 0 ;
-			tools.cancel.bg = new createjs.Shape() ;
-			tools.cancel.bg.graphics.f( "#FFFFFF" ).r( controller.getBounds().width + 21, 0, 22, 22 ) ;
-			tools.cancel.addChild( tools.cancel.bg, tools.cancel.icon ) ;
-			tools.cancel.on( "click", function(){ that.box.mapbox.objects.removeChild( controller ) ; } ) ;
-			// Flip.
-			tools.flip = new createjs.Container() ;
-			tools.flip.icon = G.cacheObjectsController[1].clone( false ) ;
-			tools.flip.icon.scaleX = tools.flip.icon.scaleY = 0.15 ;
-			tools.flip.icon.x = controller.getBounds().width + 22, tools.flip.icon.y = 22 ;
-			tools.flip.bg = new createjs.Shape() ;
-			tools.flip.bg.graphics.f( "#FFFFFF" ).r( controller.getBounds().width + 21, 22, 22, 22 ) ;
-			tools.flip.addChild( tools.flip.bg, tools.flip.icon ) ;
-			tools.flip.on( "click", function(){ controller.objects.scaleX *= -1 ; } ) ;
-			// Up.
-			tools.up = new createjs.Container() ;
-			tools.up.icon = G.cacheObjectsController[2].clone( false ) ;
-			tools.up.icon.scaleX = tools.up.icon.scaleY = 0.15 ;
-			tools.up.icon.x = -22, tools.up.icon.y = 1 ;
-			tools.up.bg = new createjs.Shape() ;
-			tools.up.bg.graphics.f( "#FFFFFF" ).r( -25, 0, 25, 22 ) ;
-			tools.up.addChild( tools.up.bg, tools.up.icon ) ;
-			tools.up.on( "click", function(){ that.box.mapbox.objects.addChild( controller ) ; } ) ;
-			// Down.
-			tools.down = new createjs.Container() ;
-			tools.down.icon = G.cacheObjectsController[3].clone( false ) ;
-			tools.down.icon.scaleX = tools.down.icon.scaleY = 0.15 ;
-			tools.down.icon.x = -22, tools.down.icon.y = 23 ;
-			tools.down.bg = new createjs.Shape() ;
-			tools.down.bg.graphics.f( "#FFFFFF" ).r( -25, 22, 25, 22 ) ;
-			tools.down.addChild( tools.down.bg, tools.down.icon ) ;
-			tools.down.on( "click", function(){ that.box.mapbox.objects.addChildAt( controller, 1 ) ; } ) ;
-			// Zoom in.
-			tools.zoom_in = new createjs.Container() ;
-			tools.zoom_in.icon = G.cacheObjectsController[4].clone( false ) ;
-			tools.zoom_in.icon.scaleX = tools.zoom_in.icon.scaleY = 0.15 ;
-			tools.zoom_in.icon.x = -22, tools.zoom_in.icon.y = 45 ;
-			tools.zoom_in.bg = new createjs.Shape() ;
-			tools.zoom_in.bg.graphics.f( "#FFFFFF" ).r( -25, 44, 25, 22 ) ;
-			tools.zoom_in.addChild( tools.zoom_in.bg, tools.zoom_in.icon ) ;
-			tools.zoom_in.on( "click", function(){ controller.scaleX *= 1.05, controller.scaleY *= 1.05 ; } ) ;
-			// Zoom out.
-			tools.zoom_out = new createjs.Container() ;
-			tools.zoom_out.icon = G.cacheObjectsController[5].clone( false ) ;
-			tools.zoom_out.icon.scaleX = tools.zoom_out.icon.scaleY = 0.15 ;
-			tools.zoom_out.icon.x = -22, tools.zoom_out.icon.y = 67 ;
-			tools.zoom_out.bg = new createjs.Shape() ;
-			tools.zoom_out.bg.graphics.f( "#FFFFFF" ).r( -25, 66, 25, 22 ) ;
-			tools.zoom_out.addChild( tools.zoom_out.bg, tools.zoom_out.icon ) ;
-			tools.zoom_out.on( "click", function(){ controller.scaleX *= 0.95, controller.scaleY *= 0.95 ; } ) ;
-			// Total icon add to this container.
-			tools.addChild( tools.cancel, tools.flip, tools.up, tools.down, tools.zoom_in, tools.zoom_out ) ;
-			// Add to the top container.
-			controller.addChildAt( controller.bg, 0 ) ;
-			controller.addChild( tools ) ;
-			return tools ;
-		} // ToolsBox()
+		controller.tools = that.GetToolsBox( controller ) ;
+		// Add controller listening events.
+		that.ToolsBoxListener( controller ) ;
 
 		// Create object map data struct.
 		function ObjectDatastruct() {
@@ -343,3 +244,104 @@ PreviewBox.prototype.OnTiledControl = function() {
 		} // Tiled_Datastruct()
 	} // OnCreateObject()
 } // OnTiledControl()
+
+// 
+PreviewBox.prototype.GetToolsBox = function( controller ) {
+	var that = this ;
+	// Setting tools location.
+	var tools = new createjs.Container() ;
+	tools.alpha = 0 ;
+	// Cancel.
+	tools.cancel = new createjs.Container() ;
+	tools.cancel.icon = G.cacheObjectsController[0].clone( false ) ;
+	tools.cancel.icon.scaleX = tools.cancel.icon.scaleY = 0.15 ;
+	tools.cancel.icon.x = controller.getBounds().width + 22, tools.cancel.y = 0 ;
+	tools.cancel.bg = new createjs.Shape() ;
+	tools.cancel.bg.graphics.f( "#FFFFFF" ).r( controller.getBounds().width + 21, 0, 22, 22 ) ;
+	tools.cancel.addChild( tools.cancel.bg, tools.cancel.icon ) ;
+	tools.cancel.on( "click", function(){ that.box.mapbox.objects.removeChild( controller ) ; } ) ;
+	// Flip.
+	tools.flip = new createjs.Container() ;
+	tools.flip.icon = G.cacheObjectsController[1].clone( false ) ;
+	tools.flip.icon.scaleX = tools.flip.icon.scaleY = 0.15 ;
+	tools.flip.icon.x = controller.getBounds().width + 22, tools.flip.icon.y = 22 ;
+	tools.flip.bg = new createjs.Shape() ;
+	tools.flip.bg.graphics.f( "#FFFFFF" ).r( controller.getBounds().width + 21, 22, 22, 22 ) ;
+	tools.flip.addChild( tools.flip.bg, tools.flip.icon ) ;
+	tools.flip.on( "click", function(){ controller.objects.scaleX *= -1 ; } ) ;
+	// Up.
+	tools.up = new createjs.Container() ;
+	tools.up.icon = G.cacheObjectsController[2].clone( false ) ;
+	tools.up.icon.scaleX = tools.up.icon.scaleY = 0.15 ;
+	tools.up.icon.x = -22, tools.up.icon.y = 1 ;
+	tools.up.bg = new createjs.Shape() ;
+	tools.up.bg.graphics.f( "#FFFFFF" ).r( -25, 0, 25, 22 ) ;
+	tools.up.addChild( tools.up.bg, tools.up.icon ) ;
+	tools.up.on( "click", function(){ that.box.mapbox.objects.addChild( controller ) ; } ) ;
+	// Down.
+	tools.down = new createjs.Container() ;
+	tools.down.icon = G.cacheObjectsController[3].clone( false ) ;
+	tools.down.icon.scaleX = tools.down.icon.scaleY = 0.15 ;
+	tools.down.icon.x = -22, tools.down.icon.y = 23 ;
+	tools.down.bg = new createjs.Shape() ;
+	tools.down.bg.graphics.f( "#FFFFFF" ).r( -25, 22, 25, 22 ) ;
+	tools.down.addChild( tools.down.bg, tools.down.icon ) ;
+	tools.down.on( "click", function(){ that.box.mapbox.objects.addChildAt( controller, 1 ) ; } ) ;
+	// Zoom in.
+	tools.zoom_in = new createjs.Container() ;
+	tools.zoom_in.icon = G.cacheObjectsController[4].clone( false ) ;
+	tools.zoom_in.icon.scaleX = tools.zoom_in.icon.scaleY = 0.15 ;
+	tools.zoom_in.icon.x = -22, tools.zoom_in.icon.y = 45 ;
+	tools.zoom_in.bg = new createjs.Shape() ;
+	tools.zoom_in.bg.graphics.f( "#FFFFFF" ).r( -25, 44, 25, 22 ) ;
+	tools.zoom_in.addChild( tools.zoom_in.bg, tools.zoom_in.icon ) ;
+	tools.zoom_in.on( "click", function(){ controller.scaleX *= 1.05, controller.scaleY *= 1.05 ; } ) ;
+	// Zoom out.
+	tools.zoom_out = new createjs.Container() ;
+	tools.zoom_out.icon = G.cacheObjectsController[5].clone( false ) ;
+	tools.zoom_out.icon.scaleX = tools.zoom_out.icon.scaleY = 0.15 ;
+	tools.zoom_out.icon.x = -22, tools.zoom_out.icon.y = 67 ;
+	tools.zoom_out.bg = new createjs.Shape() ;
+	tools.zoom_out.bg.graphics.f( "#FFFFFF" ).r( -25, 66, 25, 22 ) ;
+	tools.zoom_out.addChild( tools.zoom_out.bg, tools.zoom_out.icon ) ;
+	tools.zoom_out.on( "click", function(){ controller.scaleX *= 0.95, controller.scaleY *= 0.95 ; } ) ;
+	// Total icon add to this container.
+	tools.addChild( tools.cancel, tools.flip, tools.up, tools.down, tools.zoom_in, tools.zoom_out ) ;
+	// Add to the top container.
+	controller.addChildAt( controller.bg, 0 ) ;
+	controller.addChild( tools ) ;
+	return tools ;
+} // GetToolsBox()
+
+// 
+PreviewBox.prototype.ToolsBoxListener = function( controller ) {
+	var that = this ;
+	// Add listening events.
+	stage.enableMouseOver( 20 ) ;
+	controller.on( "mousedown", function( evt ) {
+		previous = { x: evt.stageX, y: evt.stageY } ;
+		controller.bg.alpha = 0.3 ;
+		controller.tools.alpha = 1 ;
+		controller.tools.cancel.bg.alpha = controller.tools.flip.bg.alpha = controller.tools.up.bg.alpha = controller.tools.down.bg.alpha = controller.tools.zoom_in.bg.alpha = controller.tools.zoom_out.bg.alpha = 0.7 ;
+	} ) ;
+	controller.on( "rollout", function( evt ) {
+		createjs.Tween.get( controller.bg ).to( { alpha: 0 }, 500 ) ;
+		createjs.Tween.get( controller.tools ).to( { alpha: 0 }, 500 ) ;
+	} ) ;
+	controller.on( "pressmove", function( evt ) {
+		var difX = evt.stageX - previous.x, difY = evt.stageY - previous.y ;
+		// Reject to put the object not out of range.
+		if ( controller.x + difX >= 0 && controller.x + difX <= ( G.customer_length - that.box.mapbox.tiled.mc ) * G.size ) {
+			controller.x += difX ;
+			controller.storeX = Math.ceil( controller.x + that.box.mapbox.tiled.mc * G.size ) ;
+			that.box.mapbox.object_data[controller.order-1].rx = controller.storeX ;
+			previous.x = evt.stageX ;
+		} // if
+		if ( controller.y + difY >= 0 && controller.y + difY <= ( G.customer_height - that.box.mapbox.tiled.mr ) * G.size ) {
+			controller.y += difY ;
+			controller.storeY = Math.ceil( controller.y + that.box.mapbox.tiled.mr * G.size ) ;
+			that.box.mapbox.object_data[controller.order-1].ry = controller.storeY ;
+			previous.y = evt.stageY ;
+		} // if
+	} ) ;
+} // ToolsBoxListener()

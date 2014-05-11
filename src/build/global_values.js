@@ -3,8 +3,8 @@ function GlobalValues() {
 	this.range = 8 ;
 	this.length = 18 ;
 	this.height = 14 ;
-	this.customer_length = 20 ;
-	this.customer_height = 13 ;
+	this.customer_length = 5 ;
+	this.customer_height = 5 ;
 	this.textureSrc = "pic/map/texture/" ;
 	this.objectSrc = "pic/map/object/" ;
 	this.objectConSrc = "pic/map_build/" ;
