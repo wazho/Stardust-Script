@@ -196,6 +196,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 		} // Tiled_Datastruct()
 	} // OnCreateTiled()
 
+	// Create one object on mapbox.
 	function OnCreateObject( evt ) {
 		// Reject to put the object out of range.
 		var mouseX = evt.stageX - that.box.mapbox.x, mouseY = evt.stageY - that.box.mapbox.y ;
@@ -211,16 +212,13 @@ PreviewBox.prototype.OnTiledControl = function() {
 		.to( { alpha: 1, scaleX: 1, scaleY: 1 }, 500 ) ;
 		// Copy the selected object.
 		controller.objects = that.material.box.list.objects.pic.clone( false ) ;
-		controller.objects.x = controller.objects.regX + 10, controller.objects.y = controller.objects.regY + 10 ;
+		controller.objects.x = controller.objects.regX, controller.objects.y = controller.objects.regY ;
 		controller.objects.scaleX = controller.objects.scaleY = 1 ;
 		controller.addChild( controller.objects ) ;
 		// Object container assign the name (pic number).
 		controller.name = controller.objects.name ;
 		// Adjust the location of this container.
-		controller.regX = controller.objects.regX + 10, controller.regY = controller.objects.regY + 10 ;
-		controller.bg = new createjs.Shape() ;
-		controller.bg.graphics.f( "#AAAAAA" ).s( "#000000" ).r( 0, 0, controller.getBounds().width + 20, controller.getBounds().height + 20 ) ;
-		controller.bg.alpha = 0 ;
+		controller.regX = controller.objects.regX, controller.regY = controller.objects.regY ;
 		// Store to data.
 		var index = that.box.mapbox.object_data.length ;
 		that.box.mapbox.object_data[index] = new ObjectDatastruct() ;
@@ -254,12 +252,18 @@ PreviewBox.prototype.OnTiledControl = function() {
 	} // OnCreateObject()
 } // OnTiledControl()
 
-// 
+// Add tools box to one object. 
 PreviewBox.prototype.GetToolsBox = function( controller ) {
 	var that = this ;
 	// Setting tools location.
 	var tools = new createjs.Container() ;
 	tools.alpha = 0 ;
+	// Background.
+	tools.bg = new createjs.Shape() ;
+	tools.bg.graphics.f( "#AAAAAA" ).s( "#000000" ).r( 0, 0, controller.getBounds().width + 20, controller.getBounds().height + 20 ) ;
+	tools.bg.alpha = 0 ;
+	tools.regX = ( controller.getBounds().width + 20 ) / 2, tools.regY = ( controller.getBounds().height + 20 ) / 2 ;
+	tools.x = tools.regX, tools.y = tools.regY ;
 	// Cancel.
 	tools.cancel = new createjs.Container() ;
 	tools.cancel.icon = G.cacheObjectsController[0].clone( false ) ;
@@ -270,6 +274,9 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 	tools.cancel.addChild( tools.cancel.bg, tools.cancel.icon ) ;
 	tools.cancel.on( "click", function(){
 		createjs.Tween.get( controller )
+		.to( { alpha: 0, rotation: -360, scaleX: 0, scaleY: 0 }, 500 )
+		.call( function(){ that.box.mapbox.objects.removeChild( controller ) ; } ) ;
+		createjs.Tween.get( controller.tools )
 		.to( { alpha: 0, rotation: -360, scaleX: 0, scaleY: 0 }, 500 )
 		.call( function(){ that.box.mapbox.objects.removeChild( controller ) ; } ) ;
 	} ) ;
@@ -283,7 +290,6 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 	tools.flip.addChild( tools.flip.bg, tools.flip.icon ) ;
 	tools.flip.on( "click", function(){
 		that.box.mapbox.object_data[controller.order].sx *= -1 ;
-
 		createjs.Tween.get( controller.objects )
 		.to( { scaleX: controller.objects.scaleX * -1 }, 100 ) ;
 	} ) ;
@@ -332,6 +338,8 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 		that.box.mapbox.object_data[controller.order].sy *= 1.05 ;
 		createjs.Tween.get( controller )
 		.to( { scaleX: controller.scaleX * 1.05, scaleY: controller.scaleY * 1.05 }, 300 ) ;
+		createjs.Tween.get( controller.tools )
+		.to( { scaleX: controller.scaleX * 1.05, scaleY: controller.scaleY * 1.05 }, 300 ) ;
 	} ) ;
 	// Zoom out.
 	tools.zoom_out = new createjs.Container() ;
@@ -346,50 +354,60 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 		that.box.mapbox.object_data[controller.order].sy *= 0.95 ;
 		createjs.Tween.get( controller )
 		.to( { scaleX: controller.scaleX * 0.95, scaleY: controller.scaleY * 0.95 }, 300 ) ;
+		createjs.Tween.get( controller.tools )
+		.to( { scaleX: controller.scaleX * 0.95, scaleY: controller.scaleY * 0.95 }, 300 ) ;
 	} ) ;
 	// Total icon add to this container.
-	tools.addChild( tools.cancel, tools.flip, tools.up, tools.down, tools.zoom_in, tools.zoom_out ) ;
+	tools.addChild( tools.bg, tools.cancel, tools.flip, tools.up, tools.down, tools.zoom_in, tools.zoom_out ) ;
 	// Add to the top container.
-	controller.addChildAt( controller.bg, 0 ) ;
 	controller.addChild( tools ) ;
 	return tools ;
 } // GetToolsBox()
 
-// 
+// Add objects be clicked that event listener.
 PreviewBox.prototype.ToolsBoxListener = function( controller ) {
 	var that = this ;
 	// Add listening events.
 	stage.enableMouseOver( 20 ) ;
 	controller.on( "mousedown", function( evt ) {
 		previous = { x: evt.stageX, y: evt.stageY } ;
-		controller.bg.alpha = 0.3 ;
+		controller.tools.bg.alpha = 0.3 ;
 		controller.tools.alpha = 1 ;
 		controller.tools.cancel.bg.alpha = controller.tools.flip.bg.alpha = controller.tools.up.bg.alpha = controller.tools.down.bg.alpha = controller.tools.zoom_in.bg.alpha = controller.tools.zoom_out.bg.alpha = 0.7 ;
+		// Tools has been put top of mapbox.
+		that.box.mapbox.addChild( controller.tools ) ;
+		controller.tools.x = controller.x, controller.tools.y = controller.y ;
 	} ) ;
-	controller.on( "rollout", function( evt ) {
-		createjs.Tween.get( controller.bg ).to( { alpha: 0 }, 500 ) ;
+	controller.tools.on( "rollout", function( evt ) {
 		createjs.Tween.get( controller.tools ).to( { alpha: 0 }, 500 ) ;
 	} ) ;
-	controller.on( "pressmove", function( evt ) {
+	controller.on( "pressmove", function( evt ) { 
+		ChangeGrid( evt ) ;
+	} ) ;
+	controller.tools.on( "pressmove", function( evt ) {
+		ChangeGrid( evt ) ;
+	} ) ;
+
+	function ChangeGrid( evt ) {
 		var difX = evt.stageX - previous.x, difY = evt.stageY - previous.y ;
 		var boundX = ( G.customer_length - that.box.mapbox.tiled.mc ) * G.size, boundY = ( G.customer_height - that.box.mapbox.tiled.mr ) * G.size ;
 		// Reject to put the object not out of range.
 		if ( controller.x + difX >= 0 && controller.x + difX <= boundX )
-			controller.x += difX, previous.x = evt.stageX ;
-		else if ( controller.x + difX < 0 ) 
-			controller.x = 0 ;
-		else if ( controller.x + difX > boundX ) 
-			controller.x = boundX ;
+			controller.x += difX, previous.x = evt.stageX, controller.tools.x = controller.x ;
+		else if ( controller.x + difX < 0 )
+			controller.x = 0, controller.tools.x = controller.x ;
+		else if ( controller.x + difX > boundX )
+			controller.x = boundX, controller.tools.x = controller.x ;
 		controller.storeX = Math.ceil( controller.x + that.box.mapbox.tiled.mc * G.size ) ;
 		that.box.mapbox.object_data[controller.order].rx = controller.storeX ;
 
 		if ( controller.y + difY >= 0 && controller.y + difY <= boundY )
-			controller.y += difY, previous.y = evt.stageY ;
+			controller.y += difY, previous.y = evt.stageY, controller.tools.y = controller.y ;
 		else if ( controller.y + difY < 0 )
-			controller.y = 0 ;
+			controller.y = 0, controller.tools.y = controller.y ;
 		else if ( controller.y + difY > boundY )
-			controller.y = boundY ;
+			controller.y = boundY, controller.tools.y = controller.y ;
 		controller.storeY = Math.ceil( controller.y + that.box.mapbox.tiled.mr * G.size ) ;
 		that.box.mapbox.object_data[controller.order].ry = controller.storeY ;
-	} ) ;
+	} // ChangeGrid()
 } // ToolsBoxListener()
