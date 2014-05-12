@@ -262,7 +262,11 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 	tools.cancel.bg = new createjs.Shape() ;
 	tools.cancel.bg.graphics.f( "#FFFFFF" ).r( controller.getBounds().width + 21, 0, 22, 22 ) ;
 	tools.cancel.addChild( tools.cancel.bg, tools.cancel.icon ) ;
-	tools.cancel.on( "click", function(){ that.box.mapbox.objects.removeChild( controller ) ; } ) ;
+	tools.cancel.on( "click", function(){
+		createjs.Tween.get( controller )
+		.to( { alpha: 0, rotation: -360, scaleX: 0, scaleY: 0 }, 500 )
+		.call( function(){ that.box.mapbox.objects.removeChild( controller ) ; } ) ;
+	} ) ;
 	// Flip.
 	tools.flip = new createjs.Container() ;
 	tools.flip.icon = G.cacheObjectsController[1].clone( false ) ;
@@ -271,7 +275,10 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 	tools.flip.bg = new createjs.Shape() ;
 	tools.flip.bg.graphics.f( "#FFFFFF" ).r( controller.getBounds().width + 21, 22, 22, 22 ) ;
 	tools.flip.addChild( tools.flip.bg, tools.flip.icon ) ;
-	tools.flip.on( "click", function(){ that.box.mapbox.object_data[controller.order].sx *= -1, controller.objects.scaleX *= -1 ; } ) ;
+	tools.flip.on( "click", function(){
+		that.box.mapbox.object_data[controller.order].sx *= -1 ;
+		controller.objects.scaleX *= -1 ;
+	} ) ;
 	// Up.
 	tools.up = new createjs.Container() ;
 	tools.up.icon = G.cacheObjectsController[2].clone( false ) ;
@@ -280,7 +287,11 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 	tools.up.bg = new createjs.Shape() ;
 	tools.up.bg.graphics.f( "#FFFFFF" ).r( -25, 0, 25, 22 ) ;
 	tools.up.addChild( tools.up.bg, tools.up.icon ) ;
-	tools.up.on( "click", function(){ that.box.mapbox.objects.addChild( controller ) ; } ) ;
+	tools.up.on( "click", function(){ 
+		var nowIndex = that.box.mapbox.objects.getChildIndex( controller ) ;
+
+		that.box.mapbox.objects.addChildAt( controller, nowIndex + 1 ) ;
+	} ) ;
 	// Down.
 	tools.down = new createjs.Container() ;
 	tools.down.icon = G.cacheObjectsController[3].clone( false ) ;
@@ -289,7 +300,11 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 	tools.down.bg = new createjs.Shape() ;
 	tools.down.bg.graphics.f( "#FFFFFF" ).r( -25, 22, 25, 22 ) ;
 	tools.down.addChild( tools.down.bg, tools.down.icon ) ;
-	tools.down.on( "click", function(){ that.box.mapbox.objects.addChildAt( controller, 1 ) ; } ) ;
+	tools.down.on( "click", function(){ 
+		var nowIndex = that.box.mapbox.objects.getChildIndex( controller ) ;
+
+		that.box.mapbox.objects.addChildAt( controller, ( nowIndex > 1 ) ? ( nowIndex - 1 ) : 1 ) ;
+	} ) ;
 	// Zoom in.
 	tools.zoom_in = new createjs.Container() ;
 	tools.zoom_in.icon = G.cacheObjectsController[4].clone( false ) ;
@@ -298,7 +313,10 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 	tools.zoom_in.bg = new createjs.Shape() ;
 	tools.zoom_in.bg.graphics.f( "#FFFFFF" ).r( -25, 44, 25, 22 ) ;
 	tools.zoom_in.addChild( tools.zoom_in.bg, tools.zoom_in.icon ) ;
-	tools.zoom_in.on( "click", function(){ that.box.mapbox.object_data[controller.order].sx = controller.scaleX *= 1.05, that.box.mapbox.object_data[controller.order].sy = controller.scaleY *= 1.05 ; } ) ;
+	tools.zoom_in.on( "click", function(){ 
+		that.box.mapbox.object_data[controller.order].sx = controller.scaleX *= 1.05 ;
+		that.box.mapbox.object_data[controller.order].sy = controller.scaleY *= 1.05 ;
+	} ) ;
 	// Zoom out.
 	tools.zoom_out = new createjs.Container() ;
 	tools.zoom_out.icon = G.cacheObjectsController[5].clone( false ) ;
@@ -307,7 +325,10 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 	tools.zoom_out.bg = new createjs.Shape() ;
 	tools.zoom_out.bg.graphics.f( "#FFFFFF" ).r( -25, 66, 25, 22 ) ;
 	tools.zoom_out.addChild( tools.zoom_out.bg, tools.zoom_out.icon ) ;
-	tools.zoom_out.on( "click", function(){ that.box.mapbox.object_data[controller.order].sx = controller.scaleX *= 0.95, that.box.mapbox.object_data[controller.order].sy = controller.scaleY *= 0.95 ; } ) ;
+	tools.zoom_out.on( "click", function(){ 
+		that.box.mapbox.object_data[controller.order].sx = controller.scaleX *= 0.95 ;
+		that.box.mapbox.object_data[controller.order].sy = controller.scaleY *= 0.95 ;
+	} ) ;
 	// Total icon add to this container.
 	tools.addChild( tools.cancel, tools.flip, tools.up, tools.down, tools.zoom_in, tools.zoom_out ) ;
 	// Add to the top container.
