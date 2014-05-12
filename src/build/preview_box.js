@@ -28,6 +28,9 @@ PreviewBox.prototype.OnCreate = function( material ) {
 	this.box.tool.forward.scaleX = this.box.tool.forward.scaleY = 0.3 ;
 	this.box.tool.forward.x = 50, this.box.tool.forward.y = 0 ;
 	this.box.tool.addChild( this.box.tool.backward, this.box.tool.forward ) ;
+	this.box.tool.backward.on( "click", function(){} ) ;
+	this.box.tool.forward.on( "click", function(){} ) ;
+
 	// Add to top container.
 	this.box.addChild( this.box.mapbox, this.box.bg, this.box.logo, this.box.bar, this.box.tool ) ;
 } // OnCreate()
