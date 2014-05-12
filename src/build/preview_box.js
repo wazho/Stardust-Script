@@ -314,8 +314,10 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 	tools.zoom_in.bg.graphics.f( "#FFFFFF" ).r( -25, 44, 25, 22 ) ;
 	tools.zoom_in.addChild( tools.zoom_in.bg, tools.zoom_in.icon ) ;
 	tools.zoom_in.on( "click", function(){ 
-		that.box.mapbox.object_data[controller.order].sx = controller.scaleX *= 1.05 ;
-		that.box.mapbox.object_data[controller.order].sy = controller.scaleY *= 1.05 ;
+		that.box.mapbox.object_data[controller.order].sx *= 1.05 ;
+		that.box.mapbox.object_data[controller.order].sy *= 1.05 ;
+		createjs.Tween.get( controller )
+		.to( { scaleX: controller.scaleX * 1.05, scaleY: controller.scaleY * 1.05 }, 300 ) ;
 	} ) ;
 	// Zoom out.
 	tools.zoom_out = new createjs.Container() ;
@@ -326,8 +328,10 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 	tools.zoom_out.bg.graphics.f( "#FFFFFF" ).r( -25, 66, 25, 22 ) ;
 	tools.zoom_out.addChild( tools.zoom_out.bg, tools.zoom_out.icon ) ;
 	tools.zoom_out.on( "click", function(){ 
-		that.box.mapbox.object_data[controller.order].sx = controller.scaleX *= 0.95 ;
-		that.box.mapbox.object_data[controller.order].sy = controller.scaleY *= 0.95 ;
+		that.box.mapbox.object_data[controller.order].sx *= 0.95 ;
+		that.box.mapbox.object_data[controller.order].sy *= 0.95 ;
+		createjs.Tween.get( controller )
+		.to( { scaleX: controller.scaleX * 0.95, scaleY: controller.scaleY * 0.95 }, 300 ) ;
 	} ) ;
 	// Total icon add to this container.
 	tools.addChild( tools.cancel, tools.flip, tools.up, tools.down, tools.zoom_in, tools.zoom_out ) ;
