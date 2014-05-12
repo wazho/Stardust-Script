@@ -134,11 +134,11 @@
 						G.customer_length = obj.length ;
 						// Tiled data.
 						preview.box.mapbox.tiled_data = obj.tileData ;
-						// Objects data.
-						console.log( preview.box.mapbox.objects.getNumChildren() ) ;
+						// Initial objects data at mapbox.
 						preview.box.mapbox.object_data = obj.objectData ;
 						for ( i = 1 ; i < preview.box.mapbox.objects.getNumChildren() ; i ++ )
-							preview.box.mapbox.object_data.removeChildAt( i ) ;
+							preview.box.mapbox.objects.removeChildAt( i ) ;
+						// Objects data.
 						for ( i = 0 ; i < obj.objectData.length ; i ++ ) {
 							var container = new createjs.Container() ;
 							container.x = container.storeX = obj.objectData[i].rx ;
@@ -149,11 +149,10 @@
 							var objectHeight = container.objects.getBounds().height ;
 							container.objects.regX = objectWidth / 2 ;
 							container.objects.regY = objectHeight / 2 ;
-							console.log( container.objects.regX + "  " + container.objects.regY ) ;
 							container.objects.x = container.objects.regX + 10, container.objects.y = container.objects.regY + 10 ;
-							container.objects.scaleX = container.objects.scaleY = obj.objectData[i].s ;
 							container.addChild( container.objects ) ;
 							container.regX = container.objects.regX + 10, container.regY = container.objects.regY + 10 ;
+							container.scaleX = obj.objectData[i].sx, container.scaleY = obj.objectData[i].sy ;
 							container.bg = new createjs.Shape() ;
 							container.bg.graphics.f( "#FF0000" ).s( "#000000" ).r( 0, 0, container.getBounds().width + 20, container.getBounds().height + 20 ) ;
 							container.bg.alpha = 0 ;

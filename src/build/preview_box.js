@@ -222,7 +222,8 @@ PreviewBox.prototype.OnTiledControl = function() {
 		that.box.mapbox.object_data[index].o = index ;
 		that.box.mapbox.object_data[index].rx = controller.storeX ;
 		that.box.mapbox.object_data[index].ry = controller.storeY ;
-		that.box.mapbox.object_data[index].s = controller.scaleX ;
+		that.box.mapbox.object_data[index].sx = controller.scaleX ;
+		that.box.mapbox.object_data[index].sy = controller.scaleY ;
 		controller.order = index ;
 		// Get tools.
 		controller.tools = that.GetToolsBox( controller ) ;
@@ -238,9 +239,11 @@ PreviewBox.prototype.OnTiledControl = function() {
 			// object storage real x
 			this.rx = 0 ;
 			// object storage real y
-			this.ry = 0 ;                            
-			// object scale
-			this.s = 1 ;
+			this.ry = 0 ;
+			// object scale x
+			this.sx = 1 ;
+			// object scale y
+			this.sy = 1 ;
 		} // Tiled_Datastruct()
 	} // OnCreateObject()
 } // OnTiledControl()
@@ -268,7 +271,7 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 	tools.flip.bg = new createjs.Shape() ;
 	tools.flip.bg.graphics.f( "#FFFFFF" ).r( controller.getBounds().width + 21, 22, 22, 22 ) ;
 	tools.flip.addChild( tools.flip.bg, tools.flip.icon ) ;
-	tools.flip.on( "click", function(){ controller.objects.scaleX *= -1 ; } ) ;
+	tools.flip.on( "click", function(){ that.box.mapbox.object_data[controller.order].sx *= -1, controller.objects.scaleX *= -1 ; } ) ;
 	// Up.
 	tools.up = new createjs.Container() ;
 	tools.up.icon = G.cacheObjectsController[2].clone( false ) ;
@@ -295,7 +298,7 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 	tools.zoom_in.bg = new createjs.Shape() ;
 	tools.zoom_in.bg.graphics.f( "#FFFFFF" ).r( -25, 44, 25, 22 ) ;
 	tools.zoom_in.addChild( tools.zoom_in.bg, tools.zoom_in.icon ) ;
-	tools.zoom_in.on( "click", function(){ controller.scaleX *= 1.05, controller.scaleY *= 1.05 ; } ) ;
+	tools.zoom_in.on( "click", function(){ that.box.mapbox.object_data[controller.order].sx = controller.scaleX *= 1.05, that.box.mapbox.object_data[controller.order].sy = controller.scaleY *= 1.05 ; } ) ;
 	// Zoom out.
 	tools.zoom_out = new createjs.Container() ;
 	tools.zoom_out.icon = G.cacheObjectsController[5].clone( false ) ;
@@ -304,7 +307,7 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 	tools.zoom_out.bg = new createjs.Shape() ;
 	tools.zoom_out.bg.graphics.f( "#FFFFFF" ).r( -25, 66, 25, 22 ) ;
 	tools.zoom_out.addChild( tools.zoom_out.bg, tools.zoom_out.icon ) ;
-	tools.zoom_out.on( "click", function(){ controller.scaleX *= 0.95, controller.scaleY *= 0.95 ; } ) ;
+	tools.zoom_out.on( "click", function(){ that.box.mapbox.object_data[controller.order].sx = controller.scaleX *= 0.95, that.box.mapbox.object_data[controller.order].sy = controller.scaleY *= 0.95 ; } ) ;
 	// Total icon add to this container.
 	tools.addChild( tools.cancel, tools.flip, tools.up, tools.down, tools.zoom_in, tools.zoom_out ) ;
 	// Add to the top container.
