@@ -213,7 +213,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 		// Adjust the location of this container.
 		controller.regX = controller.objects.regX + 10, controller.regY = controller.objects.regY + 10 ;
 		controller.bg = new createjs.Shape() ;
-		controller.bg.graphics.f( "#FF0000" ).s( "#000000" ).r( 0, 0, controller.getBounds().width + 20, controller.getBounds().height + 20 ) ;
+		controller.bg.graphics.f( "#AAAAAA" ).s( "#000000" ).r( 0, 0, controller.getBounds().width + 20, controller.getBounds().height + 20 ) ;
 		controller.bg.alpha = 0 ;
 		// Store to data.
 		var index = that.box.mapbox.object_data.length ;
@@ -277,7 +277,9 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 	tools.flip.addChild( tools.flip.bg, tools.flip.icon ) ;
 	tools.flip.on( "click", function(){
 		that.box.mapbox.object_data[controller.order].sx *= -1 ;
-		controller.objects.scaleX *= -1 ;
+
+		createjs.Tween.get( controller.objects )
+		.to( { scaleX: controller.objects.scaleX * -1 }, 100 ) ;
 	} ) ;
 	// Up.
 	tools.up = new createjs.Container() ;
