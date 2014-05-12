@@ -99,7 +99,8 @@ PreviewBox.prototype.OnTiledControl = function() {
 		if ( s_row != -1 && s_column != -1 ) {
 			// This is just a single fresh.
 			var row = s_row - mr, column = s_column - mc ;
-			var index = row * ( ( G.length > G.customer_length ) ? G.customer_length : G.length ) + column ;
+			var index = row * ( ( G.length > ( G.customer_length - mc ) ) ? ( G.customer_length - mc ) : G.length ) + column ;
+			console.log( row + "  " + column  + "     " + index ) ;
 			pt.box.mapbox.tiled.removeChildAt( index ) ;
 			pt.box.mapbox.tiled.addChildAt( SingleTileRefresh( row , column ).clone( true ), index ) ;
 			pt.box.mapbox.tiled.getChildAt( index ).on( "click", function( evt ) { SingleTileReplace( pt, this ) ; } ) ;
