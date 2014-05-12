@@ -260,19 +260,19 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 	tools.alpha = 0 ;
 	// Background.
 	tools.bg = new createjs.Shape() ;
-	tools.bg.graphics.f( "#AAAAAA" ).s( "#000000" ).r( 0, 0, controller.getBounds().width + 20, controller.getBounds().height + 20 ) ;
+	tools.bg.graphics.f( "#AAAAAA" ).s( "#000000" ).r( 0, 0, controller.getBounds().width + 40, controller.getBounds().height + 40 ) ;
 	tools.bg.alpha = 0 ;
-	tools.regX = ( controller.getBounds().width + 20 ) / 2, tools.regY = ( controller.getBounds().height + 20 ) / 2 ;
+	tools.regX = ( controller.getBounds().width + 40 ) / 2, tools.regY = ( controller.getBounds().height + 40 ) / 2 ;
 	tools.x = tools.regX, tools.y = tools.regY ;
 	// Cancel.
 	tools.cancel = new createjs.Container() ;
 	tools.cancel.icon = G.cacheObjectsController[0].clone( false ) ;
-	tools.cancel.icon.scaleX = tools.cancel.icon.scaleY = 0.15 ;
-	tools.cancel.icon.x = controller.getBounds().width + 22, tools.cancel.y = 0 ;
-	tools.cancel.bg = new createjs.Shape() ;
-	tools.cancel.bg.graphics.f( "#FFFFFF" ).r( controller.getBounds().width + 21, 0, 22, 22 ) ;
-	tools.cancel.addChild( tools.cancel.bg, tools.cancel.icon ) ;
-	tools.cancel.on( "click", function(){
+	tools.cancel.icon.regX = tools.cancel.icon.regY = tools.cancel.icon.getBounds().width / 2 ;
+	tools.cancel.icon.scaleX = tools.cancel.icon.scaleY = 0.7 ;
+	tools.cancel.x = tools.regX, tools.cancel.y = tools.regY ;
+	tools.cancel.oriX = tools.cancel.x, tools.cancel.oriY = tools.cancel.y ;
+	tools.cancel.addChild( tools.cancel.icon ) ;
+	tools.cancel.on( "click", function() {
 		createjs.Tween.get( controller )
 		.to( { alpha: 0, rotation: -360, scaleX: 0, scaleY: 0 }, 500 )
 		.call( function(){ that.box.mapbox.objects.removeChild( controller ) ; } ) ;
@@ -283,12 +283,12 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 	// Flip.
 	tools.flip = new createjs.Container() ;
 	tools.flip.icon = G.cacheObjectsController[1].clone( false ) ;
-	tools.flip.icon.scaleX = tools.flip.icon.scaleY = 0.15 ;
-	tools.flip.icon.x = controller.getBounds().width + 22, tools.flip.icon.y = 22 ;
-	tools.flip.bg = new createjs.Shape() ;
-	tools.flip.bg.graphics.f( "#FFFFFF" ).r( controller.getBounds().width + 21, 22, 22, 22 ) ;
-	tools.flip.addChild( tools.flip.bg, tools.flip.icon ) ;
-	tools.flip.on( "click", function(){
+	tools.flip.icon.regX = tools.flip.icon.regY = tools.flip.icon.getBounds().width / 2 ;
+	tools.flip.icon.scaleX = tools.flip.icon.scaleY = 0.7 ;
+	tools.flip.x = tools.regX, tools.flip.y = tools.regY ;
+	tools.flip.oriX = tools.flip.x, tools.flip.oriY = tools.flip.y ;
+	tools.flip.addChild( tools.flip.icon ) ;
+	tools.flip.on( "click", function() {
 		that.box.mapbox.object_data[controller.order].sx *= -1 ;
 		createjs.Tween.get( controller.objects )
 		.to( { scaleX: controller.objects.scaleX * -1 }, 100 ) ;
@@ -296,12 +296,12 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 	// Up.
 	tools.up = new createjs.Container() ;
 	tools.up.icon = G.cacheObjectsController[2].clone( false ) ;
-	tools.up.icon.scaleX = tools.up.icon.scaleY = 0.15 ;
-	tools.up.icon.x = -22, tools.up.icon.y = 1 ;
-	tools.up.bg = new createjs.Shape() ;
-	tools.up.bg.graphics.f( "#FFFFFF" ).r( -25, 0, 25, 22 ) ;
-	tools.up.addChild( tools.up.bg, tools.up.icon ) ;
-	tools.up.on( "click", function(){ 
+	tools.up.icon.regX = tools.up.icon.regY = tools.up.icon.getBounds().width / 2 ;
+	tools.up.icon.scaleX = tools.up.icon.scaleY = 0.7 ;
+	tools.up.x = tools.regX, tools.up.y = tools.regY ;
+	tools.up.oriX = tools.up.x, tools.up.oriY = tools.up.y ;
+	tools.up.addChild( tools.up.icon ) ;
+	tools.up.on( "click", function() { 
 		var nowIndex = that.box.mapbox.objects.getChildIndex( controller ) ;
 
 		createjs.Tween.get( controller )
@@ -312,12 +312,12 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 	// Down.
 	tools.down = new createjs.Container() ;
 	tools.down.icon = G.cacheObjectsController[3].clone( false ) ;
-	tools.down.icon.scaleX = tools.down.icon.scaleY = 0.15 ;
-	tools.down.icon.x = -22, tools.down.icon.y = 23 ;
-	tools.down.bg = new createjs.Shape() ;
-	tools.down.bg.graphics.f( "#FFFFFF" ).r( -25, 22, 25, 22 ) ;
-	tools.down.addChild( tools.down.bg, tools.down.icon ) ;
-	tools.down.on( "click", function(){ 
+	tools.down.icon.regX = tools.down.icon.regY = tools.down.icon.getBounds().width / 2 ;
+	tools.down.icon.scaleX = tools.down.icon.scaleY = 0.7 ;
+	tools.down.x = tools.regX, tools.down.y = tools.regY ;
+	tools.down.oriX = tools.down.x, tools.down.oriY = tools.down.y ;
+	tools.down.addChild( tools.down.icon ) ;
+	tools.down.on( "click", function() { 
 		var nowIndex = that.box.mapbox.objects.getChildIndex( controller ) ;
 
 		createjs.Tween.get( controller )
@@ -328,12 +328,12 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 	// Zoom in.
 	tools.zoom_in = new createjs.Container() ;
 	tools.zoom_in.icon = G.cacheObjectsController[4].clone( false ) ;
-	tools.zoom_in.icon.scaleX = tools.zoom_in.icon.scaleY = 0.15 ;
-	tools.zoom_in.icon.x = -22, tools.zoom_in.icon.y = 45 ;
-	tools.zoom_in.bg = new createjs.Shape() ;
-	tools.zoom_in.bg.graphics.f( "#FFFFFF" ).r( -25, 44, 25, 22 ) ;
-	tools.zoom_in.addChild( tools.zoom_in.bg, tools.zoom_in.icon ) ;
-	tools.zoom_in.on( "click", function(){ 
+	tools.zoom_in.icon.regX = tools.zoom_in.icon.regY = tools.zoom_in.icon.getBounds().width / 2 ;
+	tools.zoom_in.icon.scaleX = tools.zoom_in.icon.scaleY = 0.7 ;
+	tools.zoom_in.x = tools.regX, tools.zoom_in.y = tools.regY ;
+	tools.zoom_in.oriX = tools.zoom_in.x, tools.zoom_in.oriY = tools.zoom_in.y ;
+	tools.zoom_in.addChild( tools.zoom_in.icon ) ;
+	tools.zoom_in.on( "click", function() { 
 		that.box.mapbox.object_data[controller.order].sx *= 1.05 ;
 		that.box.mapbox.object_data[controller.order].sy *= 1.05 ;
 		createjs.Tween.get( controller )
@@ -344,12 +344,12 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 	// Zoom out.
 	tools.zoom_out = new createjs.Container() ;
 	tools.zoom_out.icon = G.cacheObjectsController[5].clone( false ) ;
-	tools.zoom_out.icon.scaleX = tools.zoom_out.icon.scaleY = 0.15 ;
-	tools.zoom_out.icon.x = -22, tools.zoom_out.icon.y = 67 ;
-	tools.zoom_out.bg = new createjs.Shape() ;
-	tools.zoom_out.bg.graphics.f( "#FFFFFF" ).r( -25, 66, 25, 22 ) ;
-	tools.zoom_out.addChild( tools.zoom_out.bg, tools.zoom_out.icon ) ;
-	tools.zoom_out.on( "click", function(){ 
+	tools.zoom_out.icon.regX = tools.zoom_out.icon.regY = tools.zoom_out.icon.getBounds().width / 2 ;
+	tools.zoom_out.icon.scaleX = tools.zoom_out.icon.scaleY = 0.7 ;
+	tools.zoom_out.x = tools.regX, tools.zoom_out.y = tools.regY ;
+	tools.zoom_out.oriX = tools.zoom_out.x, tools.zoom_out.oriY = tools.zoom_out.y ;
+	tools.zoom_out.addChild( tools.zoom_out.icon ) ;
+	tools.zoom_out.on( "click", function() { 
 		that.box.mapbox.object_data[controller.order].sx *= 0.95 ;
 		that.box.mapbox.object_data[controller.order].sy *= 0.95 ;
 		createjs.Tween.get( controller )
@@ -373,13 +373,36 @@ PreviewBox.prototype.ToolsBoxListener = function( controller ) {
 		previous = { x: evt.stageX, y: evt.stageY } ;
 		controller.tools.bg.alpha = 0.3 ;
 		controller.tools.alpha = 1 ;
-		controller.tools.cancel.bg.alpha = controller.tools.flip.bg.alpha = controller.tools.up.bg.alpha = controller.tools.down.bg.alpha = controller.tools.zoom_in.bg.alpha = controller.tools.zoom_out.bg.alpha = 0.7 ;
 		// Tools has been put top of mapbox.
 		that.box.mapbox.addChild( controller.tools ) ;
 		controller.tools.x = controller.x, controller.tools.y = controller.y ;
+
+		GoTo( controller.tools.cancel, controller.tools.up.oriX, 0 ) ;
+		GoTo( controller.tools.flip, controller.tools.up.oriX, controller.getBounds().height + 40 ) ;
+		GoTo( controller.tools.up, 0, controller.tools.up.oriY - 20 ) ;
+		GoTo( controller.tools.down, 0, controller.tools.up.oriY + 20 ) ;
+		GoTo( controller.tools.zoom_in, controller.getBounds().width + 40, controller.tools.up.oriY - 20 ) ;
+		GoTo( controller.tools.zoom_out, controller.getBounds().width + 40, controller.tools.up.oriY + 20 ) ;
+		
+		function GoTo( object, x, y ) {
+			createjs.Tween.get( object )
+			.to( { x: x, y: y }, 300 ) ;
+		} // GoBack()
 	} ) ;
 	controller.tools.on( "rollout", function( evt ) {
 		createjs.Tween.get( controller.tools ).to( { alpha: 0 }, 500 ) ;
+
+		GoBack( controller.tools.cancel ) ;
+		GoBack( controller.tools.flip ) ;
+		GoBack( controller.tools.up ) ;
+		GoBack( controller.tools.down ) ;
+		GoBack( controller.tools.zoom_in ) ;
+		GoBack( controller.tools.zoom_out ) ;
+
+		function GoBack( object ) {
+			createjs.Tween.get( object )
+			.to( { x: controller.tools.up.oriX, y: controller.tools.up.oriY }, 300 ) ;
+		} // GoBack()
 	} ) ;
 	controller.on( "pressmove", function( evt ) { 
 		ChangeGrid( evt ) ;
