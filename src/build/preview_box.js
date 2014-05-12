@@ -330,18 +330,24 @@ PreviewBox.prototype.ToolsBoxListener = function( controller ) {
 	} ) ;
 	controller.on( "pressmove", function( evt ) {
 		var difX = evt.stageX - previous.x, difY = evt.stageY - previous.y ;
+		var boundX = ( G.customer_length - that.box.mapbox.tiled.mc ) * G.size, boundY = ( G.customer_height - that.box.mapbox.tiled.mr ) * G.size ;
 		// Reject to put the object not out of range.
-		if ( controller.x + difX >= 0 && controller.x + difX <= ( G.customer_length - that.box.mapbox.tiled.mc ) * G.size ) {
-			controller.x += difX ;
-			controller.storeX = Math.ceil( controller.x + that.box.mapbox.tiled.mc * G.size ) ;
-			that.box.mapbox.object_data[controller.order-1].rx = controller.storeX ;
-			previous.x = evt.stageX ;
-		} // if
-		if ( controller.y + difY >= 0 && controller.y + difY <= ( G.customer_height - that.box.mapbox.tiled.mr ) * G.size ) {
-			controller.y += difY ;
-			controller.storeY = Math.ceil( controller.y + that.box.mapbox.tiled.mr * G.size ) ;
-			that.box.mapbox.object_data[controller.order-1].ry = controller.storeY ;
-			previous.y = evt.stageY ;
-		} // if
+		if ( controller.x + difX >= 0 && controller.x + difX <= boundX )
+			controller.x += difX, previous.x = evt.stageX ;
+		else if ( controller.x + difX < 0 ) 
+			controller.x = 0 ;
+		else if ( controller.x + difX > boundX ) 
+			controller.x = boundX ;
+		controller.storeX = Math.ceil( controller.x + that.box.mapbox.tiled.mc * G.size ) ;
+		that.box.mapbox.object_data[controller.order].rx = controller.storeX ;
+
+		if ( controller.y + difY >= 0 && controller.y + difY <= boundY )
+			controller.y += difY, previous.y = evt.stageY ;
+		else if ( controller.y + difY < 0 )
+			controller.y = 0 ;
+		else if ( controller.y + difY > boundY )
+			controller.y = boundY ;
+		controller.storeY = Math.ceil( controller.y + that.box.mapbox.tiled.mr * G.size ) ;
+		that.box.mapbox.object_data[controller.order].ry = controller.storeY ;
 	} ) ;
 } // ToolsBoxListener()

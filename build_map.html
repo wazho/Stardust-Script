@@ -145,6 +145,10 @@
 							container.y = container.storeY = obj.objectData[i].ry ;
 							container.order = obj.objectData[i].o ;
 							container.objects = G.cacheObjects[obj.objectData[i].n-1].clone( false ) ;
+							var objectWidth = container.objects.getBounds().width ;
+							var objectHeight = container.objects.getBounds().height ;
+							container.objects.regX = objectWidth / 2 ;
+							container.objects.regY = objectHeight / 2 ;
 							console.log( container.objects.regX + "  " + container.objects.regY ) ;
 							container.objects.x = container.objects.regX + 10, container.objects.y = container.objects.regY + 10 ;
 							container.objects.scaleX = container.objects.scaleY = obj.objectData[i].s ;
