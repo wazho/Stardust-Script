@@ -269,9 +269,12 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 	tools.cancel.icon = G.cacheObjectsController[0].clone( false ) ;
 	tools.cancel.icon.regX = tools.cancel.icon.regY = tools.cancel.icon.getBounds().width / 2 ;
 	tools.cancel.icon.scaleX = tools.cancel.icon.scaleY = 0.7 ;
+	tools.cancel.bg = new createjs.Shape() ;
+	tools.cancel.bg.graphics.f( "#FFFFFF" ).dc( 0, 0, 15 ) ;
+	tools.cancel.bg.alpha = 0.5 ;
 	tools.cancel.x = tools.regX, tools.cancel.y = tools.regY ;
 	tools.cancel.oriX = tools.cancel.x, tools.cancel.oriY = tools.cancel.y ;
-	tools.cancel.addChild( tools.cancel.icon ) ;
+	tools.cancel.addChild( tools.cancel.bg, tools.cancel.icon ) ;
 	tools.cancel.on( "click", function() {
 		createjs.Tween.get( controller )
 		.to( { alpha: 0, rotation: -360, scaleX: 0, scaleY: 0 }, 500 )
@@ -285,9 +288,12 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 	tools.flip.icon = G.cacheObjectsController[1].clone( false ) ;
 	tools.flip.icon.regX = tools.flip.icon.regY = tools.flip.icon.getBounds().width / 2 ;
 	tools.flip.icon.scaleX = tools.flip.icon.scaleY = 0.7 ;
+	tools.flip.bg = new createjs.Shape() ;
+	tools.flip.bg.graphics.f( "#FFFFFF" ).dc( 0, 0, 15 ) ;
+	tools.flip.bg.alpha = 0.5 ;
 	tools.flip.x = tools.regX, tools.flip.y = tools.regY ;
 	tools.flip.oriX = tools.flip.x, tools.flip.oriY = tools.flip.y ;
-	tools.flip.addChild( tools.flip.icon ) ;
+	tools.flip.addChild( tools.flip.bg, tools.flip.icon ) ;
 	tools.flip.on( "click", function() {
 		that.box.mapbox.object_data[controller.order].sx *= -1 ;
 		createjs.Tween.get( controller.objects )
@@ -298,9 +304,12 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 	tools.up.icon = G.cacheObjectsController[2].clone( false ) ;
 	tools.up.icon.regX = tools.up.icon.regY = tools.up.icon.getBounds().width / 2 ;
 	tools.up.icon.scaleX = tools.up.icon.scaleY = 0.7 ;
+	tools.up.bg = new createjs.Shape() ;
+	tools.up.bg.graphics.f( "#FFFFFF" ).dc( 0, 0, 15 ) ;
+	tools.up.bg.alpha = 0.5 ;
 	tools.up.x = tools.regX, tools.up.y = tools.regY ;
 	tools.up.oriX = tools.up.x, tools.up.oriY = tools.up.y ;
-	tools.up.addChild( tools.up.icon ) ;
+	tools.up.addChild( tools.up.bg, tools.up.icon ) ;
 	tools.up.on( "click", function() { 
 		var nowIndex = that.box.mapbox.objects.getChildIndex( controller ) ;
 
@@ -314,9 +323,12 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 	tools.down.icon = G.cacheObjectsController[3].clone( false ) ;
 	tools.down.icon.regX = tools.down.icon.regY = tools.down.icon.getBounds().width / 2 ;
 	tools.down.icon.scaleX = tools.down.icon.scaleY = 0.7 ;
+	tools.down.bg = new createjs.Shape() ;
+	tools.down.bg.graphics.f( "#FFFFFF" ).dc( 0, 0, 15 ) ;
+	tools.down.bg.alpha = 0.5 ;
 	tools.down.x = tools.regX, tools.down.y = tools.regY ;
 	tools.down.oriX = tools.down.x, tools.down.oriY = tools.down.y ;
-	tools.down.addChild( tools.down.icon ) ;
+	tools.down.addChild( tools.down.bg, tools.down.icon ) ;
 	tools.down.on( "click", function() { 
 		var nowIndex = that.box.mapbox.objects.getChildIndex( controller ) ;
 
@@ -330,9 +342,12 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 	tools.zoom_in.icon = G.cacheObjectsController[4].clone( false ) ;
 	tools.zoom_in.icon.regX = tools.zoom_in.icon.regY = tools.zoom_in.icon.getBounds().width / 2 ;
 	tools.zoom_in.icon.scaleX = tools.zoom_in.icon.scaleY = 0.7 ;
+	tools.zoom_in.bg = new createjs.Shape() ;
+	tools.zoom_in.bg.graphics.f( "#FFFFFF" ).dc( 0, 0, 15 ) ;
+	tools.zoom_in.bg.alpha = 0.5 ;
 	tools.zoom_in.x = tools.regX, tools.zoom_in.y = tools.regY ;
 	tools.zoom_in.oriX = tools.zoom_in.x, tools.zoom_in.oriY = tools.zoom_in.y ;
-	tools.zoom_in.addChild( tools.zoom_in.icon ) ;
+	tools.zoom_in.addChild( tools.zoom_in.bg, tools.zoom_in.icon ) ;
 	tools.zoom_in.on( "click", function() { 
 		that.box.mapbox.object_data[controller.order].sx *= 1.05 ;
 		that.box.mapbox.object_data[controller.order].sy *= 1.05 ;
@@ -346,9 +361,12 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 	tools.zoom_out.icon = G.cacheObjectsController[5].clone( false ) ;
 	tools.zoom_out.icon.regX = tools.zoom_out.icon.regY = tools.zoom_out.icon.getBounds().width / 2 ;
 	tools.zoom_out.icon.scaleX = tools.zoom_out.icon.scaleY = 0.7 ;
+	tools.zoom_out.bg = new createjs.Shape() ;
+	tools.zoom_out.bg.graphics.f( "#FFFFFF" ).dc( 0, 0, 15 ) ;
+	tools.zoom_out.bg.alpha = 0.5 ;
 	tools.zoom_out.x = tools.regX, tools.zoom_out.y = tools.regY ;
 	tools.zoom_out.oriX = tools.zoom_out.x, tools.zoom_out.oriY = tools.zoom_out.y ;
-	tools.zoom_out.addChild( tools.zoom_out.icon ) ;
+	tools.zoom_out.addChild( tools.zoom_out.bg, tools.zoom_out.icon ) ;
 	tools.zoom_out.on( "click", function() { 
 		that.box.mapbox.object_data[controller.order].sx *= 0.95 ;
 		that.box.mapbox.object_data[controller.order].sy *= 0.95 ;
@@ -376,7 +394,7 @@ PreviewBox.prototype.ToolsBoxListener = function( controller ) {
 		// Tools has been put top of mapbox.
 		that.box.mapbox.addChild( controller.tools ) ;
 		controller.tools.x = controller.x, controller.tools.y = controller.y ;
-
+		// Move bunttons.
 		GoTo( controller.tools.cancel, controller.tools.up.oriX, 0 ) ;
 		GoTo( controller.tools.flip, controller.tools.up.oriX, controller.getBounds().height + 40 ) ;
 		GoTo( controller.tools.up, 0, controller.tools.up.oriY - 20 ) ;
@@ -386,12 +404,14 @@ PreviewBox.prototype.ToolsBoxListener = function( controller ) {
 		
 		function GoTo( object, x, y ) {
 			createjs.Tween.get( object )
-			.to( { x: x, y: y }, 300 ) ;
+			.to( { x: x, y: y }, 500 ) ;
+			createjs.Tween.get( object )
+			.to( { rotation: 360 }, 500 ) ;
 		} // GoBack()
 	} ) ;
 	controller.tools.on( "rollout", function( evt ) {
-		createjs.Tween.get( controller.tools ).to( { alpha: 0 }, 500 ) ;
-
+		createjs.Tween.get( controller.tools ).to( { alpha: 0 }, 300 ) ;
+		// Buttons go back.
 		GoBack( controller.tools.cancel ) ;
 		GoBack( controller.tools.flip ) ;
 		GoBack( controller.tools.up ) ;
@@ -402,6 +422,8 @@ PreviewBox.prototype.ToolsBoxListener = function( controller ) {
 		function GoBack( object ) {
 			createjs.Tween.get( object )
 			.to( { x: controller.tools.up.oriX, y: controller.tools.up.oriY }, 300 ) ;
+			createjs.Tween.get( object )
+			.to( { rotation: -360 }, 300 ) ;
 		} // GoBack()
 	} ) ;
 	controller.on( "pressmove", function( evt ) { 
