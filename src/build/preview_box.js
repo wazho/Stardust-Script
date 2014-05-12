@@ -202,7 +202,10 @@ PreviewBox.prototype.OnTiledControl = function() {
 		var controller = new createjs.Container() ;
 		controller.x = Math.ceil( mouseX ), controller.y = Math.ceil( mouseY ) ;
 		controller.storeX = controller.x + that.box.mapbox.tiled.mc * G.size, controller.storeY = controller.y + that.box.mapbox.tiled.mr * G.size ;
-		that.box.mapbox.objects.addChild( controller ) ;
+		createjs.Tween.get( controller )
+		.to( { alpha: 0, scaleX: 0, scaleY: 0 }, 0 )
+		.call( function(){ that.box.mapbox.objects.addChild( controller ) ; } )
+		.to( { alpha: 1, scaleX: 1, scaleY: 1 }, 500 ) ;
 		// Copy the selected object.
 		controller.objects = that.material.box.list.objects.pic.clone( false ) ;
 		controller.objects.x = controller.objects.regX + 10, controller.objects.y = controller.objects.regY + 10 ;
