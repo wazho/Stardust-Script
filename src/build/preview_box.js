@@ -290,7 +290,10 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 	tools.up.on( "click", function(){ 
 		var nowIndex = that.box.mapbox.objects.getChildIndex( controller ) ;
 
-		that.box.mapbox.objects.addChildAt( controller, nowIndex + 1 ) ;
+		createjs.Tween.get( controller )
+		.to( { alpha: 0.5 }, 300 )
+		.call( function(){ that.box.mapbox.objects.addChildAt( controller, nowIndex + 1 ) ; } )
+		.to( { alpha: 1 }, 300 ) ;
 	} ) ;
 	// Down.
 	tools.down = new createjs.Container() ;
@@ -303,7 +306,10 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 	tools.down.on( "click", function(){ 
 		var nowIndex = that.box.mapbox.objects.getChildIndex( controller ) ;
 
-		that.box.mapbox.objects.addChildAt( controller, ( nowIndex > 1 ) ? ( nowIndex - 1 ) : 1 ) ;
+		createjs.Tween.get( controller )
+		.to( { alpha: 0.5 }, 300 )
+		.call( function(){ that.box.mapbox.objects.addChildAt( controller, ( nowIndex > 1 ) ? ( nowIndex - 1 ) : 1 ) ; } )
+		.to( { alpha: 1 }, 300 ) ;
 	} ) ;
 	// Zoom in.
 	tools.zoom_in = new createjs.Container() ;
