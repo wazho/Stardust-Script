@@ -100,7 +100,6 @@ PreviewBox.prototype.OnTiledControl = function() {
 			// This is just a single fresh.
 			var row = s_row - mr, column = s_column - mc ;
 			var index = row * ( ( G.length > ( G.customer_length - mc ) ) ? ( G.customer_length - mc ) : G.length ) + column ;
-			console.log( row + "  " + column  + "     " + index ) ;
 			pt.box.mapbox.tiled.removeChildAt( index ) ;
 			pt.box.mapbox.tiled.addChildAt( SingleTileRefresh( row , column ).clone( true ), index ) ;
 			pt.box.mapbox.tiled.getChildAt( index ).on( "click", function( evt ) { SingleTileReplace( pt, this ) ; } ) ;
