@@ -30,16 +30,20 @@ PreviewBox.prototype.OnCreate = function( material ) {
 	this.box.tool.addChild( this.box.tool.backward, this.box.tool.forward ) ;
 	this.box.tool.backward.on( "click", function() {
 		if ( that.material.box.selector.statusPage != 3 ) {
+			that.box.mapbox.combineSeen = that.material.box.selector.statusPage ;
 			that.box.mapbox.objects.visible = ( that.box.mapbox.objects.visible ) ? false : true ;
 			that.box.mapbox.objects.bg.visible = false ;
 		} // if
 	} ) ;
 	this.box.tool.forward.on( "click", function() {
 		if ( that.material.box.selector.statusPage != 4 ) {
+			that.box.mapbox.combineSeen = that.material.box.selector.statusPage ;
 			that.box.mapbox.light.visible = ( that.box.mapbox.light.visible ) ? false : true ;
 			that.box.mapbox.light.bg.visible = false ;
 		} // if
 	} ) ;
+	// Combine to see tiles, objects, light ... etc
+	this.box.mapbox.combineSeen = 0 ;
 	// Add to top container.
 	this.box.addChild( this.box.mapbox, this.box.bg, this.box.logo, this.box.bar, this.box.tool ) ;
 } // OnCreate()
@@ -108,12 +112,12 @@ PreviewBox.prototype.OnTiledControl = function() {
 	this.box.bar.vertical.up.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr - 1, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) ;
 	this.box.bar.vertical.down.on( "click", function( evt ) { TotalRefresh( that, that.box.mapbox.tiled.mr + 1, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) ;
 	// [Special] button - material box listening event added.
-	this.material.box.selector.buttonA.on( "click", function( evt ) { createjs.Tween.get( this ).wait( 550 ).call( function() { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) } ) ;
-	this.material.box.selector.buttonB.on( "click", function( evt ) { createjs.Tween.get( this ).wait( 550 ).call( function() { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) } ) ;
-	this.material.box.selector.buttonC.on( "click", function( evt ) { createjs.Tween.get( this ).wait( 550 ).call( function() { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) } ) ;
-	this.material.box.selector.buttonD.on( "click", function( evt ) { createjs.Tween.get( this ).wait( 550 ).call( function() { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) } ) ;
-	this.material.box.selector.buttonE.on( "click", function( evt ) { createjs.Tween.get( this ).wait( 550 ).call( function() { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) } ) ;
-	this.material.box.selector.buttonF.on( "click", function( evt ) { createjs.Tween.get( this ).wait( 550 ).call( function() { TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) } ) ;
+	this.material.box.selector.buttonA.on( "click", function( evt ) { createjs.Tween.get( this ).wait( 550 ).call( function() { that.box.mapbox.combineSeen = 0 ; TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) } ) ;
+	this.material.box.selector.buttonB.on( "click", function( evt ) { createjs.Tween.get( this ).wait( 550 ).call( function() { that.box.mapbox.combineSeen = 0 ; TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) } ) ;
+	this.material.box.selector.buttonC.on( "click", function( evt ) { createjs.Tween.get( this ).wait( 550 ).call( function() { that.box.mapbox.combineSeen = 0 ; TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) } ) ;
+	this.material.box.selector.buttonD.on( "click", function( evt ) { createjs.Tween.get( this ).wait( 550 ).call( function() { that.box.mapbox.combineSeen = 0 ; TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) } ) ;
+	this.material.box.selector.buttonE.on( "click", function( evt ) { createjs.Tween.get( this ).wait( 550 ).call( function() { that.box.mapbox.combineSeen = 0 ; TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) } ) ;
+	this.material.box.selector.buttonF.on( "click", function( evt ) { createjs.Tween.get( this ).wait( 550 ).call( function() { that.box.mapbox.combineSeen = 0 ; TotalRefresh( that, that.box.mapbox.tiled.mr, that.box.mapbox.tiled.mc, -1, -1 ) ; } ) } ) ;
 
 	// Replace all of this map box.
 	function TotalRefresh( pt, mr, mc, s_row, s_column ) {
@@ -140,8 +144,11 @@ PreviewBox.prototype.OnTiledControl = function() {
 			// Add listening event.
 			for ( i = 0 ; i < pt.box.mapbox.tiled.getNumChildren() ; i ++ )
 				pt.box.mapbox.tiled.getChildAt( i ).on( "click", function( evt ) { SingleTileReplace( pt, this ) ; } ) ;
-			pt.box.mapbox.objects.visible = pt.box.mapbox.objects.bg.visible = ( pt.material.box.selector.statusPage == 3 ) ? true : false ;
-			pt.box.mapbox.light.visible = pt.box.mapbox.light.bg.visible = ( pt.material.box.selector.statusPage == 4 ) ? true : false ;
+			// Combine to see tiles, objects, light ... etc.
+			if ( pt.box.mapbox.combineSeen != pt.material.box.selector.statusPage ) {
+				pt.box.mapbox.objects.visible = pt.box.mapbox.objects.bg.visible = ( pt.material.box.selector.statusPage == 3 ) ? true : false ;
+				pt.box.mapbox.light.visible = pt.box.mapbox.light.bg.visible = ( pt.material.box.selector.statusPage == 4 ) ? true : false ;
+			} // if
 		} // else
 
 		// Objects refresh.
@@ -238,7 +245,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 		controller.storeX = controller.x + that.box.mapbox.tiled.mc * G.size, controller.storeY = controller.y + that.box.mapbox.tiled.mr * G.size ;
 		createjs.Tween.get( controller )
 		.to( { alpha: 0, scaleX: 0, scaleY: 0 }, 0 )
-		.call( function(){ that.box.mapbox.objects.addChild( controller ) ; } )
+		.call( function() { that.box.mapbox.objects.addChild( controller ) ; } )
 		.to( { alpha: 1, scaleX: 1, scaleY: 1 }, 500 ) ;
 		// Copy the selected object.
 		controller.objects = that.material.box.list.objects.pic.clone( false ) ;
@@ -293,7 +300,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 		controller.storeX = controller.x + that.box.mapbox.tiled.mc * G.size, controller.storeY = controller.y + that.box.mapbox.tiled.mr * G.size ;
 		createjs.Tween.get( controller )
 		.to( { alpha: 0, scaleX: 0, scaleY: 0 }, 0 )
-		.call( function(){ that.box.mapbox.light.addChild( controller ) ; } )
+		.call( function() { that.box.mapbox.light.addChild( controller ) ; } )
 		.to( { alpha: 1, scaleX: 1, scaleY: 1 }, 500 ) ;
 		// Copy the selected light.
 		controller.light = LightEffect( that.material.box.list.light.number ) ;
@@ -363,10 +370,10 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 	tools.cancel.on( "click", function() {
 		createjs.Tween.get( controller )
 		.to( { alpha: 0, rotation: -360, scaleX: 0, scaleY: 0 }, 500 )
-		.call( function(){ that.box.mapbox.objects.removeChild( controller ) ; } ) ;
+		.call( function() { that.box.mapbox.objects.removeChild( controller ) ; } ) ;
 		createjs.Tween.get( controller.tools )
 		.to( { alpha: 0, rotation: -360, scaleX: 0, scaleY: 0 }, 500 )
-		.call( function(){ that.box.mapbox.objects.removeChild( controller ) ; } ) ;
+		.call( function() { that.box.mapbox.objects.removeChild( controller ) ; } ) ;
 	} ) ;
 	// Flip.
 	tools.flip = new createjs.Container() ;
@@ -400,7 +407,7 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 
 		createjs.Tween.get( controller )
 		.to( { alpha: 0.5 }, 300 )
-		.call( function(){ that.box.mapbox.objects.addChildAt( controller, nowIndex + 1 ) ; } )
+		.call( function() { that.box.mapbox.objects.addChildAt( controller, nowIndex + 1 ) ; } )
 		.to( { alpha: 1 }, 300 ) ;
 	} ) ;
 	// Down.
@@ -419,7 +426,7 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 
 		createjs.Tween.get( controller )
 		.to( { alpha: 0.5 }, 300 )
-		.call( function(){ that.box.mapbox.objects.addChildAt( controller, ( nowIndex > 1 ) ? ( nowIndex - 1 ) : 1 ) ; } )
+		.call( function() { that.box.mapbox.objects.addChildAt( controller, ( nowIndex > 1 ) ? ( nowIndex - 1 ) : 1 ) ; } )
 		.to( { alpha: 1 }, 300 ) ;
 	} ) ;
 	// Zoom in.

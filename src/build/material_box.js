@@ -28,9 +28,9 @@ MaterialBox.prototype.OnCreate = function() {
 	this.box.selector.buttonA.addChild( this.box.selector.buttonA.bg, this.box.selector.buttonA.text ) ;
 	this.box.selector.buttonA.on( "click", function( evt ) {
 									createjs.Tween.get( that.box.list )
-									.call( function(){ that.OnSelectEffect( that.box.selector.buttonA ) ; } )
+									.call( function() { that.OnSelectEffect( that.box.selector.buttonA ) ; } )
 									.to( { alpha: 0, x: 300 }, 500 )
-									.call( function(){ that.OnTexture() ; } )
+									.call( function() { that.OnTexture() ; } )
 									.to( { alpha: 1, x: 30 }, 500 )
 								} ) ;
 	// Material selector button - walkable.
@@ -44,9 +44,9 @@ MaterialBox.prototype.OnCreate = function() {
 	this.box.selector.buttonB.addChild( this.box.selector.buttonB.bg, this.box.selector.buttonB.text ) ;
 	this.box.selector.buttonB.on( "click", function( evt ) {
 									createjs.Tween.get( that.box.list )
-									.call( function(){ that.OnSelectEffect( that.box.selector.buttonB ) ; } )
+									.call( function() { that.OnSelectEffect( that.box.selector.buttonB ) ; } )
 									.to( { alpha: 0, x: 300 }, 500 )
-									.call( function(){ that.OnWalkable() ; } )
+									.call( function() { that.OnWalkable() ; } )
 									.to( { alpha: 1, x: 30 }, 500 )
 								} ) ;
 	// Material selector button - object.
@@ -60,9 +60,9 @@ MaterialBox.prototype.OnCreate = function() {
 	this.box.selector.buttonC.addChild( this.box.selector.buttonC.bg, this.box.selector.buttonC.text ) ;
 	this.box.selector.buttonC.on( "click", function( evt ) {
 									createjs.Tween.get( that.box.list )
-									.call( function(){ that.OnSelectEffect( that.box.selector.buttonC ) ; } )
+									.call( function() { that.OnSelectEffect( that.box.selector.buttonC ) ; } )
 									.to( { alpha: 0, x: 300 }, 500 )
-									.call( function(){ that.OnObject() ; } )
+									.call( function() { that.OnObject() ; } )
 									.to( { alpha: 1, x: 30 }, 500 )
 								} ) ;
 	// Material selector button - light.
@@ -76,9 +76,9 @@ MaterialBox.prototype.OnCreate = function() {
 	this.box.selector.buttonD.addChild( this.box.selector.buttonD.bg, this.box.selector.buttonD.text ) ;
 	this.box.selector.buttonD.on( "click", function( evt ) {
 									createjs.Tween.get( that.box.list )
-									.call( function(){ that.OnSelectEffect( that.box.selector.buttonD ) ; } )
+									.call( function() { that.OnSelectEffect( that.box.selector.buttonD ) ; } )
 									.to( { alpha: 0, x: 300 }, 500 )
-									.call( function(){ that.OnLight() ; } )
+									.call( function() { that.OnLight() ; } )
 									.to( { alpha: 1, x: 30 }, 500 )
 								} ) ;
 	// Material selector button - sound.
@@ -92,9 +92,9 @@ MaterialBox.prototype.OnCreate = function() {
 	this.box.selector.buttonE.addChild( this.box.selector.buttonE.bg, this.box.selector.buttonE.text ) ;
 	this.box.selector.buttonE.on( "click", function( evt ) {
 									createjs.Tween.get( that.box.list )
-									.call( function(){ that.OnSelectEffect( that.box.selector.buttonE ) ; } )
+									.call( function() { that.OnSelectEffect( that.box.selector.buttonE ) ; } )
 									.to( { alpha: 0, x: 300 }, 500 )
-									.call( function(){ that.OnSound() ; } )
+									.call( function() { that.OnSound() ; } )
 									.to( { alpha: 1, x: 30 }, 500 )
 								} ) ;
 	// Material selector button - option.
@@ -108,14 +108,13 @@ MaterialBox.prototype.OnCreate = function() {
 	this.box.selector.buttonF.addChild( this.box.selector.buttonF.bg, this.box.selector.buttonF.text ) ;
 	this.box.selector.buttonF.on( "click", function( evt ) {
 									createjs.Tween.get( that.box.list )
-									.call( function(){ that.OnSelectEffect( that.box.selector.buttonF ) ; } )
+									.call( function() { that.OnSelectEffect( that.box.selector.buttonF ) ; } )
 									.to( { alpha: 0, x: 300 }, 500 )
-									.call( function(){ that.OnOption() ; } )
+									.call( function() { that.OnOption() ; } )
 									.to( { alpha: 1, x: 30 }, 500 )
 								} ) ;
 	// Initial.
 	this.OnSelectEffect( this.box.selector.buttonF ) ;
-	this.OnTexture() ;
 	this.OnOption() ;
 } // OnCreate()
 
@@ -337,9 +336,9 @@ MaterialBox.prototype.OnObject = function() {
 		var sample = G.cacheSample.clone( false ) ;
 		sample.gotoAndPlay( "walk" ) ;
 		createjs.Tween.get( sample, { loop: true } )
-			.call( function(){ sample.scaleX *= -1 } )
+			.call( function() { sample.scaleX *= -1 } )
 			.to( { x: 170 }, 1500, createjs.Ease.quadInOut )
-			.call( function(){ sample.scaleX *= -1 } )
+			.call( function() { sample.scaleX *= -1 } )
 			.to( { x: 0 }, 1500, createjs.Ease.quadInOut ) ;
 		createjs.Tween.get( sample, { loop: true } )
 			.to( { y: 15 }, 500, createjs.Ease.quadInOut )
