@@ -49,7 +49,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 	this.box.mapbox.tiled.x = 0, this.box.mapbox.tiled.y = 0 ;
 	this.box.mapbox.tiled.mr = 0, this.box.mapbox.tiled.mc = 0 ;
 	this.box.mapbox.addChild( this.box.mapbox.tiled ) ;
-	// Create onjects map data struct.
+	// Create objects map data struct.
 	this.box.mapbox.object_data = new Array() ;
 	// Map box objects.
 	this.box.mapbox.objects = new createjs.Container() ;
@@ -62,6 +62,27 @@ PreviewBox.prototype.OnTiledControl = function() {
 	this.box.mapbox.objects.addChild( this.box.mapbox.objects.bg ) ;
 	// Objects listening events.
 	this.box.mapbox.objects.bg.on( "dblclick", function( evt ) { OnCreateObject( evt ) } ) ;
+
+
+	// Create light map data struct.
+	this.box.mapbox.light_data = new Array() ;
+	// Map box light.
+	this.box.mapbox.light = new createjs.Container() ;
+	this.box.mapbox.light.visible = false ;
+	this.box.mapbox.addChild( this.box.mapbox.light ) ;
+	this.box.mapbox.light.bg = new createjs.Shape() ;
+	this.box.mapbox.light.bg.graphics.f( "#000000" ).r( G.size * G.length / 2, G.size * G.height / 2, G.size * G.length, G.size * G.height ) ;
+	this.box.mapbox.light.bg.regX = G.size * G.length / 2, this.box.mapbox.light.bg.regY = G.size * G.height / 2 ;
+	this.box.mapbox.light.bg.alpha = 0.5 ;
+	this.box.mapbox.light.addChild( this.box.mapbox.light.bg ) ;
+	// Light listening events.
+	this.box.mapbox.light.bg.on( "dblclick", function( evt ) { OnCreateLight( evt ) } ) ;
+
+
+
+
+
+
 	// Modify row, column for silde tiled map.
 	TotalRefresh( this, 0, 0, -1, -1 ) ;
 	// Slide bar create.
@@ -119,6 +140,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 			for ( i = 0 ; i < pt.box.mapbox.tiled.getNumChildren() ; i ++ )
 				pt.box.mapbox.tiled.getChildAt( i ).on( "click", function( evt ) { SingleTileReplace( pt, this ) ; } ) ;
 			pt.box.mapbox.objects.visible = ( pt.material.box.selector.statusPage == 3 ) ? true : false ;
+			pt.box.mapbox.light.visible = ( pt.material.box.selector.statusPage == 4 ) ? true : false ;
 		} // else
 		// Objects refresh.
 		for ( i = 1 ; i < pt.box.mapbox.objects.getNumChildren() ; i ++ ) {
@@ -248,8 +270,63 @@ PreviewBox.prototype.OnTiledControl = function() {
 			this.sx = 1 ;
 			// object scale y
 			this.sy = 1 ;
-		} // Tiled_Datastruct()
+		} // ObjectDatastruct()
 	} // OnCreateObject()
+
+	// Create one light on mapbox.
+	function OnCreateLight( evt ) {
+		// Reject to put the light out of range.
+		var mouseX = evt.stageX - that.box.mapbox.x, mouseY = evt.stageY - that.box.mapbox.y ;
+		if ( mouseX > ( G.customer_length - that.box.mapbox.tiled.mc ) * G.size || mouseY > ( G.customer_height - that.box.mapbox.tiled.mr ) * G.size )
+			return ;
+		// Add the container for light on mapbox.
+		var controller = new createjs.Container() ;
+		controller.x = Math.ceil( mouseX ), controller.y = Math.ceil( mouseY ) ;
+		controller.storeX = controller.x + that.box.mapbox.tiled.mc * G.size, controller.storeY = controller.y + that.box.mapbox.tiled.mr * G.size ;
+		createjs.Tween.get( controller )
+		.to( { alpha: 0, scaleX: 0, scaleY: 0 }, 0 )
+		.call( function(){ that.box.mapbox.light.addChild( controller ) ; } )
+		.to( { alpha: 1, scaleX: 1, scaleY: 1 }, 500 ) ;
+		// Copy the selected light.
+		controller.light = that.material.box.list.light.pic.clone( false ) ;
+		controller.light.x = controller.light.regX, controller.light.y = controller.light.regY ;
+		controller.light.scaleX = controller.light.scaleY = 1 ;
+		controller.addChild( controller.light ) ;
+		// Light container assign the name (pic number).
+		controller.name = controller.light.name ;
+		// Adjust the location of this container.
+		controller.regX = controller.light.regX, controller.regY = controller.light.regY ;
+		// Store to data.
+		var index = that.box.mapbox.light_data.length ;
+		that.box.mapbox.light_data[index] = new LightDatastruct() ;
+		that.box.mapbox.light_data[index].n = controller.name ;
+		that.box.mapbox.light_data[index].o = index ;
+		that.box.mapbox.light_data[index].rx = controller.storeX ;
+		that.box.mapbox.light_data[index].ry = controller.storeY ;
+		that.box.mapbox.light_data[index].sx = controller.scaleX ;
+		that.box.mapbox.light_data[index].sy = controller.scaleY ;
+		controller.order = index ;
+		// Get tools.
+		controller.tools = that.GetToolsBox( controller ) ;
+		// Add controller listening events.
+		that.ToolsBoxListener( controller ) ;
+
+		// Create light map data struct.
+		function LightDatastruct() {
+			// light light number
+			this.n = 0 ;
+			// light order number
+			this.o = 0 ;
+			// light storage real x
+			this.rx = 0 ;
+			// light storage real y
+			this.ry = 0 ;
+			// light scale x
+			this.sx = 1 ;
+			// light scale y
+			this.sy = 1 ;
+		} // LightDatastruct()
+	} // OnCreateLight()
 } // OnTiledControl()
 
 // Add tools box to one object. 
