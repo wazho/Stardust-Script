@@ -33,7 +33,7 @@ function GlobalValues() {
 	this.cacheObjectsController[4] = new createjs.Bitmap( this.objectConSrc + "object_zoom_in.png" ) ;
 	this.cacheObjectsController[5] = new createjs.Bitmap( this.objectConSrc + "object_zoom_out.png" ) ;
 	// Light.
-	this.lightAmount = 1 ;
+	this.lightAmount = 2 ;
 
 } // Tiled_Datastruct()
 

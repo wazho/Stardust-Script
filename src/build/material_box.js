@@ -383,6 +383,9 @@ MaterialBox.prototype.OnLight = function() {
 		if ( selectNum + num > G.lightAmount )
 			return ;
 		pt.box.list.light.removeAllChildren() ;
+		// Get the new object pic rule.
+		selectNum = pt.box.list.light.number += ( selectNum + num > 0 ) ? num : 0 ;
+		// var light = light_adding[selectNum-1] ;
 		// Container background.
 		var bgSize = 255 + G.range ;
 		pt.box.list.light.bg = new createjs.Shape() ;
@@ -390,7 +393,6 @@ MaterialBox.prototype.OnLight = function() {
 
 		var lightEffect = LightEffect( selectNum ) ;
 		lightEffect.x = bgSize / 2, lightEffect.y = bgSize / 2 ;
-		console.log( lightEffect.regX ) ;
 
 		// Add all to top container.
 		pt.box.list.light.addChild( pt.box.list.light.bg, lightEffect ) ;
