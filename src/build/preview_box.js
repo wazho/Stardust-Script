@@ -254,7 +254,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 		// Get tools.
 		controller.tools = that.GetToolsBox( controller ) ;
 		// Add controller listening events.
-		that.ToolsBoxListener( controller ) ;
+		that.ToolsBoxListener( controller, "object" ) ;
 
 		// Create object map data struct.
 		function ObjectDatastruct() {
@@ -288,7 +288,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 		.call( function(){ that.box.mapbox.light.addChild( controller ) ; } )
 		.to( { alpha: 1, scaleX: 1, scaleY: 1 }, 500 ) ;
 		// Copy the selected light.
-		controller.light = that.material.box.list.light.pic.clone( false ) ;
+		controller.light = LightEffect( that.material.box.list.light.number ) ;
 		controller.light.x = controller.light.regX, controller.light.y = controller.light.regY ;
 		controller.light.scaleX = controller.light.scaleY = 1 ;
 		controller.addChild( controller.light ) ;
@@ -309,7 +309,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 		// Get tools.
 		controller.tools = that.GetToolsBox( controller ) ;
 		// Add controller listening events.
-		that.ToolsBoxListener( controller ) ;
+		that.ToolsBoxListener( controller, "light" ) ;
 
 		// Create light map data struct.
 		function LightDatastruct() {
@@ -460,7 +460,7 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 } // GetToolsBox()
 
 // Add objects be clicked that event listener.
-PreviewBox.prototype.ToolsBoxListener = function( controller ) {
+PreviewBox.prototype.ToolsBoxListener = function( controller, type ) {
 	var that = this ;
 	// Add listening events.
 	stage.enableMouseOver( 20 ) ;
@@ -485,6 +485,9 @@ PreviewBox.prototype.ToolsBoxListener = function( controller ) {
 			createjs.Tween.get( object )
 			.to( { rotation: 360 }, 500 ) ;
 		} // GoBack()
+	} ) ;
+	controller.tools.on( "mousedown", function( evt ) {
+		previous = { x: evt.stageX, y: evt.stageY } ;
 	} ) ;
 	controller.tools.on( "rollout", function( evt ) {
 		createjs.Tween.get( controller.tools ).to( { alpha: 0 }, 300 ) ;
@@ -521,7 +524,10 @@ PreviewBox.prototype.ToolsBoxListener = function( controller ) {
 		else if ( controller.x + difX > boundX )
 			controller.x = boundX, controller.tools.x = controller.x ;
 		controller.storeX = Math.ceil( controller.x + that.box.mapbox.tiled.mc * G.size ) ;
-		that.box.mapbox.object_data[controller.order].rx = controller.storeX ;
+		if ( type == "object" )
+			that.box.mapbox.object_data[controller.order].rx = controller.storeX ;
+		else if ( type == "light" )
+			that.box.mapbox.light_data[controller.order].rx = controller.storeX ;
 
 		if ( controller.y + difY >= 0 && controller.y + difY <= boundY )
 			controller.y += difY, previous.y = evt.stageY, controller.tools.y = controller.y ;
@@ -530,6 +536,9 @@ PreviewBox.prototype.ToolsBoxListener = function( controller ) {
 		else if ( controller.y + difY > boundY )
 			controller.y = boundY, controller.tools.y = controller.y ;
 		controller.storeY = Math.ceil( controller.y + that.box.mapbox.tiled.mr * G.size ) ;
-		that.box.mapbox.object_data[controller.order].ry = controller.storeY ;
+		if ( type == "object" )
+			that.box.mapbox.object_data[controller.order].ry = controller.storeY ;
+		else if ( type == "light" )
+			that.box.mapbox.light_data[controller.order].ry = controller.storeY ;
 	} // ChangeGrid()
 } // ToolsBoxListener()
