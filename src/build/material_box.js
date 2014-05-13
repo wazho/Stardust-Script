@@ -350,13 +350,51 @@ MaterialBox.prototype.OnObject = function() {
 
 // 
 MaterialBox.prototype.OnLight = function() {
+	var that = this ;
 	// Remove original list first.
 	this.box.list.removeAllChildren() ;
 	this.box.selector.statusPage = 4 ;
-	// List background.
-	this.box.list.bg = new createjs.Shape() ;
-	this.box.list.bg.graphics.f( "#FFF3AD" ).r( 0, 0, 290, 400 ) ;
-	this.box.list.addChild( this.box.list.bg ) ;
+	// Light select container.
+	this.box.list.light = new createjs.Container() ;
+	this.box.list.light.x = 15, this.box.list.light.y = 15 ;
+	this.box.list.light.number = 1 ;
+	// Page change.
+	this.box.list.page = new createjs.Container() ;
+	this.box.list.page.x = 15, this.box.list.page.y = 355 ;
+	this.box.list.page.prevPage = new createjs.Container() ;
+	this.box.list.page.prevPage.x = 0, this.box.list.page.prevPage.y = 0 ;
+	this.box.list.page.prevPage.bg = new createjs.Bitmap( "pic/map_build/previous.png" ) ;
+	this.box.list.page.prevPage.addChild( this.box.list.page.prevPage.bg ) ;
+	this.box.list.page.prevPage.on( "click", function( evt ) { Refresh( that, -1 ) ; } ) ;
+	this.box.list.page.nextPage = new createjs.Container() ;
+	this.box.list.page.nextPage.x = 140, this.box.list.page.nextPage.y = 0 ;
+	this.box.list.page.nextPage.bg = new createjs.Bitmap( "pic/map_build/next.png" ) ;
+	this.box.list.page.nextPage.addChild( this.box.list.page.nextPage.bg ) ;
+	this.box.list.page.nextPage.on( "click", function( evt ) { Refresh( that, 1 ) ; } ) ;
+	this.box.list.page.addChild( this.box.list.page.prevPage, this.box.list.page.nextPage ) ;
+	// Add to top container.
+	this.box.list.addChild( this.box.list.light, this.box.list.page ) ;
+	// Refresh map light effect. 
+	Refresh( this, 0 ) ;
+
+	function Refresh( pt, num ) {
+		// First initial.
+		var selectNum = pt.box.list.light.number ;
+		if ( selectNum + num > G.lightAmount )
+			return ;
+		pt.box.list.light.removeAllChildren() ;
+		// Container background.
+		var bgSize = 255 + G.range ;
+		pt.box.list.light.bg = new createjs.Shape() ;
+		pt.box.list.light.bg.graphics.f( "#222222" ).r( 0, 0, bgSize, bgSize ) ;
+
+		var lightEffect = LightEffect( selectNum ) ;
+		lightEffect.x = bgSize / 2, lightEffect.y = bgSize / 2 ;
+		console.log( lightEffect.regX ) ;
+
+		// Add all to top container.
+		pt.box.list.light.addChild( pt.box.list.light.bg, lightEffect ) ;
+	} // Refresh()
 } // OnLight()
 
 // 
