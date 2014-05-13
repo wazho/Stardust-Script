@@ -389,8 +389,8 @@ PreviewBox.prototype.ToolsBoxListener = function( controller ) {
 	stage.enableMouseOver( 20 ) ;
 	controller.on( "mousedown", function( evt ) {
 		previous = { x: evt.stageX, y: evt.stageY } ;
-		controller.tools.bg.alpha = 0.3 ;
-		controller.tools.alpha = 1 ;
+		createjs.Tween.get( controller.tools ).to( { alpha: 1 }, 500 ) ;
+		createjs.Tween.get( controller.tools.bg ).to( { alpha: 0.3 }, 0 ) ;
 		// Tools has been put top of mapbox.
 		that.box.mapbox.addChild( controller.tools ) ;
 		controller.tools.x = controller.x, controller.tools.y = controller.y ;
