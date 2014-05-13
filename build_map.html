@@ -34,6 +34,53 @@
 				stage.update() ;
 			} // tick()
 
+
+			var cover = new createjs.Shape() ;
+			cover.graphics.f( "#000000" ).r( 0, 0, 700, 600 ) ;
+			cover.alpha = 0.7 ;
+			//stage.addChild( cover ) ;
+
+
+			var effectCon = new createjs.Container() ;
+			effectCon.x = 200, effectCon.y = 100 ;
+			stage.addChild( effectCon ) ;
+
+			effectCon.scaleX = effectCon.scaleY = 0.5 ;
+
+
+			var bg = new createjs.Shape() ;
+			bg.graphics.beginLinearGradientFill( ["#6BDC00", "#FCFF19"], [0, 1], 0, 0, 0, 25).drawPolyStar(50, 25, 30, 3, 0.6, -90) ;
+			bg.scaleX = 3, bg.scaleY = 5 ;
+			bg.alpha = 0.2 ;
+			effectCon.addChild( bg ) ;
+
+
+			for ( i = 0 ; i < 30 ; i ++ ) {
+				var img = new createjs.Shape() ;
+				img.graphics.f( "#FFFFFF" ).drawPolyStar( 0, 0, 10, 10, 0.6, -90 ) ;
+				effectCon.addChild( img ) ;
+				img.x = 150, img.y = 0 ;
+				img.alpha = 0 ;
+
+				createjs.Tween.get( img, { loop: true } )
+				.to( { alpha: 0.5 }, 500 )
+				.wait( rt() )
+				.to( { x: rx(), y: 300, alpha: 0, rotation: 360 }, 2000 ) ;
+			} // for
+
+
+			function rx() { return Math.random() * 300 ; }
+			function ry() { return Math.random() * 300 ; }
+
+			function rt() { return 200 + Math.random() * 2000 ; }
+
+			function rc() { return Math.round( Math.random() * 0xED + 0x12 ).toString( 16 ) ; }
+
+
+
+
+
+
 			// jQuery Setting.
 			$( '#dialog_newMap' ).dialog({
 				autoOpen: false,
