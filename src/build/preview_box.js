@@ -30,12 +30,11 @@ PreviewBox.prototype.OnCreate = function( material ) {
 	this.box.tool.addChild( this.box.tool.backward, this.box.tool.forward ) ;
 	this.box.tool.backward.on( "click", function(){} ) ;
 	this.box.tool.forward.on( "click", function(){} ) ;
-
 	// Add to top container.
 	this.box.addChild( this.box.mapbox, this.box.bg, this.box.logo, this.box.bar, this.box.tool ) ;
 } // OnCreate()
 
-// 
+// Create all elements of map box.
 PreviewBox.prototype.OnTiledControl = function() {
 	var that = this ;
 	// Map box container.
@@ -62,8 +61,6 @@ PreviewBox.prototype.OnTiledControl = function() {
 	this.box.mapbox.objects.addChild( this.box.mapbox.objects.bg ) ;
 	// Objects listening events.
 	this.box.mapbox.objects.bg.on( "dblclick", function( evt ) { OnCreateObject( evt ) } ) ;
-
-
 	// Create light map data struct.
 	this.box.mapbox.light_data = new Array() ;
 	// Map box light.
@@ -77,12 +74,6 @@ PreviewBox.prototype.OnTiledControl = function() {
 	this.box.mapbox.light.addChild( this.box.mapbox.light.bg ) ;
 	// Light listening events.
 	this.box.mapbox.light.bg.on( "dblclick", function( evt ) { OnCreateLight( evt ) } ) ;
-
-
-
-
-
-
 	// Modify row, column for silde tiled map.
 	TotalRefresh( this, 0, 0, -1, -1 ) ;
 	// Slide bar create.
@@ -142,10 +133,16 @@ PreviewBox.prototype.OnTiledControl = function() {
 			pt.box.mapbox.objects.visible = ( pt.material.box.selector.statusPage == 3 ) ? true : false ;
 			pt.box.mapbox.light.visible = ( pt.material.box.selector.statusPage == 4 ) ? true : false ;
 		} // else
+
 		// Objects refresh.
 		for ( i = 1 ; i < pt.box.mapbox.objects.getNumChildren() ; i ++ ) {
 			pt.box.mapbox.objects.getChildAt( i ).x = pt.box.mapbox.objects.getChildAt( i ).storeX - mc * G.size ;
 			pt.box.mapbox.objects.getChildAt( i ).y = pt.box.mapbox.objects.getChildAt( i ).storeY - mr * G.size ;
+		} // for
+		// Light refresh.
+		for ( i = 1 ; i < pt.box.mapbox.light.getNumChildren() ; i ++ ) {
+			pt.box.mapbox.light.getChildAt( i ).x = pt.box.mapbox.light.getChildAt( i ).storeX - mc * G.size ;
+			pt.box.mapbox.light.getChildAt( i ).y = pt.box.mapbox.light.getChildAt( i ).storeY - mr * G.size ;
 		} // for
 
 		// Single tile for refreshing.
@@ -208,6 +205,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 				tiled[i][j] = new TiledDatastruct() ;
 		return tiled ;
 
+		// Create tile map data struct.
 		function TiledDatastruct() {
 			// texture map number
 			this.m = 0 ;
