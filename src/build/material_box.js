@@ -284,7 +284,6 @@ MaterialBox.prototype.OnObject = function() {
 		if ( selectNum + num > object_adding.length )
 			return ;
 		pt.box.list.objects.removeAllChildren() ;
-		pt.box.list.marked.visible = false ;
 		// Get the new object pic rule.
 		selectNum = pt.box.list.objects.number += ( selectNum + num > 0 ) ? num : 0 ;
 		var object_rule = object_adding[selectNum-1] ;
