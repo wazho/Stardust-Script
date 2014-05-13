@@ -28,8 +28,18 @@ PreviewBox.prototype.OnCreate = function( material ) {
 	this.box.tool.forward.scaleX = this.box.tool.forward.scaleY = 0.3 ;
 	this.box.tool.forward.x = 50, this.box.tool.forward.y = 0 ;
 	this.box.tool.addChild( this.box.tool.backward, this.box.tool.forward ) ;
-	this.box.tool.backward.on( "click", function(){} ) ;
-	this.box.tool.forward.on( "click", function(){} ) ;
+	this.box.tool.backward.on( "click", function() {
+		if ( that.material.box.selector.statusPage != 3 ) {
+			that.box.mapbox.objects.visible = ( that.box.mapbox.objects.visible ) ? false : true ;
+			that.box.mapbox.objects.bg.visible = false ;
+		} // if
+	} ) ;
+	this.box.tool.forward.on( "click", function() {
+		if ( that.material.box.selector.statusPage != 4 ) {
+			that.box.mapbox.light.visible = ( that.box.mapbox.light.visible ) ? false : true ;
+			that.box.mapbox.light.bg.visible = false ;
+		} // if
+	} ) ;
 	// Add to top container.
 	this.box.addChild( this.box.mapbox, this.box.bg, this.box.logo, this.box.bar, this.box.tool ) ;
 } // OnCreate()
@@ -130,8 +140,8 @@ PreviewBox.prototype.OnTiledControl = function() {
 			// Add listening event.
 			for ( i = 0 ; i < pt.box.mapbox.tiled.getNumChildren() ; i ++ )
 				pt.box.mapbox.tiled.getChildAt( i ).on( "click", function( evt ) { SingleTileReplace( pt, this ) ; } ) ;
-			pt.box.mapbox.objects.visible = ( pt.material.box.selector.statusPage == 3 ) ? true : false ;
-			pt.box.mapbox.light.visible = ( pt.material.box.selector.statusPage == 4 ) ? true : false ;
+			pt.box.mapbox.objects.visible = pt.box.mapbox.objects.bg.visible = ( pt.material.box.selector.statusPage == 3 ) ? true : false ;
+			pt.box.mapbox.light.visible = pt.box.mapbox.light.bg.visible = ( pt.material.box.selector.statusPage == 4 ) ? true : false ;
 		} // else
 
 		// Objects refresh.
