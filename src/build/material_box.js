@@ -205,21 +205,29 @@ MaterialBox.prototype.OnTexture = function() {
 		// Number of map : Math.floor( tiled.name / 100 )
 		// Index of tiled : tiled.name - Math.floor( tiled.name / 100 ) * 100
 		function MarkedSelected( pt, tiled ) {
-			if ( pt.box.list.texture.multiSelect == 0 ) {
-				pt.box.list.marked.pane.graphics.c() ;
-				pt.box.list.marked.pane.graphics.s( "#FF0000" ).r( 0, 0, G.size + 1, G.size + 1 ) ;
-			} // if
-			else if ( pt.box.list.texture.multiSelect == 1 ) {
-				pt.box.list.marked.pane.graphics.c() ;
-				pt.box.list.marked.pane.graphics.s( "#00FF00" ).r( 0, 0, 2 * ( G.size + 1 ), 2 * ( G.size + 1 ) ) ;
-			} // else if
-			else if ( pt.box.list.texture.multiSelect == 2 )
-				pt.box.list.marked.pane.graphics.s( "#0000FF" ).r( 0, 0, G.size + 1, G.size + 1 ) ;
 			pt.box.list.marked.name = tiled.name ;
 			pt.box.list.marked.visible = true ;
 			var index = tiled.name - Math.floor( ( tiled.name / 100 ) ) * 100 ;
-			pt.box.list.marked.x = 14 + ( index % G.range ) * ( G.size + 1 ) ;
-			pt.box.list.marked.y = 14 + ( Math.floor( index / G.range ) ) * ( G.size + 1 ) ;
+
+			// Single select.
+			if ( pt.box.list.texture.multiSelect == 0 ) {
+				pt.box.list.marked.pane.graphics.c() ;
+				pt.box.list.marked.pane.graphics.s( "#FF0000" ).r( 0, 0, G.size + 1, G.size + 1 ) ;
+				pt.box.list.marked.x = 14 + ( index % G.range ) * ( G.size + 1 ) ;
+				pt.box.list.marked.y = 14 + ( Math.floor( index / G.range ) ) * ( G.size + 1 ) ;
+			} // if
+			// Prepare to multi-select.
+			else if ( pt.box.list.texture.multiSelect == 1 ) {
+				pt.box.list.marked.pane.graphics.c() ;
+				pt.box.list.marked.pane.graphics.s( "#0000FF" ).r( 0, 0, G.size + 1, G.size + 1 ) ;
+			} // else if
+			// Select multi-tiled.
+			else if ( pt.box.list.texture.multiSelect == 2 ) {
+				var degreeX = ( index % G.range ) - ( pt.box.list.marked.x - 14 ) / ( G.size + 1 ) ;
+				var degreeY = ( Math.floor( index / G.range ) ) - ( pt.box.list.marked.y - 14 ) / ( G.size + 1 ) ;
+				console.log( degreeX + " / " + degreeY ) ;
+				pt.box.list.marked.pane.graphics.s( "#00FF00" ).r( 0, 0, ( degreeX + 1 ) * ( G.size + 1 ), ( degreeY + 1 ) * ( G.size + 1 ) ) ;
+			} // else
 		} // MarkedSelected()
 	} // Refresh()
 } // OnTexture()
