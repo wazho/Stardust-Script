@@ -27,12 +27,12 @@ MaterialBox.prototype.OnCreate = function() {
 	this.box.selector.buttonA.text.x = 50, this.box.selector.buttonA.text.y = 35 ;
 	this.box.selector.buttonA.addChild( this.box.selector.buttonA.bg, this.box.selector.buttonA.text ) ;
 	this.box.selector.buttonA.on( "click", function( evt ) {
-									createjs.Tween.get( that.box.list )
-									.call( function() { that.OnSelectEffect( that.box.selector.buttonA ) ; } )
-									.to( { alpha: 0, x: 300 }, 500 )
-									.call( function() { that.OnTexture() ; } )
-									.to( { alpha: 1, x: 30 }, 500 )
-								} ) ;
+		createjs.Tween.get( that.box.list )
+		.call( function() { that.OnSelectEffect( that.box.selector.buttonA ) ; } )
+		.to( { alpha: 0, x: 300 }, 500 )
+		.call( function() { that.OnTexture() ; } )
+		.to( { alpha: 1, x: 30 }, 500 )
+	} ) ;
 	// Material selector button - walkable.
 	this.box.selector.buttonB = new createjs.Container() ;
 	this.box.selector.buttonB.x = 100, this.box.selector.buttonB.y = 0 ;
@@ -43,12 +43,12 @@ MaterialBox.prototype.OnCreate = function() {
 	this.box.selector.buttonB.text.x = 58, this.box.selector.buttonB.text.y = 35 ;
 	this.box.selector.buttonB.addChild( this.box.selector.buttonB.bg, this.box.selector.buttonB.text ) ;
 	this.box.selector.buttonB.on( "click", function( evt ) {
-									createjs.Tween.get( that.box.list )
-									.call( function() { that.OnSelectEffect( that.box.selector.buttonB ) ; } )
-									.to( { alpha: 0, x: 300 }, 500 )
-									.call( function() { that.OnWalkable() ; } )
-									.to( { alpha: 1, x: 30 }, 500 )
-								} ) ;
+		createjs.Tween.get( that.box.list )
+		.call( function() { that.OnSelectEffect( that.box.selector.buttonB ) ; } )
+		.to( { alpha: 0, x: 300 }, 500 )
+		.call( function() { that.OnWalkable() ; } )
+		.to( { alpha: 1, x: 30 }, 500 )
+	} ) ;
 	// Material selector button - object.
 	this.box.selector.buttonC = new createjs.Container() ;
 	this.box.selector.buttonC.x = 200, this.box.selector.buttonC.y = 0 ;
@@ -59,12 +59,12 @@ MaterialBox.prototype.OnCreate = function() {
 	this.box.selector.buttonC.text.x = 50, this.box.selector.buttonC.text.y = 35 ;
 	this.box.selector.buttonC.addChild( this.box.selector.buttonC.bg, this.box.selector.buttonC.text ) ;
 	this.box.selector.buttonC.on( "click", function( evt ) {
-									createjs.Tween.get( that.box.list )
-									.call( function() { that.OnSelectEffect( that.box.selector.buttonC ) ; } )
-									.to( { alpha: 0, x: 300 }, 500 )
-									.call( function() { that.OnObject() ; } )
-									.to( { alpha: 1, x: 30 }, 500 )
-								} ) ;
+		createjs.Tween.get( that.box.list )
+		.call( function() { that.OnSelectEffect( that.box.selector.buttonC ) ; } )
+		.to( { alpha: 0, x: 300 }, 500 )
+		.call( function() { that.OnObject() ; } )
+		.to( { alpha: 1, x: 30 }, 500 )
+	} ) ;
 	// Material selector button - light.
 	this.box.selector.buttonD = new createjs.Container() ;
 	this.box.selector.buttonD.x = 45, this.box.selector.buttonD.y = 45 ;
@@ -75,12 +75,12 @@ MaterialBox.prototype.OnCreate = function() {
 	this.box.selector.buttonD.text.x = -32, this.box.selector.buttonD.text.y = 35 ;
 	this.box.selector.buttonD.addChild( this.box.selector.buttonD.bg, this.box.selector.buttonD.text ) ;
 	this.box.selector.buttonD.on( "click", function( evt ) {
-									createjs.Tween.get( that.box.list )
-									.call( function() { that.OnSelectEffect( that.box.selector.buttonD ) ; } )
-									.to( { alpha: 0, x: 300 }, 500 )
-									.call( function() { that.OnLight() ; } )
-									.to( { alpha: 1, x: 30 }, 500 )
-								} ) ;
+		createjs.Tween.get( that.box.list )
+		.call( function() { that.OnSelectEffect( that.box.selector.buttonD ) ; } )
+		.to( { alpha: 0, x: 300 }, 500 )
+		.call( function() { that.OnLight() ; } )
+		.to( { alpha: 1, x: 30 }, 500 )
+	} ) ;
 	// Material selector button - sound.
 	this.box.selector.buttonE = new createjs.Container() ;
 	this.box.selector.buttonE.x = 145, this.box.selector.buttonE.y = 45 ;
@@ -91,12 +91,12 @@ MaterialBox.prototype.OnCreate = function() {
 	this.box.selector.buttonE.text.x = -35, this.box.selector.buttonE.text.y = 35 ;
 	this.box.selector.buttonE.addChild( this.box.selector.buttonE.bg, this.box.selector.buttonE.text ) ;
 	this.box.selector.buttonE.on( "click", function( evt ) {
-									createjs.Tween.get( that.box.list )
-									.call( function() { that.OnSelectEffect( that.box.selector.buttonE ) ; } )
-									.to( { alpha: 0, x: 300 }, 500 )
-									.call( function() { that.OnSound() ; } )
-									.to( { alpha: 1, x: 30 }, 500 )
-								} ) ;
+		createjs.Tween.get( that.box.list )
+		.call( function() { that.OnSelectEffect( that.box.selector.buttonE ) ; } )
+		.to( { alpha: 0, x: 300 }, 500 )
+		.call( function() { that.OnSound() ; } )
+		.to( { alpha: 1, x: 30 }, 500 )
+	} ) ;
 	// Material selector button - option.
 	this.box.selector.buttonF = new createjs.Container() ;
 	this.box.selector.buttonF.x = 245, this.box.selector.buttonF.y = 45 ;
@@ -107,12 +107,12 @@ MaterialBox.prototype.OnCreate = function() {
 	this.box.selector.buttonF.text.x = -40, this.box.selector.buttonF.text.y = 35 ;
 	this.box.selector.buttonF.addChild( this.box.selector.buttonF.bg, this.box.selector.buttonF.text ) ;
 	this.box.selector.buttonF.on( "click", function( evt ) {
-									createjs.Tween.get( that.box.list )
-									.call( function() { that.OnSelectEffect( that.box.selector.buttonF ) ; } )
-									.to( { alpha: 0, x: 300 }, 500 )
-									.call( function() { that.OnOption() ; } )
-									.to( { alpha: 1, x: 30 }, 500 )
-								} ) ;
+		createjs.Tween.get( that.box.list )
+		.call( function() { that.OnSelectEffect( that.box.selector.buttonF ) ; } )
+		.to( { alpha: 0, x: 300 }, 500 )
+		.call( function() { that.OnOption() ; } )
+		.to( { alpha: 1, x: 30 }, 500 )
+	} ) ;
 	// Initial.
 	this.OnSelectEffect( this.box.selector.buttonF ) ;
 	this.OnOption() ;
@@ -154,7 +154,6 @@ MaterialBox.prototype.OnTexture = function() {
 	// Selected for marking.
 	this.box.list.marked = new createjs.Container() ;
 	this.box.list.marked.pane = new createjs.Shape() ;
-	this.box.list.marked.pane.graphics.s( "#FF0000" ).r( 0, 0, G.size + 1, G.size + 1 ) ;
 	this.box.list.marked.visible = false ;
 	this.box.list.marked.addChild( this.box.list.marked.pane ) ;
 	// Add to top container.
@@ -179,8 +178,18 @@ MaterialBox.prototype.OnTexture = function() {
 				pt.box.list.texture.addChild( pt.box.list.texture.pic.clone( false ) ) ;
 			} // for
 		// Add listening event.
-		for ( i = 0 ; i < G.range * G.range ; i ++ )
-			pt.box.list.texture.getChildAt( i ).on( "click", function( evt ) { MarkedSelected( that, this, G ) ; } ) ;
+		for ( i = 0 ; i < G.range * G.range ; i ++ ) {
+			pt.box.list.texture.multiSelect = 0 ;
+			pt.box.list.texture.getChildAt( i ).on( "click", function( evt ) {
+				MarkedSelected( that, this ) ;
+				pt.box.list.texture.multiSelect = 0 ;
+			} ) ;
+			pt.box.list.texture.getChildAt( i ).on( "dblclick", function( evt ) {
+				pt.box.list.texture.multiSelect = 1 ;
+				MarkedSelected( that, this ) ;
+				pt.box.list.texture.multiSelect = 2 ;
+			} ) ;
+		} // for
 		// Text info.
 		pt.box.list.picNum = new createjs.Text( "[" + selectNum + "/" + texture_adding.length + "]", "18px comic sans ms", "#FFFFFF" ) ;
 		pt.box.list.picNum.x = 15, pt.box.list.picNum.y = 297 ;
@@ -195,7 +204,17 @@ MaterialBox.prototype.OnTexture = function() {
 
 		// Number of map : Math.floor( tiled.name / 100 )
 		// Index of tiled : tiled.name - Math.floor( tiled.name / 100 ) * 100
-		function MarkedSelected( pt, tiled, G ) {
+		function MarkedSelected( pt, tiled ) {
+			if ( pt.box.list.texture.multiSelect == 0 ) {
+				pt.box.list.marked.pane.graphics.c() ;
+				pt.box.list.marked.pane.graphics.s( "#FF0000" ).r( 0, 0, G.size + 1, G.size + 1 ) ;
+			} // if
+			else if ( pt.box.list.texture.multiSelect == 1 ) {
+				pt.box.list.marked.pane.graphics.c() ;
+				pt.box.list.marked.pane.graphics.s( "#00FF00" ).r( 0, 0, 2 * ( G.size + 1 ), 2 * ( G.size + 1 ) ) ;
+			} // else if
+			else if ( pt.box.list.texture.multiSelect == 2 )
+				pt.box.list.marked.pane.graphics.s( "#0000FF" ).r( 0, 0, G.size + 1, G.size + 1 ) ;
 			pt.box.list.marked.name = tiled.name ;
 			pt.box.list.marked.visible = true ;
 			var index = tiled.name - Math.floor( ( tiled.name / 100 ) ) * 100 ;
