@@ -28,11 +28,12 @@
 
 			stage.addChild( preview.box, material.box ) ;
 
-			// 換面更新幀數
+			// Refresh frame number - FPS
 			createjs.Ticker.addEventListener( "tick", function ( event ) { stage.update() ; } ) ;
 			createjs.Ticker.setFPS( 60 ) ;
 
-			jQueryFunctions() ;
+			// Import jQuery functions.
+			jQueryFunctions( preview ) ;
 		} // init()
 	</script>
 

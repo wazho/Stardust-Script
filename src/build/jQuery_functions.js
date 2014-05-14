@@ -1,4 +1,4 @@
-function jQueryFunctions( effect_num ) {
+function jQueryFunctions( preview ) {
 	// jQuery Setting.
 	$( '#dialog_newMap' ).dialog({
 		autoOpen: false,
