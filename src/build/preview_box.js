@@ -36,18 +36,35 @@ PreviewBox.prototype.OnCreate = function( material ) {
 	this.box.tool.toolsbox = new createjs.Container() ;
 	this.box.tool.toolsbox.x = 135, this.box.tool.toolsbox.y = -60 ;
 	this.box.tool.addChild( this.box.tool.toolsbox ) ;
-	this.box.tool.toolsbox.showObject = new createjs.Bitmap( "pic/map_build/toolsbox.png" ) ;
-	this.box.tool.toolsbox.showObject.scaleX = this.box.tool.toolsbox.showObject.scaleY = 0.45 ;
-	this.box.tool.toolsbox.showObject.x = 0, this.box.tool.toolsbox.showObject.y = 0 ;
-	this.box.tool.toolsbox.showLight = new createjs.Bitmap( "pic/map_build/toolsbox.png" ) ;
-	this.box.tool.toolsbox.showLight.scaleX = this.box.tool.toolsbox.showLight.scaleY = 0.45 ;
-	this.box.tool.toolsbox.showLight.x = 100, this.box.tool.toolsbox.showLight.y = 0 ;
-	this.box.tool.toolsbox.showGirds = new createjs.Bitmap( "pic/map_build/toolsbox.png" ) ;
-	this.box.tool.toolsbox.showGirds.scaleX = this.box.tool.toolsbox.showGirds.scaleY = 0.45 ;
-	this.box.tool.toolsbox.showGirds.x = 200, this.box.tool.toolsbox.showGirds.y = 0 ;
+	this.box.tool.toolsbox.showObject = new createjs.Container() ;
+	this.box.tool.toolsbox.showObject.icon = new createjs.Bitmap( "pic/map_build/toolsbox.png" ) ;
+	this.box.tool.toolsbox.showObject.icon.scaleX = this.box.tool.toolsbox.showObject.icon.scaleY = 0.45 ;
+	this.box.tool.toolsbox.showObject.icon.x = 0, this.box.tool.toolsbox.showObject.icon.y = 0 ;
+	this.box.tool.toolsbox.showObject.comment = new createjs.Text( "Show\n Object", "14px comic sans ms", "#FFFFFF" ) ;
+	this.box.tool.toolsbox.showObject.comment.x = 60, this.box.tool.toolsbox.showObject.comment.y = 25 ;
+	this.box.tool.toolsbox.showObject.addChild( this.box.tool.toolsbox.showObject.icon, this.box.tool.toolsbox.showObject.comment ) ;
+	this.box.tool.toolsbox.showLight = new createjs.Container() ;
+	this.box.tool.toolsbox.showLight.icon = new createjs.Bitmap( "pic/map_build/toolsbox.png" ) ;
+	this.box.tool.toolsbox.showLight.icon.scaleX = this.box.tool.toolsbox.showLight.icon.scaleY = 0.45 ;
+	this.box.tool.toolsbox.showLight.icon.x = 120, this.box.tool.toolsbox.showLight.icon.y = 0 ;
+	this.box.tool.toolsbox.showLight.comment = new createjs.Text( "Show\n Light", "14px comic sans ms", "#FFFFFF" ) ;
+	this.box.tool.toolsbox.showLight.comment.x = 180, this.box.tool.toolsbox.showLight.comment.y = 25 ;
+	this.box.tool.toolsbox.showLight.addChild( this.box.tool.toolsbox.showLight.icon, this.box.tool.toolsbox.showLight.comment ) ;
+	this.box.tool.toolsbox.showGirds = new createjs.Container() ;
+
+	this.box.tool.toolsbox.showGirds.icon = new createjs.Bitmap( "pic/map_build/toolsbox.png" ) ;
+	this.box.tool.toolsbox.showGirds.icon.scaleX = this.box.tool.toolsbox.showGirds.icon.scaleY = 0.45 ;
+	this.box.tool.toolsbox.showGirds.icon.x = 240, this.box.tool.toolsbox.showGirds.icon.y = 0 ;
+	this.box.tool.toolsbox.showGirds.comment = new createjs.Text( "Show\n Grid", "14px comic sans ms", "#FFFFFF" ) ;
+	this.box.tool.toolsbox.showGirds.comment.x = 300, this.box.tool.toolsbox.showGirds.comment.y = 25 ;
+	this.box.tool.toolsbox.showGirds.addChild( this.box.tool.toolsbox.showGirds.icon, this.box.tool.toolsbox.showGirds.comment ) ;
+	this.box.tool.toolsbox.setCharacter = new createjs.Container() ;
+
+
+
 	this.box.tool.toolsbox.setCharacter = new createjs.Bitmap( "pic/map_build/toolsbox.png" ) ;
 	this.box.tool.toolsbox.setCharacter.scaleX = this.box.tool.toolsbox.setCharacter.scaleY = 0.45 ;
-	this.box.tool.toolsbox.setCharacter.x = 300, this.box.tool.toolsbox.setCharacter.y = 0 ;
+	this.box.tool.toolsbox.setCharacter.x = 360, this.box.tool.toolsbox.setCharacter.y = 0 ;
 	this.box.tool.toolsbox.addChild( this.box.tool.toolsbox.showObject, this.box.tool.toolsbox.showLight, this.box.tool.toolsbox.showGirds, this.box.tool.toolsbox.setCharacter ) ; 
 	// Adding switcher listenling events.
 	this.box.tool.switcher.on( "click", function() {
