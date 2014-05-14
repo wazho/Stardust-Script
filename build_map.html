@@ -29,12 +29,8 @@
 			stage.addChild( preview.box, material.box ) ;
 
 			// 換面更新幀數
-			createjs.Ticker.addEventListener( "tick", tick ) ;
+			createjs.Ticker.addEventListener( "tick", function ( event ) { stage.update() ; } ) ;
 			createjs.Ticker.setFPS( 60 ) ;
-
-			function tick( event ) {
-				stage.update() ;
-			} // tick()
 
 			jQueryFunctions() ;
 		} // init()
