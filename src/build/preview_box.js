@@ -20,28 +20,56 @@ PreviewBox.prototype.OnCreate = function( material ) {
 	this.OnTiledControl() ;
 	// Map editor tools.
 	this.box.tool = new createjs.Container() ;
-	this.box.tool.x = 525, this.box.tool.y = 22 ;
-	this.box.tool.backward = new createjs.Bitmap( "pic/map_build/movement_a.png" ) ;
-	this.box.tool.backward.scaleX = this.box.tool.backward.scaleY = 0.3 ;
-	this.box.tool.backward.x = 0, this.box.tool.backward.y = 0 ;
-	this.box.tool.forward = new createjs.Bitmap( "pic/map_build/movement_b.png" ) ;
-	this.box.tool.forward.scaleX = this.box.tool.forward.scaleY = 0.3 ;
-	this.box.tool.forward.x = 50, this.box.tool.forward.y = 0 ;
-	this.box.tool.addChild( this.box.tool.backward, this.box.tool.forward ) ;
-	this.box.tool.backward.on( "click", function() {
-		if ( that.material.box.selector.statusPage != 3 ) {
-			that.box.mapbox.combineSeen = that.material.box.selector.statusPage ;
-			that.box.mapbox.objects.visible = ( that.box.mapbox.objects.visible ) ? false : true ;
-			that.box.mapbox.objects.bg.visible = false ;
+	this.box.tool.x = 0, this.box.tool.y = 0 ;
+	// Tools box switch container.
+	this.box.tool.switcher = new createjs.Container() ;
+	this.box.tool.switcher.x = 525, this.box.tool.switcher.y = 5 ;
+	this.box.tool.addChild( this.box.tool.switcher ) ;
+	this.box.tool.switcher.icon = new createjs.Bitmap( "pic/map_build/toolsbox.png" ) ;
+	this.box.tool.switcher.icon.scaleX = this.box.tool.switcher.icon.scaleY = 0.45 ;
+	this.box.tool.switcher.icon.x = 0, this.box.tool.switcher.icon.y = 0 ;
+	this.box.tool.switcher.comment = new createjs.Text( "Tools\n  Box", "18px comic sans ms", "#FFFFFF" ) ;
+	this.box.tool.switcher.comment.x = 55, this.box.tool.switcher.comment.y = 14 ;
+	this.box.tool.switcher.open = false ;
+	this.box.tool.switcher.addChild( this.box.tool.switcher.icon, this.box.tool.switcher.comment ) ;
+	// Tools of tools box conatiner.
+	this.box.tool.toolsbox = new createjs.Container() ;
+	this.box.tool.addChild( this.box.tool.toolsbox ) ;
+
+
+	this.box.tool.switcher.on( "click", function() {
+		if ( ! that.box.tool.switcher.open ) {
+			that.box.tool.switcher.open = true ;
+			createjs.Tween.get( that.box.tool.switcher )
+			.to( { x: 15, alpha: 0.3 }, 1000 )
+			.to( { alpha: 1 }, 500 ) ;
+			createjs.Tween.get( that.box.logo )
+			.to( { alpha: 0 }, 1000 ) ;
 		} // if
+		else {
+			that.box.tool.switcher.open = false ;
+			createjs.Tween.get( that.box.tool.switcher )
+			.to( { x: 525, alpha: 0.3 }, 1000 )
+			.to( { alpha: 1 }, 500 ) ;
+			createjs.Tween.get( that.box.logo )
+			.to( { alpha: 1 }, 1000 ) ;
+		} // else
 	} ) ;
-	this.box.tool.forward.on( "click", function() {
-		if ( that.material.box.selector.statusPage != 4 ) {
-			that.box.mapbox.combineSeen = that.material.box.selector.statusPage ;
-			that.box.mapbox.light.visible = ( that.box.mapbox.light.visible ) ? false : true ;
-			that.box.mapbox.light.bg.visible = false ;
-		} // if
-	} ) ;
+
+	// this.box.tool.icon.on( "click", function() {
+	// 	if ( that.material.box.selector.statusPage != 3 ) {
+	// 		that.box.mapbox.combineSeen = that.material.box.selector.statusPage ;
+	// 		that.box.mapbox.objects.visible = ( that.box.mapbox.objects.visible ) ? false : true ;
+	// 		that.box.mapbox.objects.bg.visible = false ;
+	// 	} // if
+	// } ) ;
+	// this.box.tool.forward.on( "click", function() {
+	// 	if ( that.material.box.selector.statusPage != 4 ) {
+	// 		that.box.mapbox.combineSeen = that.material.box.selector.statusPage ;
+	// 		that.box.mapbox.light.visible = ( that.box.mapbox.light.visible ) ? false : true ;
+	// 		that.box.mapbox.light.bg.visible = false ;
+	// 	} // if
+	// } ) ;
 	// Combine to see tiles, objects, light ... etc
 	this.box.mapbox.combineSeen = 0 ;
 	// Add to top container.
