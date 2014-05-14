@@ -33,7 +33,7 @@ function LightEffect( effect_num ) {
 	else if ( effect_num == 3 ) {
 		effectContainer.regX = 50, effectContainer.regY = 100 ;
 		effectContainer.setBounds( 0, 0, 100, 200 ) ;
-		for ( i = 0 ; i < 120 ; i ++ ) {
+		for ( i = 0 ; i < 75 ; i ++ ) {
 			var grain = new createjs.Shape() ;
 			grain.graphics.f( "#FFFFFF" ).r( 0, 0, 1, 12 ) ;
 			effectContainer.addChild( grain ) ;
@@ -48,9 +48,9 @@ function LightEffect( effect_num ) {
 	else if ( effect_num == 4 ) {
 		effectContainer.regX = 60, effectContainer.regY = 15 ;
 		effectContainer.setBounds( 0, 0, 120, 30 ) ;
-		for ( i = 0 ; i < 140 ; i ++ ) {
+		for ( i = 0 ; i < 85 ; i ++ ) {
 			var grain = new createjs.Shape() ;
-			grain.graphics.f( "#FFFFFF" ).r( 0, 0, 1, 6 ) ;
+			grain.graphics.f( "#FFFFFF" ).r( 0, 0, 1, 4 ) ;
 			effectContainer.addChild( grain ) ;
 			grain.x = RandomRange( 120 ), grain.y = 30 ;
 			grain.alpha = 0 ;
