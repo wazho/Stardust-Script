@@ -225,8 +225,18 @@ MaterialBox.prototype.OnTexture = function() {
 			else if ( pt.box.list.texture.multiSelect == 2 ) {
 				var degreeX = ( index % G.range ) - ( pt.box.list.marked.x - 14 ) / ( G.size + 1 ) ;
 				var degreeY = ( Math.floor( index / G.range ) ) - ( pt.box.list.marked.y - 14 ) / ( G.size + 1 ) ;
-				console.log( degreeX + " / " + degreeY ) ;
-				pt.box.list.marked.pane.graphics.s( "#00FF00" ).r( 0, 0, ( degreeX + 1 ) * ( G.size + 1 ), ( degreeY + 1 ) * ( G.size + 1 ) ) ;
+				// Forth quadrant.
+				if ( degreeX >= 0 && degreeY >= 0 )
+					pt.box.list.marked.pane.graphics.s( "#00FF00" ).r( 0, 0, ( degreeX + 1 ) * ( G.size + 1 ), ( degreeY + 1 ) * ( G.size + 1 ) ) ;
+				// First quadrant.
+				else if ( degreeX >= 0 && degreeY < 0 )
+					pt.box.list.marked.pane.graphics.s( "#00FF00" ).r( 0, G.size + 1, ( degreeX + 1 ) * ( G.size + 1 ), ( degreeY - 1 ) * ( G.size + 1 ) ) ;
+				// Second quadrant.
+				else if ( degreeX < 0 && degreeY < 0 )
+					pt.box.list.marked.pane.graphics.s( "#00FF00" ).r( G.size + 1, G.size + 1, ( degreeX - 1 ) * ( G.size + 1 ), ( degreeY - 1 ) * ( G.size + 1 ) ) ;
+				// Third quadrant.
+				else if ( degreeX < 0 && degreeY >= 0 )
+					pt.box.list.marked.pane.graphics.s( "#00FF00" ).r( G.size + 1, 0, ( degreeX - 1 ) * ( G.size + 1 ), ( degreeY + 1 ) * ( G.size + 1 ) ) ;
 			} // else
 		} // MarkedSelected()
 	} // Refresh()
