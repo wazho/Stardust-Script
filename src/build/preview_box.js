@@ -29,47 +29,69 @@ PreviewBox.prototype.OnCreate = function( material ) {
 	this.box.tool.switcher.icon.scaleX = this.box.tool.switcher.icon.scaleY = 0.45 ;
 	this.box.tool.switcher.icon.x = 0, this.box.tool.switcher.icon.y = 0 ;
 	this.box.tool.switcher.comment = new createjs.Text( "Tools\n  Box", "18px comic sans ms", "#FFFFFF" ) ;
-	this.box.tool.switcher.comment.x = 55, this.box.tool.switcher.comment.y = 14 ;
+	this.box.tool.switcher.comment.x = 60, this.box.tool.switcher.comment.y = 14 ;
 	this.box.tool.switcher.open = false ;
 	this.box.tool.switcher.addChild( this.box.tool.switcher.icon, this.box.tool.switcher.comment ) ;
 	// Tools of tools box conatiner.
 	this.box.tool.toolsbox = new createjs.Container() ;
+	this.box.tool.toolsbox.x = 135, this.box.tool.toolsbox.y = -60 ;
 	this.box.tool.addChild( this.box.tool.toolsbox ) ;
-
-
+	this.box.tool.toolsbox.showObject = new createjs.Bitmap( "pic/map_build/toolsbox.png" ) ;
+	this.box.tool.toolsbox.showObject.scaleX = this.box.tool.toolsbox.showObject.scaleY = 0.45 ;
+	this.box.tool.toolsbox.showObject.x = 0, this.box.tool.toolsbox.showObject.y = 0 ;
+	this.box.tool.toolsbox.showLight = new createjs.Bitmap( "pic/map_build/toolsbox.png" ) ;
+	this.box.tool.toolsbox.showLight.scaleX = this.box.tool.toolsbox.showLight.scaleY = 0.45 ;
+	this.box.tool.toolsbox.showLight.x = 100, this.box.tool.toolsbox.showLight.y = 0 ;
+	this.box.tool.toolsbox.showGirds = new createjs.Bitmap( "pic/map_build/toolsbox.png" ) ;
+	this.box.tool.toolsbox.showGirds.scaleX = this.box.tool.toolsbox.showGirds.scaleY = 0.45 ;
+	this.box.tool.toolsbox.showGirds.x = 200, this.box.tool.toolsbox.showGirds.y = 0 ;
+	this.box.tool.toolsbox.setCharacter = new createjs.Bitmap( "pic/map_build/toolsbox.png" ) ;
+	this.box.tool.toolsbox.setCharacter.scaleX = this.box.tool.toolsbox.setCharacter.scaleY = 0.45 ;
+	this.box.tool.toolsbox.setCharacter.x = 300, this.box.tool.toolsbox.setCharacter.y = 0 ;
+	this.box.tool.toolsbox.addChild( this.box.tool.toolsbox.showObject, this.box.tool.toolsbox.showLight, this.box.tool.toolsbox.showGirds, this.box.tool.toolsbox.setCharacter ) ; 
+	// Adding switcher listenling events.
 	this.box.tool.switcher.on( "click", function() {
 		if ( ! that.box.tool.switcher.open ) {
 			that.box.tool.switcher.open = true ;
-			createjs.Tween.get( that.box.tool.switcher )
-			.to( { x: 15, alpha: 0.3 }, 1000 )
-			.to( { alpha: 1 }, 500 ) ;
 			createjs.Tween.get( that.box.logo )
-			.to( { alpha: 0 }, 1000 ) ;
+			.to( { alpha: 0 }, 300 ) ;
+			createjs.Tween.get( that.box.tool.switcher )
+			.to( { x: 15, alpha: 0.3 }, 1500, createjs.Ease.backInOut )
+			.call( function() {
+				createjs.Tween.get( that.box.tool.toolsbox )
+				.to( { alpha: 0 }, 0 )
+				.to( { y: 5, alpha: 1 }, 300 ) ;
+			} )
+			.to( { alpha: 1 }, 500 ) ;
 		} // if
 		else {
 			that.box.tool.switcher.open = false ;
-			createjs.Tween.get( that.box.tool.switcher )
-			.to( { x: 525, alpha: 0.3 }, 1000 )
-			.to( { alpha: 1 }, 500 ) ;
 			createjs.Tween.get( that.box.logo )
-			.to( { alpha: 1 }, 1000 ) ;
+			.to( { alpha: 1 }, 300 ) ;
+			createjs.Tween.get( that.box.tool.switcher, createjs.Ease.elasticOut )
+			.call( function() {
+				createjs.Tween.get( that.box.tool.toolsbox )
+				.to( { y: -60, alpha: 0 }, 300 ) ;
+			} )
+			.to( { x: 525 }, 500, createjs.Ease.elasticOut ) ;
 		} // else
 	} ) ;
+	// Adding tools button listening events.
+	this.box.tool.toolsbox.showObject.on( "click", function() {
+		if ( that.material.box.selector.statusPage != 3 ) {
+			that.box.mapbox.combineSeen = that.material.box.selector.statusPage ;
+			that.box.mapbox.objects.visible = ( that.box.mapbox.objects.visible ) ? false : true ;
+			that.box.mapbox.objects.bg.visible = false ;
+		} // if
+	} ) ;
+	this.box.tool.toolsbox.showLight.on( "click", function() {
+		if ( that.material.box.selector.statusPage != 4 ) {
+			that.box.mapbox.combineSeen = that.material.box.selector.statusPage ;
+			that.box.mapbox.light.visible = ( that.box.mapbox.light.visible ) ? false : true ;
+			that.box.mapbox.light.bg.visible = false ;
+		} // if
+	} ) ;
 
-	// this.box.tool.icon.on( "click", function() {
-	// 	if ( that.material.box.selector.statusPage != 3 ) {
-	// 		that.box.mapbox.combineSeen = that.material.box.selector.statusPage ;
-	// 		that.box.mapbox.objects.visible = ( that.box.mapbox.objects.visible ) ? false : true ;
-	// 		that.box.mapbox.objects.bg.visible = false ;
-	// 	} // if
-	// } ) ;
-	// this.box.tool.forward.on( "click", function() {
-	// 	if ( that.material.box.selector.statusPage != 4 ) {
-	// 		that.box.mapbox.combineSeen = that.material.box.selector.statusPage ;
-	// 		that.box.mapbox.light.visible = ( that.box.mapbox.light.visible ) ? false : true ;
-	// 		that.box.mapbox.light.bg.visible = false ;
-	// 	} // if
-	// } ) ;
 	// Combine to see tiles, objects, light ... etc
 	this.box.mapbox.combineSeen = 0 ;
 	// Add to top container.
