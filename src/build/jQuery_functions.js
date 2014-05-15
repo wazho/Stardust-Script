@@ -74,7 +74,7 @@ function jQueryFunctions( preview ) {
 					length : G.customer_length,
 					tileData : preview.box.mapbox.tiled_data,
 					objectData : preview.box.mapbox.object_data,
-					lightData : [],
+					lightData : preview.box.mapbox.light_data,
 					soundData : []
 				} ;
 				var json = JSON.stringify( obj ) ;
@@ -108,7 +108,6 @@ function jQueryFunctions( preview ) {
 					var container = new createjs.Container() ;
 					container.x = container.storeX = obj.objectData[i].rx ;
 					container.y = container.storeY = obj.objectData[i].ry ;
-					container.order = obj.objectData[i].o ;
 					container.objects = G.cacheObjects[obj.objectData[i].n-1].clone( false ) ;
 					var objectWidth = container.objects.getBounds().width ;
 					var objectHeight = container.objects.getBounds().height ;
@@ -122,8 +121,35 @@ function jQueryFunctions( preview ) {
 					container.bg.graphics.f( "#AAAAAA" ).s( "#000000" ).r( 0, 0, container.getBounds().width + 20, container.getBounds().height + 20 ) ;
 					container.bg.alpha = 0 ;
 					container.tools = preview.GetToolsBox( container ) ;
+					container.tools.scaleX = container.scaleX, container.tools.scaleY = container.scaleY ;
 					preview.ToolsBoxListener( container ) ;
 					preview.box.mapbox.objects.addChild( container ) ;
+				} // for
+				// Initial light data at mapbox.
+				preview.box.mapbox.light_data = obj.objectData ;
+				for ( i = 1 ; i < preview.box.mapbox.light.getNumChildren() ; i ++ )
+					preview.box.mapbox.light.removeChildAt( i ) ;
+				// Light data.
+				for ( i = 0 ; i < obj.lightData.length ; i ++ ) {
+					var container = new createjs.Container() ;
+					container.x = container.storeX = obj.lightData[i].rx ;
+					container.y = container.storeY = obj.lightData[i].ry ;
+					container.light = LightEffect( obj.lightData[i].n ) ;
+					var lightWidth = container.light.getBounds().width ;
+					var lightHeight = container.light.getBounds().height ;
+					container.light.regX = lightWidth / 2 ;
+					container.light.regY = lightHeight / 2 ;
+					container.light.x = container.light.regX + 10, container.light.y = container.light.regY + 10 ;
+					container.addChild( container.light ) ;
+					container.regX = container.light.regX + 10, container.regY = container.light.regY + 10 ;
+					container.scaleX = obj.lightData[i].sx, container.scaleY = obj.lightData[i].sy ;
+					container.bg = new createjs.Shape() ;
+					container.bg.graphics.f( "#AAAAAA" ).s( "#000000" ).r( 0, 0, container.getBounds().width + 20, container.getBounds().height + 20 ) ;
+					container.bg.alpha = 0 ;
+					container.tools = preview.GetToolsBox( container ) ;
+					container.tools.scaleX = container.scaleX, container.tools.scaleY = container.scaleY ;
+					preview.ToolsBoxListener( container ) ;
+					preview.box.mapbox.light.addChild( container ) ;
 				} // for
 			},
 			"Cancel": function() {

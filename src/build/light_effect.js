@@ -1,9 +1,10 @@
 function LightEffect( effect_num ) {
 	var effectContainer = new createjs.Container() ;
+	effectContainer.name = effect_num ;
 	if ( effect_num == 1 ) {
 		effectContainer.regX = 150, effectContainer.regY = 100 ;
 		effectContainer.setBounds( 0, 0, 300, 200 ) ;
-		for ( i = 0 ; i < 30 ; i ++ ) {
+		for ( k = 0 ; k < 30 ; k ++ ) {
 			var grain = new createjs.Shape() ;
 			grain.graphics.f( "#FFFFFF" ).drawPolyStar( 0, 0, 10, 10, 0.6, -90 ) ;
 			effectContainer.addChild( grain ) ;
@@ -18,7 +19,7 @@ function LightEffect( effect_num ) {
 	else if ( effect_num == 2 ) {
 		effectContainer.regX = 100, effectContainer.regY = 100 ;
 		effectContainer.setBounds( 0, 0, 200, 200 ) ;
-		for ( i = 0 ; i < 15 ; i ++ ) {
+		for ( k = 0 ; k < 15 ; k ++ ) {
 			var grain = new createjs.Shape() ;
 			grain.graphics.f( "#FFFFFF" ).drawPolyStar( 0, 0, 10, 10, 0.6, -90 ) ;
 			effectContainer.addChild( grain ) ;
@@ -33,7 +34,7 @@ function LightEffect( effect_num ) {
 	else if ( effect_num == 3 ) {
 		effectContainer.regX = 50, effectContainer.regY = 100 ;
 		effectContainer.setBounds( 0, 0, 100, 200 ) ;
-		for ( i = 0 ; i < 75 ; i ++ ) {
+		for ( k = 0 ; k < 75 ; k ++ ) {
 			var grain = new createjs.Shape() ;
 			grain.graphics.f( "#FFFFFF" ).r( 0, 0, 1, 12 ) ;
 			effectContainer.addChild( grain ) ;
@@ -48,7 +49,7 @@ function LightEffect( effect_num ) {
 	else if ( effect_num == 4 ) {
 		effectContainer.regX = 60, effectContainer.regY = 15 ;
 		effectContainer.setBounds( 0, 0, 120, 30 ) ;
-		for ( i = 0 ; i < 85 ; i ++ ) {
+		for ( k = 0 ; k < 85 ; k ++ ) {
 			var grain = new createjs.Shape() ;
 			grain.graphics.f( "#FFFFFF" ).r( 0, 0, 1, 4 ) ;
 			effectContainer.addChild( grain ) ;
