@@ -683,6 +683,10 @@ PreviewBox.prototype.ToolsBoxListener = function( controller, type ) {
 	} ) ;
 
 	function ChangeGrid( evt ) {
+		if ( type == "object" )
+			var nowIndex = that.box.mapbox.objects.getChildIndex( controller ) - 1 ;
+		else if ( type == "light" )
+			var nowIndex = that.box.mapbox.light.getChildIndex( controller ) - 1 ;
 		var difX = evt.stageX - previous.x, difY = evt.stageY - previous.y ;
 		var boundX = ( G.customer_length - that.box.mapbox.tiled.mc ) * G.size, boundY = ( G.customer_height - that.box.mapbox.tiled.mr ) * G.size ;
 		// Reject to put the object not out of range.
@@ -693,11 +697,6 @@ PreviewBox.prototype.ToolsBoxListener = function( controller, type ) {
 		else if ( controller.x + difX > boundX )
 			controller.x = boundX, controller.tools.x = controller.x ;
 		controller.storeX = Math.ceil( controller.x + that.box.mapbox.tiled.mc * G.size ) ;
-		// if ( type == "object" )
-		// 	that.box.mapbox.object_data[controller.order].rx = controller.storeX ;
-		// else if ( type == "light" )
-		// 	that.box.mapbox.light_data[controller.order].rx = controller.storeX ;
-
 		if ( controller.y + difY >= 0 && controller.y + difY <= boundY )
 			controller.y += difY, previous.y = evt.stageY, controller.tools.y = controller.y ;
 		else if ( controller.y + difY < 0 )
@@ -705,9 +704,13 @@ PreviewBox.prototype.ToolsBoxListener = function( controller, type ) {
 		else if ( controller.y + difY > boundY )
 			controller.y = boundY, controller.tools.y = controller.y ;
 		controller.storeY = Math.ceil( controller.y + that.box.mapbox.tiled.mr * G.size ) ;
-		// if ( type == "object" )
-		// 	that.box.mapbox.object_data[controller.order].ry = controller.storeY ;
-		// else if ( type == "light" )
-		// 	that.box.mapbox.light_data[controller.order].ry = controller.storeY ;
+		if ( type == "object" ) {
+			that.box.mapbox.object_data[nowIndex].rx = controller.storeX ;
+			that.box.mapbox.object_data[nowIndex].ry = controller.storeY ;
+		} // if
+		else if ( type == "light" ) {
+			that.box.mapbox.light_data[nowIndex].rx = controller.storeX ;
+			that.box.mapbox.light_data[nowIndex].ry = controller.storeY ;
+		} // else if
 	} // ChangeGrid()
 } // ToolsBoxListener()
