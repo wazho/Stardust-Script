@@ -126,7 +126,7 @@ function jQueryFunctions( preview ) {
 					preview.box.mapbox.objects.addChild( container ) ;
 				} // for
 				// Initial light data at mapbox.
-				preview.box.mapbox.light_data = obj.objectData ;
+				preview.box.mapbox.light_data = obj.lightData ;
 				for ( i = 1 ; i < preview.box.mapbox.light.getNumChildren() ; i ++ )
 					preview.box.mapbox.light.removeChildAt( i ) ;
 				// Light data.
