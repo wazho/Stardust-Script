@@ -222,8 +222,14 @@ MaterialBox.prototype.OnTexture = function() {
 			} // else if
 			// Select multi-tiled.
 			else if ( pt.box.list.texture.multiSelect == 2 ) {
+				// Get distance of 'final - start grid'.
 				var degreeX = ( index % G.range ) - ( pt.box.list.marked.x - 14 ) / ( G.size + 1 ) ;
 				var degreeY = ( Math.floor( index / G.range ) ) - ( pt.box.list.marked.y - 14 ) / ( G.size + 1 ) ;
+				// Save those distance to name element.
+				var storeRangeX = ( 10 * ( ( degreeX >= 0 ) ? 1 : 0 ) ) + Math.abs( degreeX ) ;
+				var storeRangeY = ( 10 * ( ( degreeY >= 0 ) ? 1 : 0 ) ) + Math.abs( degreeY ) ;
+				pt.box.list.marked.name = ( tiled.name + storeRangeX * 0.01 + storeRangeY * 0.0001 ).toFixed( 4 ) ;
+				// Draw a new range multi-selected.
 				pt.box.list.marked.pane.graphics.s( "#00FF00" ).r( 
 					( degreeX >= 0 ) ? 0 : ( G.size + 1 ),
 					( degreeY >= 0 ) ? 0 : ( G.size + 1 ),

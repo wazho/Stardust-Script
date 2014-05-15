@@ -265,16 +265,24 @@ PreviewBox.prototype.OnTiledControl = function() {
 
 		// Focus one tiled, let it replace new one.
 		function SingleTileReplace( pt, singleTiled ) {
-			// Get sileded tiled map data.
+			// Get selected tiled map data.
 			var select = pt.material.box.list.marked.name ;
 			var row = Math.floor( singleTiled.name / G.length ) + pt.box.mapbox.tiled.mr ;
 			var column = ( singleTiled.name % G.length ) + pt.box.mapbox.tiled.mc ;
 			if ( pt.material.box.selector.statusPage == 1 ) {
-				var map = Math.floor( select / 100 ) ;
-				var index = select - Math.floor( ( select / 100 ) ) * 100 ;
-				// tilde map assign.
-				pt.box.mapbox.tiled_data[row][column].m = map ;
-				pt.box.mapbox.tiled_data[row][column].i = index ;
+				// This's tiled map data has a range.
+				if ( ( select - Math.floor( select ) ).toFixed( 4 ) != 0 ) {
+					var range = Math.floor( ( select - Math.floor( select ) ).toFixed( 4 ) * 10000 ) ;
+					var getX = Math.floor( range / 100 ), getY = range - getX * 100 ;
+					var rangeX = ( ( getX >= 10 ) ? 1 : -1 ) * ( getX % 10 ) ;
+					var rangeY = ( ( getY >= 10 ) ? 1 : -1 ) * ( getY % 10 ) ;
+				} // if
+
+				var mapNumber = Math.floor( select / 100 ) ;
+				var mapSrartIndex = select - Math.floor( ( select / 100 ) ) * 100 ;
+				// Tilde map assign.
+				pt.box.mapbox.tiled_data[row][column].m = mapNumber ;
+				pt.box.mapbox.tiled_data[row][column].i = mapSrartIndex ;
 				TotalRefresh( pt, pt.box.mapbox.tiled.mr, pt.box.mapbox.tiled.mc, row, column ) ;
 			} // if
 			else if ( pt.material.box.selector.statusPage == 2 ) {
