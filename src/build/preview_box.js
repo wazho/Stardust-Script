@@ -365,7 +365,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 		that.box.mapbox.object_data[index].sy = controller.scaleY ;
 		controller.order = index ;
 		// Get tools.
-		controller.tools = that.GetToolsBox( controller ) ;
+		controller.tools = that.GetToolsBox( controller, "object"  ) ;
 		// Add controller listening events.
 		that.ToolsBoxListener( controller, "object" ) ;
 
@@ -420,7 +420,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 		that.box.mapbox.light_data[index].sy = controller.scaleY ;
 		controller.order = index ;
 		// Get tools.
-		controller.tools = that.GetToolsBox( controller ) ;
+		controller.tools = that.GetToolsBox( controller, "light" ) ;
 		// Add controller listening events.
 		that.ToolsBoxListener( controller, "light" ) ;
 
@@ -443,7 +443,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 } // OnTiledControl()
 
 // Add tools box to one object. 
-PreviewBox.prototype.GetToolsBox = function( controller ) {
+PreviewBox.prototype.GetToolsBox = function( controller, type ) {
 	var that = this ;
 	// Setting tools location.
 	var tools = new createjs.Container() ;
@@ -468,10 +468,15 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 	tools.cancel.on( "click", function() {
 		createjs.Tween.get( controller )
 		.to( { alpha: 0, rotation: -360, scaleX: 0, scaleY: 0 }, 500 )
-		.call( function() { that.box.mapbox.objects.removeChild( controller ) ; } ) ;
+		.call( function() { 
+			if ( type == "object" )
+				that.box.mapbox.objects.removeChild( controller ) ;
+			else if ( type == "light" )
+				that.box.mapbox.light.removeChild( controller ) ;
+		} ) ;
 		createjs.Tween.get( controller.tools )
 		.to( { alpha: 0, rotation: -360, scaleX: 0, scaleY: 0 }, 500 )
-		.call( function() { that.box.mapbox.objects.removeChild( controller ) ; } ) ;
+		.call( function() { that.box.mapbox.removeChild( controller.tools ) ; } ) ;
 	} ) ;
 	// Flip.
 	tools.flip = new createjs.Container() ;
@@ -485,9 +490,16 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 	tools.flip.oriX = tools.flip.x, tools.flip.oriY = tools.flip.y ;
 	tools.flip.addChild( tools.flip.bg, tools.flip.icon ) ;
 	tools.flip.on( "click", function() {
-		that.box.mapbox.object_data[controller.order].sx *= -1 ;
-		createjs.Tween.get( controller.objects )
-		.to( { scaleX: controller.objects.scaleX * -1 }, 100 ) ;
+		if ( type == "object" ) {
+			that.box.mapbox.object_data[controller.order].sx *= -1 ;
+			createjs.Tween.get( controller.objects )
+			.to( { scaleX: controller.objects.scaleX * -1 }, 100 ) ;
+		} // if
+		else if ( type == "light" ) {
+			that.box.mapbox.light_data[controller.order].sx *= -1 ;
+			createjs.Tween.get( controller.light )
+			.to( { scaleX: controller.light.scaleX * -1 }, 100 ) ;
+		} // else if
 	} ) ;
 	// Up.
 	tools.up = new createjs.Container() ;
@@ -501,11 +513,19 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 	tools.up.oriX = tools.up.x, tools.up.oriY = tools.up.y ;
 	tools.up.addChild( tools.up.bg, tools.up.icon ) ;
 	tools.up.on( "click", function() { 
-		var nowIndex = that.box.mapbox.objects.getChildIndex( controller ) ;
+		if ( type == "object" )
+			var nowIndex = that.box.mapbox.objects.getChildIndex( controller ) ;
+		else if ( type == "light" )
+			var nowIndex = that.box.mapbox.light.getChildIndex( controller ) ;
 
 		createjs.Tween.get( controller )
 		.to( { alpha: 0.5 }, 300 )
-		.call( function() { that.box.mapbox.objects.addChildAt( controller, nowIndex + 1 ) ; } )
+		.call( function() {
+			if ( type == "object" )
+				that.box.mapbox.objects.addChildAt( controller, nowIndex + 1 ) ; 
+			else if ( type == "light" )
+				that.box.mapbox.light.addChildAt( controller, nowIndex + 1 ) ; 
+		} )
 		.to( { alpha: 1 }, 300 ) ;
 	} ) ;
 	// Down.
@@ -520,11 +540,19 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 	tools.down.oriX = tools.down.x, tools.down.oriY = tools.down.y ;
 	tools.down.addChild( tools.down.bg, tools.down.icon ) ;
 	tools.down.on( "click", function() { 
-		var nowIndex = that.box.mapbox.objects.getChildIndex( controller ) ;
+		if ( type == "object" )
+			var nowIndex = that.box.mapbox.objects.getChildIndex( controller ) ;
+		else if ( type == "light" )
+			var nowIndex = that.box.mapbox.light.getChildIndex( controller ) ;
 
 		createjs.Tween.get( controller )
 		.to( { alpha: 0.5 }, 300 )
-		.call( function() { that.box.mapbox.objects.addChildAt( controller, ( nowIndex > 1 ) ? ( nowIndex - 1 ) : 1 ) ; } )
+		.call( function() {
+			if ( type == "object" )
+				that.box.mapbox.objects.addChildAt( controller, ( nowIndex > 1 ) ? ( nowIndex - 1 ) : 1 ) ;
+			else if ( type == "light" )
+				that.box.mapbox.light.addChildAt( controller, ( nowIndex > 1 ) ? ( nowIndex - 1 ) : 1 ) ;
+		} )
 		.to( { alpha: 1 }, 300 ) ;
 	} ) ;
 	// Zoom in.
@@ -539,8 +567,14 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 	tools.zoom_in.oriX = tools.zoom_in.x, tools.zoom_in.oriY = tools.zoom_in.y ;
 	tools.zoom_in.addChild( tools.zoom_in.bg, tools.zoom_in.icon ) ;
 	tools.zoom_in.on( "click", function() { 
-		that.box.mapbox.object_data[controller.order].sx *= 1.05 ;
-		that.box.mapbox.object_data[controller.order].sy *= 1.05 ;
+		if ( type == "object" ) {
+			that.box.mapbox.object_data[controller.order].sx *= 1.05 ;
+			that.box.mapbox.object_data[controller.order].sy *= 1.05 ;
+		} // if
+		else if ( type == "light" ) {
+			that.box.mapbox.light_data[controller.order].sx *= 1.05 ;
+			that.box.mapbox.light_data[controller.order].sy *= 1.05 ;
+		} // else if
 		createjs.Tween.get( controller )
 		.to( { scaleX: controller.scaleX * 1.05, scaleY: controller.scaleY * 1.05 }, 300 ) ;
 		createjs.Tween.get( controller.tools )
@@ -558,8 +592,14 @@ PreviewBox.prototype.GetToolsBox = function( controller ) {
 	tools.zoom_out.oriX = tools.zoom_out.x, tools.zoom_out.oriY = tools.zoom_out.y ;
 	tools.zoom_out.addChild( tools.zoom_out.bg, tools.zoom_out.icon ) ;
 	tools.zoom_out.on( "click", function() { 
-		that.box.mapbox.object_data[controller.order].sx *= 0.95 ;
-		that.box.mapbox.object_data[controller.order].sy *= 0.95 ;
+		if ( type == "object" ) {
+			that.box.mapbox.object_data[controller.order].sx *= 0.95 ;
+			that.box.mapbox.object_data[controller.order].sy *= 0.95 ;
+		} // if
+		else if ( type == "light" ) {
+			that.box.mapbox.light_data[controller.order].sx *= 0.95 ;
+			that.box.mapbox.light_data[controller.order].sy *= 0.95 ;
+		} // else if
 		createjs.Tween.get( controller )
 		.to( { scaleX: controller.scaleX * 0.95, scaleY: controller.scaleY * 0.95 }, 300 ) ;
 		createjs.Tween.get( controller.tools )
