@@ -485,12 +485,14 @@ PreviewBox.prototype.GetToolsBox = function( controller, type ) {
 	tools.flip.addChild( tools.flip.bg, tools.flip.icon ) ;
 	tools.flip.on( "click", function() {
 		if ( type == "object" ) {
-			// that.box.mapbox.object_data[controller.order].sx *= -1 ;
+			var nowIndex = that.box.mapbox.objects.getChildIndex( controller ) - 1 ;
+			that.box.mapbox.object_data[nowIndex].sx *= -1 ;
 			createjs.Tween.get( controller.objects )
 			.to( { scaleX: controller.objects.scaleX * -1 }, 100 ) ;
 		} // if
 		else if ( type == "light" ) {
-			// that.box.mapbox.light_data[controller.order].sx *= -1 ;
+			var nowIndex = that.box.mapbox.light.getChildIndex( controller ) - 1 ;
+			that.box.mapbox.light_data[nowIndex].sx *= -1 ;
 			createjs.Tween.get( controller.light )
 			.to( { scaleX: controller.light.scaleX * -1 }, 100 ) ;
 		} // else if
@@ -554,7 +556,7 @@ PreviewBox.prototype.GetToolsBox = function( controller, type ) {
 			that.box.mapbox.object_data[nowIndex-2] = temp ;
 		} // if
 		else if ( type == "light" ) {
-			var nowIndex = that.box.mapbox.light.getChildIndex( controller ) 
+			var nowIndex = that.box.mapbox.light.getChildIndex( controller ) ;
 			if ( nowIndex < 2 )
 				return ;
 			var temp = that.box.mapbox.light_data[nowIndex-1] ;
@@ -584,12 +586,14 @@ PreviewBox.prototype.GetToolsBox = function( controller, type ) {
 	tools.zoom_in.addChild( tools.zoom_in.bg, tools.zoom_in.icon ) ;
 	tools.zoom_in.on( "click", function() { 
 		if ( type == "object" ) {
-			// that.box.mapbox.object_data[controller.order].sx *= 1.05 ;
-			// that.box.mapbox.object_data[controller.order].sy *= 1.05 ;
+			var nowIndex = that.box.mapbox.objects.getChildIndex( controller ) - 1 ;
+			that.box.mapbox.object_data[nowIndex].sx *= 1.05 ;
+			that.box.mapbox.object_data[nowIndex].sy *= 1.05 ;
 		} // if
 		else if ( type == "light" ) {
-			// that.box.mapbox.light_data[controller.order].sx *= 1.05 ;
-			// that.box.mapbox.light_data[controller.order].sy *= 1.05 ;
+			var nowIndex = that.box.mapbox.light.getChildIndex( controller ) - 1 ;
+			that.box.mapbox.light_data[nowIndex].sx *= 1.05 ;
+			that.box.mapbox.light_data[nowIndex].sy *= 1.05 ;
 		} // else if
 		createjs.Tween.get( controller )
 		.to( { scaleX: controller.scaleX * 1.05, scaleY: controller.scaleY * 1.05 }, 300 ) ;
@@ -609,12 +613,14 @@ PreviewBox.prototype.GetToolsBox = function( controller, type ) {
 	tools.zoom_out.addChild( tools.zoom_out.bg, tools.zoom_out.icon ) ;
 	tools.zoom_out.on( "click", function() { 
 		if ( type == "object" ) {
-			// that.box.mapbox.object_data[controller.order].sx *= 0.95 ;
-			// that.box.mapbox.object_data[controller.order].sy *= 0.95 ;
+			var nowIndex = that.box.mapbox.objects.getChildIndex( controller ) - 1 ;
+			that.box.mapbox.object_data[nowIndex].sx *= 0.95 ;
+			that.box.mapbox.object_data[nowIndex].sy *= 0.95 ;
 		} // if
 		else if ( type == "light" ) {
-			// that.box.mapbox.light_data[controller.order].sx *= 0.95 ;
-			// that.box.mapbox.light_data[controller.order].sy *= 0.95 ;
+			var nowIndex = that.box.mapbox.light.getChildIndex( controller ) - 1 ;
+			that.box.mapbox.light_data[nowIndex].sx *= 0.95 ;
+			that.box.mapbox.light_data[nowIndex].sy *= 0.95 ;
 		} // else if
 		createjs.Tween.get( controller )
 		.to( { scaleX: controller.scaleX * 0.95, scaleY: controller.scaleY * 0.95 }, 300 ) ;
