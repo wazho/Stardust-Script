@@ -281,13 +281,15 @@ PreviewBox.prototype.OnTiledControl = function() {
 				// Range tiled replace.
 				var mapNumber = Math.floor( select / 100 ) ;
 				var mapSrartIndex = ( select - Math.floor( select / 100 ) * 100 ).toFixed( 0 ) ;
-				console.log( select + "     start from : " + mapNumber + "(" + mapSrartIndex + ")   " + "Rx: " + rangeX + " Ry: " + rangeY ) ;
 				for ( y = rangeY ; ; ( y > 0 ) ? y -- : y ++ ) {
 					for ( x = rangeX ; ; ( x > 0 ) ? x -- : x ++ ) {
 						// Tilde map assign.
-						pt.box.mapbox.tiled_data[row+y][column+x].m = mapNumber ;
-						pt.box.mapbox.tiled_data[row+y][column+x].i = Number( mapSrartIndex ) + x + ( G.range * y ) ;
-						TotalRefresh( pt, pt.box.mapbox.tiled.mr, pt.box.mapbox.tiled.mc, row + y, column + x ) ;
+						if ( row + y >= 0 && column + x >= 0 && row + y < G.customer_height && column + x < G.customer_length ) {
+							pt.box.mapbox.tiled_data[row+y][column+x].m = mapNumber ;
+							pt.box.mapbox.tiled_data[row+y][column+x].i = Number( mapSrartIndex ) + x + ( G.range * y ) ;
+							if ( ( row + y ) < ( G.height + pt.box.mapbox.tiled.mr ) && ( column + x ) < ( G.length + pt.box.mapbox.tiled.mc ) && ( row + y ) >= 0 && ( column + x ) >= 0 )
+								TotalRefresh( pt, pt.box.mapbox.tiled.mr, pt.box.mapbox.tiled.mc, row + y, column + x ) ;
+						} // if
 						if ( x == 0 )
 							break ;
 					} // for
