@@ -104,29 +104,27 @@ function jQueryFunctions( preview ) {
 				for ( i = 1 ; i < preview.box.mapbox.objects.getNumChildren() ; i ++ )
 					preview.box.mapbox.objects.removeChildAt( i ) ;
 				// Objects data.
-				for ( i = 0 ; i < obj.objectData.length ; i ++ )
-					for ( j = 0 ; j < obj.objectData.length ; j ++ )
-						if ( i == obj.objectData[j].o ) {
-							var container = new createjs.Container() ;
-							container.x = container.storeX = obj.objectData[j].rx ;
-							container.y = container.storeY = obj.objectData[j].ry ;
-							container.order = obj.objectData[j].o ;
-							container.objects = G.cacheObjects[obj.objectData[j].n-1].clone( false ) ;
-							var objectWidth = container.objects.getBounds().width ;
-							var objectHeight = container.objects.getBounds().height ;
-							container.objects.regX = objectWidth / 2 ;
-							container.objects.regY = objectHeight / 2 ;
-							container.objects.x = container.objects.regX + 10, container.objects.y = container.objects.regY + 10 ;
-							container.addChild( container.objects ) ;
-							container.regX = container.objects.regX + 10, container.regY = container.objects.regY + 10 ;
-							container.scaleX = obj.objectData[j].sx, container.scaleY = obj.objectData[j].sy ;
-							container.bg = new createjs.Shape() ;
-							container.bg.graphics.f( "#AAAAAA" ).s( "#000000" ).r( 0, 0, container.getBounds().width + 20, container.getBounds().height + 20 ) ;
-							container.bg.alpha = 0 ;
-							container.tools = preview.GetToolsBox( container ) ;
-							preview.ToolsBoxListener( container ) ;
-							preview.box.mapbox.objects.addChild( container ) ;
-						} // if
+				for ( i = 0 ; i < obj.objectData.length ; i ++ ) {
+					var container = new createjs.Container() ;
+					container.x = container.storeX = obj.objectData[i].rx ;
+					container.y = container.storeY = obj.objectData[i].ry ;
+					container.order = obj.objectData[i].o ;
+					container.objects = G.cacheObjects[obj.objectData[i].n-1].clone( false ) ;
+					var objectWidth = container.objects.getBounds().width ;
+					var objectHeight = container.objects.getBounds().height ;
+					container.objects.regX = objectWidth / 2 ;
+					container.objects.regY = objectHeight / 2 ;
+					container.objects.x = container.objects.regX + 10, container.objects.y = container.objects.regY + 10 ;
+					container.addChild( container.objects ) ;
+					container.regX = container.objects.regX + 10, container.regY = container.objects.regY + 10 ;
+					container.scaleX = obj.objectData[i].sx, container.scaleY = obj.objectData[i].sy ;
+					container.bg = new createjs.Shape() ;
+					container.bg.graphics.f( "#AAAAAA" ).s( "#000000" ).r( 0, 0, container.getBounds().width + 20, container.getBounds().height + 20 ) ;
+					container.bg.alpha = 0 ;
+					container.tools = preview.GetToolsBox( container ) ;
+					preview.ToolsBoxListener( container ) ;
+					preview.box.mapbox.objects.addChild( container ) ;
+				} // for
 			},
 			"Cancel": function() {
 				$( this ).dialog( "close" ) ;
