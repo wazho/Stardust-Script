@@ -269,6 +269,7 @@ PreviewBox.prototype.OnTiledControl = function() {
 			var select = pt.material.box.list.marked.name ;
 			var row = Math.floor( singleTiled.name / G.length ) + pt.box.mapbox.tiled.mr ;
 			var column = ( singleTiled.name % G.length ) + pt.box.mapbox.tiled.mc ;
+			var rangeX = 0, rangeY = 0 ;
 			if ( pt.material.box.selector.statusPage == 1 ) {
 				// This's tiled map data has a range.
 				if ( ( select - Math.floor( select ) ).toFixed( 4 ) != 0 ) {
@@ -277,13 +278,22 @@ PreviewBox.prototype.OnTiledControl = function() {
 					var rangeX = ( ( getX >= 10 ) ? 1 : -1 ) * ( getX % 10 ) ;
 					var rangeY = ( ( getY >= 10 ) ? 1 : -1 ) * ( getY % 10 ) ;
 				} // if
-
+				// Range tiled replace.
 				var mapNumber = Math.floor( select / 100 ) ;
-				var mapSrartIndex = select - Math.floor( ( select / 100 ) ) * 100 ;
-				// Tilde map assign.
-				pt.box.mapbox.tiled_data[row][column].m = mapNumber ;
-				pt.box.mapbox.tiled_data[row][column].i = mapSrartIndex ;
-				TotalRefresh( pt, pt.box.mapbox.tiled.mr, pt.box.mapbox.tiled.mc, row, column ) ;
+				var mapSrartIndex = ( select - Math.floor( select / 100 ) * 100 ).toFixed( 0 ) ;
+				console.log( select + "     start from : " + mapNumber + "(" + mapSrartIndex + ")   " + "Rx: " + rangeX + " Ry: " + rangeY ) ;
+				for ( y = rangeY ; ; ( y > 0 ) ? y -- : y ++ ) {
+					for ( x = rangeX ; ; ( x > 0 ) ? x -- : x ++ ) {
+						// Tilde map assign.
+						pt.box.mapbox.tiled_data[row+y][column+x].m = mapNumber ;
+						pt.box.mapbox.tiled_data[row+y][column+x].i = Number( mapSrartIndex ) + x + ( G.range * y ) ;
+						TotalRefresh( pt, pt.box.mapbox.tiled.mr, pt.box.mapbox.tiled.mc, row + y, column + x ) ;
+						if ( x == 0 )
+							break ;
+					} // for
+					if ( y == 0 )
+						break ;
+				} // for
 			} // if
 			else if ( pt.material.box.selector.statusPage == 2 ) {
 				if ( select == "walkable" )
