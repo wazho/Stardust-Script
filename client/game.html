@@ -1,0 +1,84 @@
+<!DOCTYPE  html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Stardust Script</title>
+
+	<link href="pepper-grinder/jquery-ui-1.10.4.custom.css" rel="stylesheet">
+	<script src="jquery-2.1.1.min.js"></script>
+	<script src="jquery-ui-1.10.4.custom.min.js"></script>
+
+	<script src="createjs-2013.12.12.min.js"></script>
+	<script src="RPG/global_function.js"></script>
+	<script src="RPG/sprite_choose.js"></script>
+	<script src="RPG/map.js"></script>
+	<script src="RPG/npc.js"></script>
+	<script src="RPG/character.js"></script>
+	<script src="RPG/monster.js"></script>
+	<script src="RPG/framework.js"></script>
+
+	<script src="../socket.io/socket.io.js"></script>
+	<script src="RPG/server_connection.js"></script>
+	<script>
+		var socket = io.connect() ;
+		socket.on( 'clientConnect', function( data ) {
+			console.log( data.message ) ;
+			socket.emit( 'clientConnect', { message: 'One player is online.' } ) ;
+		} ) ;
+	</script>
+
+	<script>
+		var stage ;
+		function init() {
+			stage = new createjs.Stage( "myCanvas" ) ;
+    		document.body.style.cursor = "url('cursor/normal_select.cur'), default" ;
+			// 定義畫布長寬
+			var canvas_len = 900, canvas_hei = 550 ;
+			// 建立地圖框架
+			var mapcontrol = new Main_Map( "01", canvas_len, canvas_hei, true ) ;
+			// 建立遊戲框架
+			var framework = new Main_Framework( canvas_len, canvas_hei ) ;
+			// 建立角色物件
+			var baphomet = new Character( mapcontrol, "baphomet", 175, 55, 1.00, 9, 3, "front" ) ;
+			var farmiliar_01 = new NPC( mapcontrol, "farmiliar_01", 19, 1, 6, "monster", "farmiliar" ) ;
+			var farmiliar_01 = new NPC( mapcontrol, "farmiliar_01", 19, 1, 6, "monster", "farmiliar" ) ;
+			var farmiliar_02 = new NPC( mapcontrol, "farmiliar_02", 19, 1, 6, "monster", "farmiliar" ) ;
+			var farmiliar_03 = new NPC( mapcontrol, "farmiliar_03", 19, 1, 6, "monster", "farmiliar" ) ;
+
+			baphomet.OnLifeModify( -100, -40 ) ;
+
+			// 地圖背景匯入
+			stage.addChild( mapcontrol.backgorond ) ;
+			// 地圖景效物件匯入(後端)
+			stage.addChild( mapcontrol.container_back ) ;
+			// 主要角色匯入
+			stage.addChild( baphomet.container ) ;
+			stage.addChild( farmiliar_01.container, farmiliar_02.container, farmiliar_03.container ) ;
+			// 地圖景效物件匯入(前端)
+			stage.addChild( mapcontrol.container_front ) ;
+			// 遊戲主框架匯入
+		    stage.addChild( framework.container ) ;
+		} // init()
+	</script>
+
+	<style>
+		body {
+			background-color: #ACA
+		}
+		#myCanvas {
+			 position: absolute ;
+			 top: 50% ;
+			 left: 50% ;
+			 margin-left: -450px ;
+			 margin-top: -285px ;
+			 border-radius: 10px ;
+		}
+	</style>
+</head>
+
+<body onload="init()">
+	<canvas id="myCanvas" width="900" height="550">
+		Alternative Content
+	</canvas>
+</body>
+</html>
