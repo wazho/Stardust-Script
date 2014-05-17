@@ -12,15 +12,31 @@
 2. Have fun.
 
 
-# Build your map.
+# Build your unique map.
 
-* This is a tool to create tiled map in json format.
+## This is a tool to create tiled map.
 
-* Support to add any texture easyly.
+	1. Unlimited ranged.
 
-* Put 'floor texture', 'building objects', 'light effect', 'environment sound' ... etc 
+	2. Export json format.
 
-1. Open the file 'build/build_map.html'.
+	3. Add any texture easyly.
 
-2. Let create your map format to json.
+## Expandability and instinctive UI.
+
+	1. Floor texture.
+
+	2. Walkable setting.
+
+	3. Building objects.
+
+	4. Light effect.
+
+	5. Environment sound.
+
+## How to start ?
+
+	1. Open the file 'build/build_map.html'.
+
+	2. Let create your map and fun.
 
