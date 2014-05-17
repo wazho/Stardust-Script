@@ -16,6 +16,8 @@ function Main_Map( map_num, len, hei, switch_debug ) {
 	this.container_back.addChild( this.grid ) ;
 	// 地圖網格上物件管理
 	this.controlContainer = new createjs.Container() ;
+
+	this.DrawMap( map_num, 0, 0 ) ;
 } // Main_Map()
 
 // 地圖網格上物件管理, 更新物件
@@ -87,14 +89,32 @@ Main_Map.prototype.Float_Object = function( type, start_x, start_y, end_x, end_y
 } // Float_Object()
 
 // DrawMap
-Main_Map.prototype.DrawMap = function( x, y, length, height ) {
-	
-	
+Main_Map.prototype.DrawMap = function( index, x, y ) {
+	var mapPixel = cacheMapData.map[index].tilePixel ;
+	var mapName = cacheMapData.map[index].name ;
+	var mapLength = cacheMapData.map[index].length, mapHeight = cacheMapData.map[index].height ;
+	var mapTile = cacheMapData.map[index].tileData ;
+	console.log( "Now Loading map: " + mapName + " (" + mapLength + "*" + mapHeight + ")" ) ;
+
+	var map = new createjs.Container() ;
+
+	console.log( mapHeight + "  " + mapLength ) ;
+
+
+	for ( row = 0 ; row < mapHeight ; row ++ )
+		for ( column = 0 ; column < mapLength ; column ++ ) {
+			var tileIndex_row = Math.floor( mapTile[row][column].i / ( 256 / mapPixel ) ) ;
+			var tileIndex_column = mapTile[row][column].i % ( 256 / mapPixel ) ;
+			var tile = new createjs.Bitmap( "map/texture/" + mapTile[row][column].m + ".png" ) ;
+			tile.sourceRect = new createjs.Rectangle( mapPixel * tileIndex_column, mapPixel * tileIndex_row, mapPixel, mapPixel ) ;
+			tile.cache( 0, 0, mapPixel, mapPixel ) ;
+			tile.x = mapPixel * column, tile.y = mapPixel * row ;
+			this.container_back.addChild( tile ) ;
+		} // for
 
 } // DrawMap()
 
 Main_Map.prototype.MapMove = function( x, y, speed ) {
-	this.DrawMap( 0, 0, 25, 15 ) ;
 	createjs.Tween.get( this.backgorond, { loop: false } ).to( { x: x, y: y }, speed, createjs.Ease.quadInOut ) ;
 
 

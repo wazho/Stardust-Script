@@ -109,8 +109,8 @@ Character.prototype.OnWalk = function( x, y ) {
 														.to( { x: location_x, y: location_y }, trim_speed, createjs.Ease.quadInOut )
 														.call( function() { that.OnDirection( direction, "front" ) } )
 														.call( function() { if ( that.MapControlPointer.GetObjectbyGrid( x, y ).getNumChildren() != 0 ) that.MapControlPointer.GetObjectbyGrid( x, y ).getChildAt( 0 ).OnDialog() } ) ;
-	this.MapControlPointer.MapMove( location_x, location_y, trim_speed ) ;
 
+	this.MapControlPointer.MapMove( location_x, location_y, trim_speed ) ;
 
 	console.log( start_x + "  " + start_y ) ;
 

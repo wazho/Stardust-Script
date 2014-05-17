@@ -4,11 +4,15 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<title>Stardust Script</title>
 
+	<!-- jQuery -->
 	<link href="pepper-grinder/jquery-ui-1.10.4.custom.css" rel="stylesheet">
 	<script src="jquery-2.1.1.min.js"></script>
 	<script src="jquery-ui-1.10.4.custom.min.js"></script>
-
+	<!-- CreateJS -->
 	<script src="createjs-2013.12.12.min.js"></script>
+	<!-- Preload game data -->
+	<script src="map_adding.js"></script>
+	<!-- RPG source -->
 	<script src="RPG/global_function.js"></script>
 	<script src="RPG/sprite_choose.js"></script>
 	<script src="RPG/map.js"></script>
@@ -16,7 +20,7 @@
 	<script src="RPG/character.js"></script>
 	<script src="RPG/monster.js"></script>
 	<script src="RPG/framework.js"></script>
-
+	<!-- NodeJS for socket connetion -->
 	<script src="../socket.io/socket.io.js"></script>
 	<script src="RPG/server_connection.js"></script>
 	<script>
@@ -35,7 +39,7 @@
 			// 定義畫布長寬
 			var canvas_len = 900, canvas_hei = 550 ;
 			// 建立地圖框架
-			var mapcontrol = new Main_Map( "01", canvas_len, canvas_hei, true ) ;
+			var mapcontrol = new Main_Map( 0, canvas_len, canvas_hei, true ) ;
 			// 建立遊戲框架
 			var framework = new Main_Framework( canvas_len, canvas_hei ) ;
 			// 建立角色物件
@@ -57,12 +61,15 @@
 			// 地圖景效物件匯入(前端)
 			stage.addChild( mapcontrol.container_front ) ;
 			// 遊戲主框架匯入
-		    stage.addChild( framework.container ) ;
+			stage.addChild( framework.container ) ;
 
+			fpsLabel = new createjs.Text( "-- fps", "bold 18px Arial", "#FFF" ) ;
+			stage.addChild( fpsLabel ) ;
+			fpsLabel.x = 10, fpsLabel.y = 20 ;
 
-
-
-		    cacheMapData() ;
+			// FPS
+			createjs.Ticker.addEventListener( "tick", tick ) ;
+			createjs.Ticker.setFPS( 100 ) ;
 		} // init()
 	</script>
 

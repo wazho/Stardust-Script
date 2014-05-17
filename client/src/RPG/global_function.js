@@ -1,32 +1,3 @@
-// Cache game data.
-
-function cacheMapData() {
-	$.getJSON( "_adding.json", function( addingMap ) {
-		var mapCount = addingMap.file.length ;
-
-		//alert( "Total have : " + mapCount ) ;
-
-		var cacheMapData = new Array() ;
-				console.log( cacheMapData + " ???" ) ;
-
-		for ( mapIndex = 0 ; mapIndex < mapCount ; mapIndex ++ ) {
-			console.log( addingMap.file[mapIndex].name ) ;
-			console.log( $.getJSON( addingMap.file[mapIndex].name, function( mapData ) {
-				// console.log( "Map name: " + mapData.name ) ;
-				// console.log( "Map pixel per tile: " + mapData.tilePixel + " (" + mapData.length + "*" + mapData.height + ")" ) ;
-			} ) ) ;
-
-		} // for
-
-
-		alert( "~~~~~~~~~~~   " + cacheMapData.name ) ;
-
-	} ) ;
-
-
-} // cacheMapData()
-
-
 // Key event listening.
 
 var KEYCODE_ENTER = 13 ;
@@ -59,6 +30,7 @@ function handleKeyUp( e ) {
 } // handleKeyUp()
 
 function tick( event ) {
+	fpsLabel.text = Math.round( createjs.Ticker.getMeasuredFPS() ) + " fps" ;
 	stage.update() ;
 } // tick()
 

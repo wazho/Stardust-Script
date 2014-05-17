@@ -27,9 +27,6 @@ function Main_Framework( len, hei ) {
 	this.condition = new createjs.Container() ;
 	this.container.addChild( this.condition ) ;
 	this.OnCondition() ;
-	// 換面更新幀數
-	createjs.Ticker.addEventListener( "tick", tick ) ;
-	createjs.Ticker.setFPS( 60 ) ;
 	// 背景音樂播放
 	var instance = createjs.Sound.play( "BGM.mp3", { loop: true } ) ;
 	instance.volume = 0.0001 ;
