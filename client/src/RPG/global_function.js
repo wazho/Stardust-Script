@@ -1,3 +1,23 @@
+// Cache game data.
+
+function cacheMapData() {
+	$.getJSON( "_adding.json", function( data ) {
+		var mapCount = data.file.length ;
+
+		alert( "Total have : " + mapCount ) ;
+
+		var cacheMapData = new Array(  ) ;
+		$.getJSON( "1.json", function( data ) {
+			alert( "My data: " + data.name ) ;
+		} ) ;
+	} ) ;
+
+
+} // cacheMapData()
+
+
+// Key event listening.
+
 var KEYCODE_ENTER = 13 ;
 var KEYCODE_SPACE = 32 ;
 var KEYCODE_UP = 38 ;
@@ -13,11 +33,9 @@ var KEYCODE_Z = 90 ;
 var KEYCODE_X = 88 ;
 
 var pressed = [] ;
-
 	
 document.onkeydown = handleKeyDown ;
 document.onkeyup = handleKeyUp ;
-
 
 function handleKeyDown( e ) {
 	// console.log( "pressed:" + e.keyCode ) ;
