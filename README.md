@@ -14,6 +14,8 @@
 
 # Build your unique map.
 
+	![01](/readme/01.png)
+
 ## This is a tool to create tiled map.
 
 	1. Unlimited ranged.
