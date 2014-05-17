@@ -88,7 +88,7 @@ Main_Map.prototype.Float_Object = function( type, start_x, start_y, end_x, end_y
 
 // DrawMap
 Main_Map.prototype.DrawMap = function( x, y, length, height ) {
-
+	
 	
 
 } // DrawMap()
