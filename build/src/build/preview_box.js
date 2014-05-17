@@ -708,14 +708,9 @@ PreviewBox.prototype.ToolsBoxListener = function( controller, type ) {
 		else if ( controller.y + difY > boundY )
 			controller.y = boundY, controller.tools.y = controller.y ;
 		controller.storeY = Math.ceil( controller.y + that.box.mapbox.tiled.mr * G.size ) ;
-		if ( type == "object" ) {
-			console.log( "test" ) ;
-			that.box.mapbox.object_data[nowIndex].rx = controller.storeX ;
-			that.box.mapbox.object_data[nowIndex].ry = controller.storeY ;
-		} // if
-		else if ( type == "light" ) {
-			that.box.mapbox.light_data[nowIndex].rx = controller.storeX ;
-			that.box.mapbox.light_data[nowIndex].ry = controller.storeY ;
-		} // else if
+		if ( type == "object" )
+			that.box.mapbox.object_data[nowIndex].rx = controller.storeX, that.box.mapbox.object_data[nowIndex].ry = controller.storeY ;
+		else if ( type == "light" )
+			that.box.mapbox.light_data[nowIndex].rx = controller.storeX, that.box.mapbox.light_data[nowIndex].ry = controller.storeY ;
 	} // ChangeGrid()
 } // ToolsBoxListener()

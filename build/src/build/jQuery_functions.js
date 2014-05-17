@@ -120,7 +120,7 @@ function jQueryFunctions( preview ) {
 					container.bg = new createjs.Shape() ;
 					container.bg.graphics.f( "#AAAAAA" ).s( "#000000" ).r( 0, 0, container.getBounds().width + 20, container.getBounds().height + 20 ) ;
 					container.bg.alpha = 0 ;
-					container.tools = preview.GetToolsBox( container ) ;
+					container.tools = preview.GetToolsBox( container, "object" ) ;
 					container.tools.scaleX = container.scaleX, container.tools.scaleY = container.scaleY ;
 					preview.ToolsBoxListener( container, "object" ) ;
 					preview.box.mapbox.objects.addChild( container ) ;
@@ -146,7 +146,7 @@ function jQueryFunctions( preview ) {
 					container.bg = new createjs.Shape() ;
 					container.bg.graphics.f( "#AAAAAA" ).s( "#000000" ).r( 0, 0, container.getBounds().width + 20, container.getBounds().height + 20 ) ;
 					container.bg.alpha = 0 ;
-					container.tools = preview.GetToolsBox( container ) ;
+					container.tools = preview.GetToolsBox( container, "light" ) ;
 					container.tools.scaleX = container.scaleX, container.tools.scaleY = container.scaleY ;
 					preview.ToolsBoxListener( container, "light" ) ;
 					preview.box.mapbox.light.addChild( container ) ;
