@@ -4,13 +4,13 @@
 
 1. In NodeJS console mode. 'node server.js'
 
---
 
 # Enter client.
 
 1. Open your browser and link to 'localhost:8001'.
 
---
+2. Have fun.
+
 
 # Build your map.
 
