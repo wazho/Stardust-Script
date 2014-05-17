@@ -1,15 +1,26 @@
 // Cache game data.
 
 function cacheMapData() {
-	$.getJSON( "_adding.json", function( data ) {
-		var mapCount = data.file.length ;
+	$.getJSON( "_adding.json", function( addingMap ) {
+		var mapCount = addingMap.file.length ;
 
-		alert( "Total have : " + mapCount ) ;
+		//alert( "Total have : " + mapCount ) ;
 
-		var cacheMapData = new Array(  ) ;
-		$.getJSON( "1.json", function( data ) {
-			alert( "My data: " + data.name ) ;
-		} ) ;
+		var cacheMapData = new Array() ;
+				console.log( cacheMapData + " ???" ) ;
+
+		for ( mapIndex = 0 ; mapIndex < mapCount ; mapIndex ++ ) {
+			console.log( addingMap.file[mapIndex].name ) ;
+			console.log( $.getJSON( addingMap.file[mapIndex].name, function( mapData ) {
+				// console.log( "Map name: " + mapData.name ) ;
+				// console.log( "Map pixel per tile: " + mapData.tilePixel + " (" + mapData.length + "*" + mapData.height + ")" ) ;
+			} ) ) ;
+
+		} // for
+
+
+		alert( "~~~~~~~~~~~   " + cacheMapData.name ) ;
+
 	} ) ;
 
 
