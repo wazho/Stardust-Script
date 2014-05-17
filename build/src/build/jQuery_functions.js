@@ -101,7 +101,7 @@ function jQueryFunctions( preview ) {
 				preview.box.mapbox.tiled_data = obj.tileData ;
 				// Initial objects data at mapbox.
 				preview.box.mapbox.object_data = obj.objectData ;
-				for ( i = 1 ; i < preview.box.mapbox.objects.getNumChildren() ; i ++ )
+				for ( i = preview.box.mapbox.objects.getNumChildren() ; i > 0 ; i -- )
 					preview.box.mapbox.objects.removeChildAt( i ) ;
 				// Objects data.
 				for ( i = 0 ; i < obj.objectData.length ; i ++ ) {
@@ -122,12 +122,12 @@ function jQueryFunctions( preview ) {
 					container.bg.alpha = 0 ;
 					container.tools = preview.GetToolsBox( container ) ;
 					container.tools.scaleX = container.scaleX, container.tools.scaleY = container.scaleY ;
-					preview.ToolsBoxListener( container ) ;
+					preview.ToolsBoxListener( container, "object" ) ;
 					preview.box.mapbox.objects.addChild( container ) ;
 				} // for
 				// Initial light data at mapbox.
 				preview.box.mapbox.light_data = obj.lightData ;
-				for ( i = 1 ; i < preview.box.mapbox.light.getNumChildren() ; i ++ )
+				for ( i = preview.box.mapbox.objects.getNumChildren() ; i > 0 ; i -- )
 					preview.box.mapbox.light.removeChildAt( i ) ;
 				// Light data.
 				for ( i = 0 ; i < obj.lightData.length ; i ++ ) {
@@ -148,7 +148,7 @@ function jQueryFunctions( preview ) {
 					container.bg.alpha = 0 ;
 					container.tools = preview.GetToolsBox( container ) ;
 					container.tools.scaleX = container.scaleX, container.tools.scaleY = container.scaleY ;
-					preview.ToolsBoxListener( container ) ;
+					preview.ToolsBoxListener( container, "light" ) ;
 					preview.box.mapbox.light.addChild( container ) ;
 				} // for
 			},

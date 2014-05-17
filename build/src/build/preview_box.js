@@ -709,6 +709,7 @@ PreviewBox.prototype.ToolsBoxListener = function( controller, type ) {
 			controller.y = boundY, controller.tools.y = controller.y ;
 		controller.storeY = Math.ceil( controller.y + that.box.mapbox.tiled.mr * G.size ) ;
 		if ( type == "object" ) {
+			console.log( "test" ) ;
 			that.box.mapbox.object_data[nowIndex].rx = controller.storeX ;
 			that.box.mapbox.object_data[nowIndex].ry = controller.storeY ;
 		} // if
