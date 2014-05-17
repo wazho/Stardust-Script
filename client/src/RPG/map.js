@@ -94,11 +94,12 @@ Main_Map.prototype.DrawMap = function( index, x, y ) {
 	var mapName = cacheMapData.map[index].name ;
 	var mapLength = cacheMapData.map[index].length, mapHeight = cacheMapData.map[index].height ;
 	var mapTile = cacheMapData.map[index].tileData ;
+	var mapObject = cacheMapData.map[index].objectData ;
 	console.log( "Now Loading map: " + mapName + " (" + mapLength + "*" + mapHeight + ")" ) ;
 
 	var map = new createjs.Container() ;
 
-	console.log( mapHeight + "  " + mapLength ) ;
+	console.log( mapObject.length ) ;
 
 
 	for ( row = 0 ; row < mapHeight ; row ++ )
@@ -111,6 +112,13 @@ Main_Map.prototype.DrawMap = function( index, x, y ) {
 			tile.x = mapPixel * column, tile.y = mapPixel * row ;
 			this.container_back.addChild( tile ) ;
 		} // for
+	for ( count = 0 ; count < mapObject.length ; count ++ ) {
+		var object = new createjs.Bitmap( "map/object/" + mapObject[count].n + ".png" ) ;
+		object.x = mapObject[count].rx, object.y = mapObject[count].ry ;
+		object.scaleX = mapObject[count].sx, object.scaleY = mapObject[count].sy ;
+		object.regX = object.getBounds().width / 2, object.regY = object.getBounds().height / 2 ; 
+		this.container_back.addChild( object ) ;
+	} // for
 
 } // DrawMap()
 
