@@ -1,15 +1,15 @@
 # Run server.
 
-* Install NodeJS.
+	* Install NodeJS.
 
-1. In NodeJS console mode. 'node server.js'
+	1. In NodeJS console mode. 'node server.js'
 
 
 # Enter client.
 
-1. Open your browser and link to 'localhost:8001'.
+	1. Open your browser and link to 'localhost:8001'.
 
-2. Have fun.
+	2. Have fun.
 
 
 # Build your unique map.
@@ -39,4 +39,3 @@
 	1. Open the file 'build/build_map.html'.
 
 	2. Let create your map and fun.
-
