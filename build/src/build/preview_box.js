@@ -461,10 +461,16 @@ PreviewBox.prototype.GetToolsBox = function( controller, type ) {
 		createjs.Tween.get( controller )
 		.to( { alpha: 0, rotation: -360, scaleX: 0, scaleY: 0 }, 500 )
 		.call( function() { 
-			if ( type == "object" )
+			if ( type == "object" ) {
+				var nowIndex = that.box.mapbox.objects.getChildIndex( controller ) ;
+				that.box.mapbox.object_data.splice( nowIndex - 1, 1 ) ;
 				that.box.mapbox.objects.removeChild( controller ) ;
-			else if ( type == "light" )
+			} // if
+			else if ( type == "light" ) {
+				var nowIndex = that.box.mapbox.light.getChildIndex( controller ) ;
+				that.box.mapbox.light_data.splice( nowIndex - 1, 1 ) ;
 				that.box.mapbox.light.removeChild( controller ) ;
+			} // else if
 		} ) ;
 		createjs.Tween.get( controller.tools )
 		.to( { alpha: 0, rotation: -360, scaleX: 0, scaleY: 0 }, 500 )
