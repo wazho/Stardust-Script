@@ -102,9 +102,6 @@ Character.prototype.OnWalk = function( x, y ) {
 
 
 
-	this.grid_x = endGrid_x, this.grid_y = endGrid_y ;
-
-
 
 	// var start_x = this.MapControlPointer.GetGrid( ( this.container.x - trim_x ), 'x', 'real' ) ;
 	// var start_y = this.MapControlPointer.GetGrid( ( this.container.y - trim_y ), 'y', 'real' ) ;
@@ -120,8 +117,10 @@ Character.prototype.OnWalk = function( x, y ) {
 	// 													.call( function() { that.OnDirection( direction, "front" ) } )
 	// 													.call( function() { if ( that.MapControlPointer.GetObjectbyGrid( x, y ).getNumChildren() != 0 ) that.MapControlPointer.GetObjectbyGrid( x, y ).getChildAt( 0 ).OnDialog() } ) ;
 
-	this.MapControlPointer.MapMove( endGrid_x, endGrid_y ) ;
-	sendPlayerStateToServer() ;
+	if ( this.MapControlPointer.MapMove( endGrid_x, endGrid_y ) ) {
+		this.grid_x = endGrid_x, this.grid_y = endGrid_y ;
+		sendPlayerStateToServer() ;
+	} // if
 } // OnWalk()
 
 // 旋轉角色方向/改變播放圖層

@@ -133,20 +133,25 @@ Main_Map.prototype.DrawMap = function( index ) {
 } // DrawMap()
 
 Main_Map.prototype.MapMove = function( x, y, speed ) {
-	//createjs.Tween.get( this.container_back, { loop: false } ).to( { x: x, y: y }, speed, createjs.Ease.quadInOut ) ;
 	var that = this ;
-	this.selectGrid.graphics.c() ;
 	var mapTile = cacheMapData.map[0].tileData ;
+	// Reject the bound of map.
+	if ( x <= 0 || y <= 0 || x > mapTile[0].length || y > mapTile.length )
+		return false ;
 	var ifWalkable = mapTile[y-1][x-1].w ;
-	// Compute the distance between center.
-	var distanceX = x - this.trim_x - 16, distanceY = y - this.trim_y - 11 ;
-	// Trim the distance about cursor of the map .
-	this.trim_x += distanceX, this.trim_y += distanceY ;
 	// Move the map to center.
-	var timeDelay = Math.abs( distanceX ) + Math.abs( distanceY ) ;
-	createjs.Tween.get( this.container_back ).to( { x: this.container_back.x - distanceX * this.grid.size, y: this.container_back.y - distanceY * this.grid.size }, 100 * timeDelay ) ;
-	createjs.Tween.get( this.container_front ).to( { x: this.container_back.x - distanceX * this.grid.size, y: this.container_back.y - distanceY * this.grid.size }, 100 * timeDelay ) ;
+	if ( ifWalkable == 1 ) {
+		// Compute the distance between center.
+		var distanceX = x - this.trim_x - 16, distanceY = y - this.trim_y - 11 ;
+		// Trim the distance about cursor of the map .
+		this.trim_x += distanceX, this.trim_y += distanceY ;
+		var timeDelay = Math.abs( distanceX ) + Math.abs( distanceY ) ;
+		createjs.Tween.get( this.container_back ).to( { x: this.container_back.x - distanceX * this.grid.size, y: this.container_back.y - distanceY * this.grid.size }, 100 * timeDelay ) ;
+		createjs.Tween.get( this.container_front ).to( { x: this.container_back.x - distanceX * this.grid.size, y: this.container_back.y - distanceY * this.grid.size }, 100 * timeDelay ) ;
+	} // if
 
 	console.log( "(" + x + "," + y + ") Can" + ( ( ifWalkable == 0 ) ? "not" : "" ) + " walk." ) ;
+
+	return ( ifWalkable == 1 ) ? true : false ;
 } // MapMove
 
