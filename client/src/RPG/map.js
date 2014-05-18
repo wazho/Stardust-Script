@@ -136,10 +136,12 @@ Main_Map.prototype.MapMove = function( x, y, speed ) {
 	var mapTile = cacheMapData.map[0].tileData ;
 	var ifWalkable = mapTile[y-1][x-1].w ;
 
-	
+	var distanceX = x - 16, distanceY = y - 11 ;
 
-	createjs.Tween.get( this.container_back ).to( { x: this.container_back.x - 128 }, 300 ) ;
-	createjs.Tween.get( this.container_front ).to( { x: this.container_front.x - 128 }, 300 ) ;
+	var timeDelay = Math.abs( distanceX ) + Math.abs( distanceY ) ;
+
+	createjs.Tween.get( this.container_back ).to( { x: this.container_back.x - distanceX * this.grid.size, y: this.container_back.y - distanceY * this.grid.size }, 100 * timeDelay ) ;
+	createjs.Tween.get( this.container_front ).to( { x: this.container_back.x - distanceX * this.grid.size, y: this.container_back.y - distanceY * this.grid.size }, 100 * timeDelay ) ;
 
 	console.log( "(" + x + "," + y + ") Can" + ( ( ifWalkable == 0 ) ? "not" : "" ) + " walk." ) ;
 } // MapMove
