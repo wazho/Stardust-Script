@@ -15,6 +15,9 @@ function Main_Map( map_num, len, hei, switch_debug ) {
 	this.grid.y_max = Math.ceil( this.container_front.height / this.grid.size ) ;
 	this.GridCreate( switch_debug ) ;
 	this.container_back.addChild( this.grid ) ;
+
+	this.trim_x = 0, this.trim_y = 0 ;
+
 	// 地圖網格上物件管理
 	this.controlContainer = new createjs.Container() ;
 
@@ -29,8 +32,8 @@ function Main_Map( map_num, len, hei, switch_debug ) {
 	this.container_back.addChild( this.selectGrid ) ;
 
 	stage.on( "stagemousemove", function( evt ) {
-		that.selectGrid.x = ( that.GetGrid( evt.stageX, 'x', 'real' ) - 1 ) * that.grid.size ;
-		that.selectGrid.y = ( that.GetGrid( evt.stageY, 'y', 'real' ) - 1 ) * that.grid.size ;
+		that.selectGrid.x = ( that.trim_x + that.GetGrid( evt.stageX, 'x', 'real' ) - 1 ) * that.grid.size ;
+		that.selectGrid.y = ( that.trim_y + that.GetGrid( evt.stageY, 'y', 'real' ) - 1 ) * that.grid.size ;
 	} ) ;
 } // Main_Map())
 
@@ -135,11 +138,12 @@ Main_Map.prototype.MapMove = function( x, y, speed ) {
 	this.selectGrid.graphics.c() ;
 	var mapTile = cacheMapData.map[0].tileData ;
 	var ifWalkable = mapTile[y-1][x-1].w ;
-
-	var distanceX = x - 16, distanceY = y - 11 ;
-
+	// Compute the distance between center.
+	var distanceX = x - this.trim_x - 16, distanceY = y - this.trim_y - 11 ;
+	// Trim the distance about cursor of the map .
+	this.trim_x += distanceX, this.trim_y += distanceY ;
+	// Move the map to center.
 	var timeDelay = Math.abs( distanceX ) + Math.abs( distanceY ) ;
-
 	createjs.Tween.get( this.container_back ).to( { x: this.container_back.x - distanceX * this.grid.size, y: this.container_back.y - distanceY * this.grid.size }, 100 * timeDelay ) ;
 	createjs.Tween.get( this.container_front ).to( { x: this.container_back.x - distanceX * this.grid.size, y: this.container_back.y - distanceY * this.grid.size }, 100 * timeDelay ) ;
 
