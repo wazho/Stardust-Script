@@ -117,7 +117,7 @@ Main_Framework.prototype.OnCondition = function() {
 	this.bg.graphics.f( "#000" ).r( 0, 0, 35, 310 ) ;
 	this.bg.alpha = 0.3 ;
 	this.condition.addChild( this.bg ) ;
-	this.condition.x = 850, this.condition.y = 150 ;
+	this.condition.x = 940, this.condition.y = 150 ;
 
 	var buff_img = new Array() ;
 	for ( i = 0 ; i < 10 ; i ++ ) {

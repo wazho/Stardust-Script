@@ -1,11 +1,15 @@
-# Run server.
+# Create your RPG game !! Stardust Script
+
+![101](/readme/101.jpg)
+
+## Run server.
 
 	* Install NodeJS.
 
 	1. In NodeJS console mode. 'node server.js'
 
 
-# Enter client.
+## Enter client.
 
 	1. Open your browser and link to 'localhost:8001'.
 
