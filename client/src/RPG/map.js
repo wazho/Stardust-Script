@@ -17,6 +17,8 @@ function Main_Map( map_num, len, hei, switch_debug ) {
 	// 地圖網格上物件管理
 	this.controlContainer = new createjs.Container() ;
 
+	this.selectGrid = new createjs.Shape() ;
+	this.container_back.addChild( this.selectGrid ) ;
 } // Main_Map())
 
 // // 地圖網格上物件管理, 依照名稱取得物件
@@ -108,7 +110,7 @@ Main_Map.prototype.DrawMap = function( index ) {
 		object.x = mapObject[count].rx, object.y = mapObject[count].ry ;
 		object.scaleX = mapObject[count].sx, object.scaleY = mapObject[count].sy ;
 		object.regX = object.getBounds().width / 2, object.regY = object.getBounds().height / 2 ; 
-		this.container_back.addChild( object ) ;
+		this.container_front.addChild( object ) ;
 	} // for
 
 	return mapPixel ;
@@ -116,10 +118,18 @@ Main_Map.prototype.DrawMap = function( index ) {
 
 Main_Map.prototype.MapMove = function( x, y, speed ) {
 	//createjs.Tween.get( this.container_back, { loop: false } ).to( { x: x, y: y }, speed, createjs.Ease.quadInOut ) ;
-
-
+	this.selectGrid.graphics.c() ;
 	var mapTile = cacheMapData.map[0].tileData ;
-	console.log( x + "   " + y +  " -> " + mapTile[y-1][x-1].w ) ;
+	if ( mapTile[y-1][x-1].w == 1 ) {
+		console.log( "(" + x + "," + y + ") Can walk." ) ;
+		this.selectGrid.graphics.s( "#00FF00" ).r( 0, 0, this.grid.size, this.grid.size ) ;
+	} // if
+	else {
+		console.log( "(" + x + "," + y + ") Cannot walk." ) ;
+		this.selectGrid.graphics.s( "#FF0000" ).r( 0, 0, this.grid.size, this.grid.size ) ;
+	} // else
+	this.selectGrid.x = ( x - 1 ) * this.grid.size, this.selectGrid.y = ( y - 1 ) * this.grid.size ;
+
 
 
 
