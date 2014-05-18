@@ -45,3 +45,12 @@
 	1. Open the file 'build/build_map.html'.
 
 	2. Let create your map and fun.
+
+
+# License
+
+* In this project, you will see the texture & object folder. It's all copyright of Korea's 'Gravity'.
+
+Just part of code MIT licensed, only using based on learning.
+
+Copyright (C) 2014 Salmon(grass0916), [http://salmon.tw](http://salmon.tw)
