@@ -115,14 +115,14 @@ Main_Map.prototype.DrawMap = function( index ) {
 		for ( column = 0 ; column < mapLength ; column ++ ) {
 			var tileIndex_row = Math.floor( mapTile[row][column].i / ( 256 / mapPixel ) ) ;
 			var tileIndex_column = mapTile[row][column].i % ( 256 / mapPixel ) ;
-			var tile = new createjs.Bitmap( "map/texture/" + mapTile[row][column].m + ".png" ) ;
+			var tile = G.cacheTile[mapTile[row][column].m].clone( false ) ;
 			tile.sourceRect = new createjs.Rectangle( mapPixel * tileIndex_column, mapPixel * tileIndex_row, mapPixel, mapPixel ) ;
 			tile.cache( 0, 0, mapPixel, mapPixel ) ;
 			tile.x = mapPixel * column, tile.y = mapPixel * row ;
 			this.container_back.addChild( tile ) ;
 		} // for
 	for ( count = 0 ; count < mapObject.length ; count ++ ) {
-		var object = new createjs.Bitmap( "map/object/" + mapObject[count].n + ".png" ) ;
+		var object = G.cacheObject[mapObject[count].n-1].clone( false ) ;
 		object.x = mapObject[count].rx, object.y = mapObject[count].ry ;
 		object.scaleX = mapObject[count].sx, object.scaleY = mapObject[count].sy ;
 		object.regX = object.getBounds().width / 2, object.regY = object.getBounds().height / 2 ; 

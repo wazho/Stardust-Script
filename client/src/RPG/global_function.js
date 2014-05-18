@@ -1,3 +1,23 @@
+function GlobalValues() {
+	this.tileSrc = "map_texture/texture/" ;
+	this.objectSrc = "map_texture/object/" ;
+
+	// Texture.
+	this.cacheTile = new Array( texture_adding.length ) ;
+	this.cacheTile[0] = new createjs.Bitmap( this.tileSrc + "0.png" ) ;
+	for ( i = 0 ; i < texture_adding.length ; i ++ )
+		this.cacheTile[i+1] = new createjs.Bitmap( this.tileSrc + texture_adding[i].file ) ;
+	// Objects.
+	this.cacheObject = new Array( object_adding.length ) ;
+	for ( i = 0 ; i < object_adding.length ; i ++ ) {
+		this.cacheObject[i] = new createjs.Bitmap( this.objectSrc + object_adding[i].file ) ;
+		this.cacheObject[i].name = ( i + 1 ) ;
+	} // for
+} // GlobalValues()
+
+var G = new GlobalValues() ;
+
+
 // Key event listening.
 
 var KEYCODE_ENTER = 13 ;
