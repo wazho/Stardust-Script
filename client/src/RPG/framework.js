@@ -38,7 +38,7 @@ Main_Framework.prototype.OnInventory = function() {
     this.img.src = "skin_01/box.png" ;
     this.bg = new createjs.Bitmap( this.img ) ;
 	this.inventory.addChild( this.bg ) ;
-	this.OnBoxAnimation( this.inventory, 280, 143, 70, 534, 0, 16, 1000 ) ;
+	this.OnBoxAnimation( this.inventory, 280, 143, 70, 560, 0, 16, 1000 ) ;
 } // OnInventory()
 
 // 裝備欄建立
@@ -47,7 +47,7 @@ Main_Framework.prototype.OnEquipment = function() {
     this.img.src = "skin_01/box.png" ;
     this.bg = new createjs.Bitmap( this.img ) ;
 	this.equip.addChild( this.bg ) ;
-	this.OnBoxAnimation( this.equip, 280, 143, 145, 534, 0, 16, 1000 ) ;
+	this.OnBoxAnimation( this.equip, 280, 143, 145, 560, 0, 16, 1000 ) ;
 } // OnEquipment()
 
 // 技能欄建立
@@ -72,7 +72,6 @@ Main_Framework.prototype.OnSkillTree = function() {
 		this.skill_list[i] = new Array( new createjs.Bitmap( skill_img[i] ),
 										new createjs.Text( "Skill_Name", "14px Arial", "#000" ),
 										new createjs.Text( "Skill_Lv", "14px Arial", "#000" ) ) ;
-		console.log( this.skill_list[i][1].text ) ;
 		this.skill_list[i][0].regX = 12, this.skill_list[i][0].regY = 12 ;
 		this.skill_list[i][0].x = 24, this.skill_list[i][0].y = 24 + i * 37 ;
 		this.skill_list[i][1].regX = 0, this.skill_list[i][1].regY = 3 ;
@@ -87,7 +86,7 @@ Main_Framework.prototype.OnSkillTree = function() {
 	skill_img[2].src = "skill/blessing.png" ;
 	skill_img[3].src = "skill/blessing.png" ;
 
-	this.OnBoxAnimation( this.skilltree, 280, 143, 220, 534, 0, 16, 1000 ) ;
+	this.OnBoxAnimation( this.skilltree, 280, 143, 220, 560, 0, 16, 1000 ) ;
 } // OnSkillTree()
 
 // 主要欄位浮動函數

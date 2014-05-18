@@ -9,7 +9,7 @@ function Main_Map( map_num, len, hei, switch_debug ) {
 	this.container_front.height = this.container_back.height = hei ;
 	// 坐標網格建立
 	this.grid = new createjs.Container() ;
-	this.grid.size = 50 ;
+	this.grid.size = this.DrawMap( map_num ) ;
 	this.grid.x_max = Math.ceil( this.container_front.length / this.grid.size ) ;
 	this.grid.y_max = Math.ceil( this.container_front.height / this.grid.size ) ;
 	this.GridCreate( switch_debug ) ;
@@ -17,39 +17,33 @@ function Main_Map( map_num, len, hei, switch_debug ) {
 	// 地圖網格上物件管理
 	this.controlContainer = new createjs.Container() ;
 
-	this.DrawMap( map_num, 0, 0 ) ;
-} // Main_Map()
+} // Main_Map())
 
-// 地圖網格上物件管理, 更新物件
-Main_Map.prototype.UpdateObject = function( object ) {
-	this.controlContainer.addChild( object ) ;
-} // UpdateObject()
+// // 地圖網格上物件管理, 依照名稱取得物件
+// Main_Map.prototype.GetObjectbyName = function( name ) {
+// 	var object_list = this.controlContainer ;
+// 	var result_list = new createjs.Container() ;
+// 	for ( i = 0 ; i < object_list.getNumChildren() ; i ++ ) {
+// 		object = object_list.getChildAt( i ) ;
+// 		if ( object.name == name )
+// 			result_list.addChild( object.Clone() ) ;
+// 	} // for
+// 	return result_list ;
+// } // GetObjectbyName()
 
-// 地圖網格上物件管理, 依照名稱取得物件
-Main_Map.prototype.GetObjectbyName = function( name ) {
-	var object_list = this.controlContainer ;
-	var result_list = new createjs.Container() ;
-	for ( i = 0 ; i < object_list.getNumChildren() ; i ++ ) {
-		object = object_list.getChildAt( i ) ;
-		if ( object.name == name )
-			result_list.addChild( object.Clone() ) ;
-	} // for
-	return result_list ;
-} // GetObjectbyName()
+// // 地圖網格上物件管理, 依照地圖坐標
+// Main_Map.prototype.GetObjectbyGrid = function( x, y ) {
+// 	var object_list = this.controlContainer ;
+// 	var result_list = new createjs.Container() ;
+// 	for ( i = 0 ; i < object_list.getNumChildren() ; i ++ ) {
+// 		object = object_list.getChildAt( i ) ;
+// 		if ( object.container.grid_x == x && object.container.grid_y == y )
+// 			result_list.addChild( object.Clone() ) ;
+// 	} // for
+// 	return result_list ;
+// } // GetObjectbyGrid()
 
-// 地圖網格上物件管理, 依照地圖坐標
-Main_Map.prototype.GetObjectbyGrid = function( x, y ) {
-	var object_list = this.controlContainer ;
-	var result_list = new createjs.Container() ;
-	for ( i = 0 ; i < object_list.getNumChildren() ; i ++ ) {
-		object = object_list.getChildAt( i ) ;
-		if ( object.container.grid_x == x && object.container.grid_y == y )
-			result_list.addChild( object.Clone() ) ;
-	} // for
-	return result_list ;
-} // GetObjectbyGrid()
-
-// 除錯模式, 畫格建立顯示
+// // 除錯模式, 畫格建立顯示
 Main_Map.prototype.GridCreate = function( switch_debug ) {
 	this.debug_mode = new createjs.Shape() ;
 	this.debug_mode.alpha = 0.1 ;
@@ -67,7 +61,7 @@ Main_Map.prototype.GetGrid = function( grid, select, type ) {
 	if ( select == 'x' )
 		return ( ( type == 'real' ) ? ( Math.ceil( this.grid.x_max - Math.abs( this.container_front.length - grid ) / this.grid.size ) ) : ( ( grid - 0.5 ) * this.grid.size ) ) ;
 	else if ( select == 'y' )
-		return ( ( type == 'real' ) ? ( Math.ceil( Math.abs( this.container_front.height - grid ) / this.grid.size ) ) : ( this.container_front.height - ( grid - 0.5 ) * this.grid.size ) ) ;
+		return ( ( type == 'real' ) ? ( Math.ceil( this.grid.y_max - Math.abs( this.container_front.height - grid ) / this.grid.size ) ) : ( ( grid - 0.5 ) * this.grid.size ) ) ;
 } // GetGrid()
 
 // 漂浮物件建立
@@ -89,7 +83,7 @@ Main_Map.prototype.Float_Object = function( type, start_x, start_y, end_x, end_y
 } // Float_Object()
 
 // DrawMap
-Main_Map.prototype.DrawMap = function( index, x, y ) {
+Main_Map.prototype.DrawMap = function( index ) {
 	var mapPixel = cacheMapData.map[index].tilePixel ;
 	var mapName = cacheMapData.map[index].name ;
 	var mapLength = cacheMapData.map[index].length, mapHeight = cacheMapData.map[index].height ;
@@ -98,9 +92,6 @@ Main_Map.prototype.DrawMap = function( index, x, y ) {
 	console.log( "Now Loading map: " + mapName + " (" + mapLength + "*" + mapHeight + ")" ) ;
 
 	var map = new createjs.Container() ;
-
-	console.log( mapObject.length ) ;
-
 
 	for ( row = 0 ; row < mapHeight ; row ++ )
 		for ( column = 0 ; column < mapLength ; column ++ ) {
@@ -120,11 +111,15 @@ Main_Map.prototype.DrawMap = function( index, x, y ) {
 		this.container_back.addChild( object ) ;
 	} // for
 
+	return mapPixel ;
 } // DrawMap()
 
 Main_Map.prototype.MapMove = function( x, y, speed ) {
-	createjs.Tween.get( this.backgorond, { loop: false } ).to( { x: x, y: y }, speed, createjs.Ease.quadInOut ) ;
+	//createjs.Tween.get( this.container_back, { loop: false } ).to( { x: x, y: y }, speed, createjs.Ease.quadInOut ) ;
 
+
+	var mapTile = cacheMapData.map[0].tileData ;
+	console.log( x + "   " + y +  " -> " + mapTile[y-1][x-1].w ) ;
 
 
 

@@ -58,8 +58,6 @@ Character.prototype.OnCreate = function( MapControl, Name, HP, SP, Speed, x, y, 
 	this.OnActive() ;
 	// 自動恢復生命條
 	this.sp_recover = createjs.Tween.get( this, { loop: true } ).wait( 1000 ).call( function() { this.OnLifeModify( 2, 2 ) ; } ) ;
-	// 更新於地圖資料上
-	this.MapControlPointer.UpdateObject( this ) ;
 } // OnCreate()
 
 // 角色移動
@@ -105,15 +103,12 @@ Character.prototype.OnWalk = function( x, y ) {
 	direction += ( direction != 0 ) ? ( ( start_y != y ) ? ( ( ( start_y - y > 0 ) ? 1 : -1 ) * ( ( direction == 2 ) ? 1 : -1 ) ) : 0 ) : ( ( start_y != y ) ? ( ( start_y - y > 0 ) ? 4 : 0 ) : -1 ) ;
 	var that = this ;
 	// 這裡最後一行有 bug, 未來要改
-	createjs.Tween.get( this.container, { loop: false } ).call( function() { that.OnDirection( direction, "walk" ) } )
-														.to( { x: location_x, y: location_y }, trim_speed, createjs.Ease.quadInOut )
-														.call( function() { that.OnDirection( direction, "front" ) } )
-														.call( function() { if ( that.MapControlPointer.GetObjectbyGrid( x, y ).getNumChildren() != 0 ) that.MapControlPointer.GetObjectbyGrid( x, y ).getChildAt( 0 ).OnDialog() } ) ;
+	// createjs.Tween.get( this.container, { loop: false } ).call( function() { that.OnDirection( direction, "walk" ) } )
+	// 													.to( { x: location_x, y: location_y }, trim_speed, createjs.Ease.quadInOut )
+	// 													.call( function() { that.OnDirection( direction, "front" ) } )
+	// 													.call( function() { if ( that.MapControlPointer.GetObjectbyGrid( x, y ).getNumChildren() != 0 ) that.MapControlPointer.GetObjectbyGrid( x, y ).getChildAt( 0 ).OnDialog() } ) ;
 
-	this.MapControlPointer.MapMove( location_x, location_y, trim_speed ) ;
-
-	console.log( start_x + "  " + start_y ) ;
-
+	this.MapControlPointer.MapMove( x, y, trim_speed ) ;
 	sendPlayerStateToServer() ;
 } // OnWalk()
 

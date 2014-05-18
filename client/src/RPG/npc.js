@@ -45,8 +45,6 @@ NPC.prototype.OnCreate = function( MapControl, Name, x, y, direction, sheet_type
 	this.talk.wd = new createjs.Text( "", "17px Courier New", "#FFF" ) ;
 	this.talk.fadetime = 0 ;
 	this.talk.addChild( this.talk.bg, this.talk.wd ) ;
-	// 更新於地圖資料上
-	this.MapControlPointer.UpdateObject( this ) ;
 } // OnCreate()
 
 // 角色物件複製, 但其實指標內容是相通的
