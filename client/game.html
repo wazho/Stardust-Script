@@ -37,13 +37,13 @@
 			stage = new createjs.Stage( "myCanvas" ) ;
     		document.body.style.cursor = "url('cursor/normal_select.cur'), default" ;
 			// 定義畫布長寬
-			var canvas_len = 960, canvas_hei = 576 ;
+			var canvas_len = 992, canvas_hei = 576 ;
 			// 建立地圖框架
 			var mapcontrol = new Main_Map( 0, canvas_len, canvas_hei, false ) ;
 			// 建立遊戲框架
 			var framework = new Main_Framework( canvas_len, canvas_hei ) ;
 			// 建立角色物件
-			var baphomet = new Character( mapcontrol, "baphomet", 175, 55, 1.00, 5, 12, "front" ) ;
+			var baphomet = new Character( mapcontrol, "baphomet", 175, 55, 1.00, 16, 11, "front" ) ;
 			var farmiliar_01 = new NPC( mapcontrol, "farmiliar_01", 19, 7, 6, "monster", "farmiliar" ) ;
 			var farmiliar_02 = new NPC( mapcontrol, "farmiliar_02", 19, 11, 6, "monster", "farmiliar" ) ;
 			var farmiliar_03 = new NPC( mapcontrol, "farmiliar_03", 19, 15, 6, "monster", "farmiliar" ) ;
@@ -80,7 +80,7 @@
 			 position: absolute ;
 			 top: 50% ;
 			 left: 50% ;
-			 margin-left: -450px ;
+			 margin-left: -496px ;
 			 margin-top: -285px ;
 			 border-radius: 10px ;
 		}
@@ -88,7 +88,7 @@
 </head>
 
 <body onload="init()">
-	<canvas id="myCanvas" width="960" height="576">
+	<canvas id="myCanvas" width="992" height="576">
 		Alternative Content
 	</canvas>
 </body>

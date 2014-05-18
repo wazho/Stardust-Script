@@ -1,4 +1,5 @@
 function Main_Map( map_num, len, hei, switch_debug ) {
+	var that = this ;
 	// 背景建立
 	this.backgorond = new createjs.Container() ;
 	// 容器建立(前端與後端)
@@ -18,8 +19,19 @@ function Main_Map( map_num, len, hei, switch_debug ) {
 	this.controlContainer = new createjs.Container() ;
 
 	this.selectGrid = new createjs.Shape() ;
+	this.selectGrid.graphics.f( "#00FF00" )
+		.moveTo(0,0).lineTo(10,0).lineTo(10,3).lineTo(3,3).lineTo(3,10).lineTo(0,10).lineTo(0,0)
+		.moveTo(32,0).lineTo(32,10).lineTo(29,10).lineTo(29,3).lineTo(22,3).lineTo(22,0).lineTo(32,0)
+		.moveTo(0,32).lineTo(10,32).lineTo(10,29).lineTo(3,29).lineTo(3,22).lineTo(0,22).lineTo(0,32)
+		.moveTo(32,32).lineTo(22,32).lineTo(22,29).lineTo(29,29).lineTo(29,22).lineTo(32,22).lineTo(32,32) ;
+	this.selectGrid.cache( 0, 0, 32, 32 ) ;
 	this.selectGrid.alpha = 0.5 ;
 	this.container_back.addChild( this.selectGrid ) ;
+
+	stage.on( "stagemousemove", function( evt ) {
+		that.selectGrid.x = ( that.GetGrid( evt.stageX, 'x', 'real' ) - 1 ) * that.grid.size ;
+		that.selectGrid.y = ( that.GetGrid( evt.stageY, 'y', 'real' ) - 1 ) * that.grid.size ;
+	} ) ;
 } // Main_Map())
 
 // // 地圖網格上物件管理, 依照名稱取得物件
@@ -119,15 +131,15 @@ Main_Map.prototype.DrawMap = function( index ) {
 
 Main_Map.prototype.MapMove = function( x, y, speed ) {
 	//createjs.Tween.get( this.container_back, { loop: false } ).to( { x: x, y: y }, speed, createjs.Ease.quadInOut ) ;
+	var that = this ;
 	this.selectGrid.graphics.c() ;
 	var mapTile = cacheMapData.map[0].tileData ;
 	var ifWalkable = mapTile[y-1][x-1].w ;
-	this.selectGrid.graphics.f( ( ifWalkable == 1 ) ? "#00FF00" : "#FF0000" )
-		.moveTo(0,0).lineTo(10,0).lineTo(10,3).lineTo(3,3).lineTo(3,10).lineTo(0,10).lineTo(0,0)
-		.moveTo(32,0).lineTo(32,10).lineTo(29,10).lineTo(29,3).lineTo(22,3).lineTo(22,0).lineTo(32,0)
-		.moveTo(0,32).lineTo(10,32).lineTo(10,29).lineTo(3,29).lineTo(3,22).lineTo(0,22).lineTo(0,32)
-		.moveTo(32,32).lineTo(22,32).lineTo(22,29).lineTo(29,29).lineTo(29,22).lineTo(32,22).lineTo(32,32) ;
-	this.selectGrid.x = ( x - 1 ) * this.grid.size, this.selectGrid.y = ( y - 1 ) * this.grid.size ;
+
+	
+
+	createjs.Tween.get( this.container_back ).to( { x: this.container_back.x - 128 }, 300 ) ;
+	createjs.Tween.get( this.container_front ).to( { x: this.container_front.x - 128 }, 300 ) ;
 
 	console.log( "(" + x + "," + y + ") Can" + ( ( ifWalkable == 0 ) ? "not" : "" ) + " walk." ) ;
 } // MapMove
