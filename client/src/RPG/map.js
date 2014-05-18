@@ -9,6 +9,7 @@ function Main_Map( map_num, len, hei, switch_debug ) {
 	this.container_front.length = this.container_back.length = len ;
 	this.container_front.height = this.container_back.height = hei ;
 	// 坐標網格建立
+	this.mapNum = map_num ;
 	this.grid = new createjs.Container() ;
 	this.grid.size = this.DrawMap( map_num ) ;
 	this.grid.x_max = Math.ceil( this.container_front.length / this.grid.size ) ;
@@ -134,7 +135,7 @@ Main_Map.prototype.DrawMap = function( index ) {
 
 Main_Map.prototype.MapMove = function( x, y, speed ) {
 	var that = this ;
-	var mapTile = cacheMapData.map[0].tileData ;
+	var mapTile = cacheMapData.map[this.mapNum].tileData ;
 	// Reject the bound of map.
 	if ( x <= 0 || y <= 0 || x > mapTile[0].length || y > mapTile.length )
 		return false ;

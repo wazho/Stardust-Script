@@ -506,33 +506,37 @@ PreviewBox.prototype.GetToolsBox = function( controller, type ) {
 	tools.up.x = tools.regX, tools.up.y = tools.regY ;
 	tools.up.oriX = tools.up.x, tools.up.oriY = tools.up.y ;
 	tools.up.addChild( tools.up.bg, tools.up.icon ) ;
-	tools.up.on( "click", function() {
-		if ( type == "object" ) {
-			var nowIndex = that.box.mapbox.objects.getChildIndex( controller ) ;
-			if ( nowIndex >= that.box.mapbox.objects.getNumChildren() - 1 )
-				return ;
-			var temp = that.box.mapbox.object_data[nowIndex] ;
-			that.box.mapbox.object_data[nowIndex] = that.box.mapbox.object_data[nowIndex-1] ;
-			that.box.mapbox.object_data[nowIndex-1] = temp ;
-		} // if
-		else if ( type == "light" ) {
-			var nowIndex = that.box.mapbox.light.getChildIndex( controller ) ;
-			if ( nowIndex >= that.box.mapbox.light.getNumChildren() - 1 )
-				return ;
-			var temp = that.box.mapbox.light_data[nowIndex] ;
-			that.box.mapbox.light_data[nowIndex] = that.box.mapbox.light_data[nowIndex-1] ;
-			that.box.mapbox.light_data[nowIndex-1] = temp ;
-		} // else if
-		createjs.Tween.get( controller )
-		.to( { alpha: 0.5 }, 300 )
-		.call( function() {
-			if ( type == "object" )
-				that.box.mapbox.objects.addChildAt( controller, nowIndex + 1 ) ; 
-			else if ( type == "light" )
-				that.box.mapbox.light.addChildAt( controller, nowIndex + 1 ) ; 
-		} )
-		.to( { alpha: 1 }, 300 ) ;
-	} ) ;
+	addListening_Tool_Up() ;
+	function addListening_Tool_Up() {
+		tools.up.on( "click", function() {
+			if ( type == "object" ) {
+				var nowIndex = that.box.mapbox.objects.getChildIndex( controller ) ;
+				if ( nowIndex >= that.box.mapbox.objects.getNumChildren() - 1 )
+					return ;
+				var temp = that.box.mapbox.object_data[nowIndex] ;
+				that.box.mapbox.object_data[nowIndex] = that.box.mapbox.object_data[nowIndex-1] ;
+				that.box.mapbox.object_data[nowIndex-1] = temp ;
+			} // if
+			else if ( type == "light" ) {
+				var nowIndex = that.box.mapbox.light.getChildIndex( controller ) ;
+				if ( nowIndex >= that.box.mapbox.light.getNumChildren() - 1 )
+					return ;
+				var temp = that.box.mapbox.light_data[nowIndex] ;
+				that.box.mapbox.light_data[nowIndex] = that.box.mapbox.light_data[nowIndex-1] ;
+				that.box.mapbox.light_data[nowIndex-1] = temp ;
+			} // else if
+			createjs.Tween.get( controller )
+			.to( { alpha: 0.5 }, 300 )
+			.call( function() {
+				if ( type == "object" )
+					that.box.mapbox.objects.addChildAt( controller, nowIndex + 1 ) ; 
+				else if ( type == "light" )
+					that.box.mapbox.light.addChildAt( controller, nowIndex + 1 ) ; 
+			} )
+			.to( { alpha: 1 }, 300 )
+			.call( function() { addListening_Tool_Up() ; } ) ;
+		}, null, true ) ;
+	} // addListening_Tool_Up()
 	// Down.
 	tools.down = new createjs.Container() ;
 	tools.down.icon = G.cacheObjectsController[3].clone( false ) ;
@@ -544,33 +548,37 @@ PreviewBox.prototype.GetToolsBox = function( controller, type ) {
 	tools.down.x = tools.regX, tools.down.y = tools.regY ;
 	tools.down.oriX = tools.down.x, tools.down.oriY = tools.down.y ;
 	tools.down.addChild( tools.down.bg, tools.down.icon ) ;
-	tools.down.on( "click", function() {
-		if ( type == "object" ) {
-			var nowIndex = that.box.mapbox.objects.getChildIndex( controller ) ;
-			if ( nowIndex < 2 )
-				return ;
-			var temp = that.box.mapbox.object_data[nowIndex-1] ;
-			that.box.mapbox.object_data[nowIndex-1] = that.box.mapbox.object_data[nowIndex-2] ;
-			that.box.mapbox.object_data[nowIndex-2] = temp ;
-		} // if
-		else if ( type == "light" ) {
-			var nowIndex = that.box.mapbox.light.getChildIndex( controller ) ;
-			if ( nowIndex < 2 )
-				return ;
-			var temp = that.box.mapbox.light_data[nowIndex-1] ;
-			that.box.mapbox.light_data[nowIndex-1] = that.box.mapbox.light_data[nowIndex-2] ;
-			that.box.mapbox.light_data[nowIndex-2] = temp ;
-		} // else if
-		createjs.Tween.get( controller )
-		.to( { alpha: 0.5 }, 300 )
-		.call( function() {
-			if ( type == "object" )
-				that.box.mapbox.objects.addChildAt( controller, ( nowIndex > 1 ) ? ( nowIndex - 1 ) : 1 ) ;
-			else if ( type == "light" )
-				that.box.mapbox.light.addChildAt( controller, ( nowIndex > 1 ) ? ( nowIndex - 1 ) : 1 ) ;
-		} )
-		.to( { alpha: 1 }, 300 ) ;
-	} ) ;
+	addListening_Tool_Down() ;
+	function addListening_Tool_Down() {
+		tools.down.on( "click", function() {
+			if ( type == "object" ) {
+				var nowIndex = that.box.mapbox.objects.getChildIndex( controller ) ;
+				if ( nowIndex < 2 )
+					return ;
+				var temp = that.box.mapbox.object_data[nowIndex-1] ;
+				that.box.mapbox.object_data[nowIndex-1] = that.box.mapbox.object_data[nowIndex-2] ;
+				that.box.mapbox.object_data[nowIndex-2] = temp ;
+			} // if
+			else if ( type == "light" ) {
+				var nowIndex = that.box.mapbox.light.getChildIndex( controller ) ;
+				if ( nowIndex < 2 )
+					return ;
+				var temp = that.box.mapbox.light_data[nowIndex-1] ;
+				that.box.mapbox.light_data[nowIndex-1] = that.box.mapbox.light_data[nowIndex-2] ;
+				that.box.mapbox.light_data[nowIndex-2] = temp ;
+			} // else if
+			createjs.Tween.get( controller )
+			.to( { alpha: 0.5 }, 300 )
+			.call( function() {
+				if ( type == "object" )
+					that.box.mapbox.objects.addChildAt( controller, ( nowIndex > 1 ) ? ( nowIndex - 1 ) : 1 ) ;
+				else if ( type == "light" )
+					that.box.mapbox.light.addChildAt( controller, ( nowIndex > 1 ) ? ( nowIndex - 1 ) : 1 ) ;
+			} )
+			.to( { alpha: 1 }, 300 )
+			.call( function() { addListening_Tool_Down() ; } ) ;
+		}, null, true ) ;
+	} // addListening_Tool_Down()
 	// Zoom in.
 	tools.zoom_in = new createjs.Container() ;
 	tools.zoom_in.icon = G.cacheObjectsController[4].clone( false ) ;
