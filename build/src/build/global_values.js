@@ -1,3 +1,5 @@
+// Global values storage space about mapbox size, map size and texture of cache.
+// If wanna use these values, 'G.XXX' XXX is parameter.
 function GlobalValues() {
 	this.size = 32 ;
 	this.range = 8 ;

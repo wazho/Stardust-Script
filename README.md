@@ -1,4 +1,4 @@
-# Create your RPG game !! Stardust Script
+# Create your RPG game !!
 
 ![101](/readme/101.jpg)
 
