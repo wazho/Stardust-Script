@@ -68,3 +68,11 @@ function GetDistance( x1, y1, x2, y2 ) {
 
     return Math.sqrt( xs + ys );
 } // GetDistance()
+
+function TwoD_Array( row, column ) {
+	var array = new Array( row ) ;
+	for ( i = 0 ; i < row ; i ++ )
+		array[i] = new Array( column ) ;
+	
+	return array ;
+} // TwoD_Array()
