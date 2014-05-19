@@ -117,7 +117,7 @@ Character.prototype.OnWalk = function( x, y ) {
 	// 													.call( function() { that.OnDirection( direction, "front" ) } )
 	// 													.call( function() { if ( that.MapControlPointer.GetObjectbyGrid( x, y ).getNumChildren() != 0 ) that.MapControlPointer.GetObjectbyGrid( x, y ).getChildAt( 0 ).OnDialog() } ) ;
 
-	if ( this.MapControlPointer.MapMove( endGrid_x, endGrid_y ) ) {
+	if ( this.MapControlPointer.MapMove( this.grid_x, this.grid_y, endGrid_x, endGrid_y ) ) {
 		this.grid_x = endGrid_x, this.grid_y = endGrid_y ;
 		sendPlayerStateToServer() ;
 	} // if

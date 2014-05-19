@@ -133,17 +133,22 @@ Main_Map.prototype.DrawMap = function( index ) {
 	return mapPixel ;
 } // DrawMap()
 
-Main_Map.prototype.MapMove = function( x, y, speed ) {
+Main_Map.prototype.MapMove = function( start_x, start_y, end_x, end_y, speed ) {
 	var that = this ;
 	var mapTile = cacheMapData.map[this.mapNum].tileData ;
 	// Reject the bound of map.
-	if ( x <= 0 || y <= 0 || x > mapTile[0].length || y > mapTile.length )
+	if ( end_x <= 0 || end_y <= 0 || end_x > mapTile[0].length || end_y > mapTile.length )
 		return false ;
-	var ifWalkable = mapTile[y-1][x-1].w ;
+	var ifWalkable = mapTile[end_y-1][end_x-1].w ;
 	// Move the map to center.
 	if ( ifWalkable == 1 ) {
+
+		console.log( start_x + "," + start_y + " to " + end_x + "," + end_y ) ;
+
+
+
 		// Compute the distance between center.
-		var distanceX = x - this.trim_x - 16, distanceY = y - this.trim_y - 11 ;
+		var distanceX = end_x - this.trim_x - 16, distanceY = end_y - this.trim_y - 11 ;
 		// Trim the distance about cursor of the map .
 		this.trim_x += distanceX, this.trim_y += distanceY ;
 		var timeDelay = Math.abs( distanceX ) + Math.abs( distanceY ) ;
@@ -151,7 +156,7 @@ Main_Map.prototype.MapMove = function( x, y, speed ) {
 		createjs.Tween.get( this.container_front ).to( { x: this.container_back.x - distanceX * this.grid.size, y: this.container_back.y - distanceY * this.grid.size }, 100 * timeDelay ) ;
 	} // if
 
-	console.log( "(" + x + "," + y + ") Can" + ( ( ifWalkable == 0 ) ? "not" : "" ) + " walk." ) ;
+	console.log( "(" + end_x + "," + end_y + ") Can" + ( ( ifWalkable == 0 ) ? "not" : "" ) + " walk." ) ;
 
 	return ( ifWalkable == 1 ) ? true : false ;
 } // MapMove
