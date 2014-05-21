@@ -40,10 +40,27 @@ NPC.prototype.OnCreate = function( MapControl, Name, grid, sheet, direction ) {
 	this.talk.wd = new createjs.Text( "", "17px Courier New", "#FFF" ) ;
 	this.talk.fadetime = 0 ;
 	this.talk.addChild( this.talk.bg, this.talk.wd ) ;
+	// Name tag.
+	this.nameTag = new createjs.Container() ;
+	this.nameTag.regX = ( ( halfFullCheck( "half", Name ) * 1.03 + halfFullCheck( "full", Name ) * 1.71 ) * 10 ) / 2, this.nameTag.y = this.spriteSize / 2 + 20 ;
+	this.container.addChild( this.nameTag ) ;
+	this.nameTag.bg = new createjs.Text( Name, "17px Courier New", "#000" ) ;
+	this.nameTag.bg.outline = 6 ;
+	this.nameTag.wd = new createjs.Text( Name, "17px Courier New", "#FFF" ) ;
+	this.nameTag.alpha = 0 ;
+	this.nameTag.addChild( this.nameTag.bg, this.nameTag.wd ) ;
 
 
-	this.container.on( "mouseover", function() { that.MapControlPointer.nowEventTrigger = that ; } ) ;
-	this.container.on( "mouseout", function() { that.MapControlPointer.nowEventTrigger = null ; } ) ;
+	this.container.on( "mouseover", function() { 
+		that.MapControlPointer.nowEventTrigger = that ; 
+		createjs.Tween.get( that.nameTag )
+		.to( { alpha: 1 } , 300 ) ;
+	} ) ;
+	this.container.on( "mouseout", function() { 
+		that.MapControlPointer.nowEventTrigger = null ;
+		createjs.Tween.get( that.nameTag )
+		.to( { alpha: 0 } , 300 ) ;
+	} ) ;
 } // OnCreate()
 
 // Clone the NPC. Except NPC's info isn's inherited, all for the script is inherited.
