@@ -14,8 +14,8 @@ NPC.prototype.OnCreate = function( MapControl, Name, x, y, sheet, direction ) {
 	this.container = new createjs.Container() ;
 	this.container.regX = this.spriteSize / 2, this.container.regY = this.spriteSize / 2 ;
 	this.container.length = this.spriteSize, this.container.height = this.spriteSize ;
-	this.container.x = this.MapControlPointer.GetGrid( x, 'x', 'virtual' ) + this.container.regX ;
-	this.container.y = this.MapControlPointer.GetGrid( y, 'y', 'virtual' ) + this.container.regY * 0.3 ;
+	this.container.x = this.MapControlPointer.GetGrid( { x: x, y: y }, "virtual" ).x + this.container.regX ;
+	this.container.y = this.MapControlPointer.GetGrid( { x: x, y: y }, "virtual" ).y + this.container.regY * 0.3 ;
 	// Basic NPC info.
 	this.container.name = Name ;
 	this.container.type = "NPC" ;
@@ -32,7 +32,7 @@ NPC.prototype.OnCreate = function( MapControl, Name, x, y, sheet, direction ) {
 	this.OnDirection( this.container.direction, "front" ) ;
 	// Shadow created.
 	this.sprite.shadow = new createjs.Shadow( "#454", 5, 5, 5 ) ;
-	// Talk .
+	// Window of conversation.
 	this.talk = new createjs.Container() ;
 	this.talk.regX = this.spriteSize / 2, this.talk.regY = this.spriteSize / 2 ;
 	this.container.addChild( this.talk ) ;
@@ -64,7 +64,7 @@ NPC.prototype.OnTalk = function( text ) {
 	// Initial of the window.
 	OffTalk( that, "now" ) ;
 	// Get the text and check the half or full char.
-	var chat_len = 20 + ( halfFullCheck( "half", text ) * 1.07 + halfFullCheck( "full", text ) * 1.71 ) * 10 ;
+	var chat_len = 20 + ( halfFullCheck( "half", text ) * 1.03 + halfFullCheck( "full", text ) * 1.71 ) * 10 ;
 	// Set the status of window.
 	this.talk.bg.alpha = 0.65 ;
 	this.talk.bg.graphics.f( "#000" ).r( 0, 0, chat_len, 25 ) ;

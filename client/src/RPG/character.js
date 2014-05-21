@@ -21,8 +21,8 @@ Character.prototype.OnCreate = function( MapControl, Name, HP, SP, Speed, x, y, 
 	this.container.name = Name ;
 	this.container.regX = this.spriteSize / 2, this.container.regY = this.spriteSize / 2 ;
 	this.container.length = this.spriteSize, this.container.height = this.spriteSize ;
-	this.container.x = this.MapControlPointer.GetGrid( 16, 'x', 'virtual' ) + this.container.regX ;
-	this.container.y = this.MapControlPointer.GetGrid( 11, 'y', 'virtual' ) + this.container.regY * 0.3 ;
+	this.container.x = this.MapControlPointer.GetGrid( { x: 16, y: 11 }, "virtual" ).x + this.container.regX ;
+	this.container.y = this.MapControlPointer.GetGrid( { x: 16, y: 11 }, "virtual" ).y + this.container.regY * 0.3 ;
 	// 圖層建立
 	this.sprite = new createjs.Sprite( SettingSprite( "character", Name ) ) ;
 	this.sprite.regX = this.spriteSize / 2, this.sprite.regY = this.spriteSize / 2 ;
@@ -88,37 +88,18 @@ Character.prototype.OnActive = function() {
 	createjs.Ticker.addEventListener( "tick", function() { that.OnTick( that ) ; } ) ;
 
 	stage.on( "stagemousedown", function( evt ) {
-		if ( that.MapControlPointer.nowEventTrigger == null )
-			that.OnWalk( that.MapControlPointer.GetGrid( evt.stageX, 'x', 'real' ), that.MapControlPointer.GetGrid( evt.stageY, 'y', 'real' ) ) ;
+		if ( that.MapControlPointer.nowEventTrigger == null ) 
+			that.OnWalk( that.MapControlPointer.GetGrid( { x: evt.stageX, y: evt.stageY }, "real" ) ) ;
 		else 
 			that.MapControlPointer.nowEventTrigger.OnTrigger() ;
 	}) ;
 } // OnActive()
 
 // 角色移動, 使用虛擬坐標
-Character.prototype.OnWalk = function( x, y ) {
-	var trim_x = this.container.regX, trim_y = this.container.regY * 0.3 ;
-
+Character.prototype.OnWalk = function( grid ) {
 	// Virtual grid system.
 	var startGrid_x = this.grid_x, startGrid_y = this.grid_y ;
-	var endGrid_x = ( x - 16 ) + startGrid_x, endGrid_y = ( y - 11 ) + startGrid_y ;
-
-
-
-
-	// var start_x = this.MapControlPointer.GetGrid( ( this.container.x - trim_x ), 'x', 'real' ) ;
-	// var start_y = this.MapControlPointer.GetGrid( ( this.container.y - trim_y ), 'y', 'real' ) ;
-	// var location_x = this.MapControlPointer.GetGrid( x, 'x', 'virtual' ) + trim_x ;
-	// var location_y = this.MapControlPointer.GetGrid( y, 'y', 'virtual' ) + trim_y ;
-	// var trim_speed = 5 * GetDistance( this.container.x, this.container.y, location_x, location_y ) ;
-	// var direction = ( start_x != x ) ? ( ( start_x - x > 0 ) ? 6 : 2 ) : 0 ;
-	// direction += ( direction != 0 ) ? ( ( start_y != y ) ? ( ( ( start_y - y > 0 ) ? 1 : -1 ) * ( ( direction == 2 ) ? 1 : -1 ) ) : 0 ) : ( ( start_y != y ) ? ( ( start_y - y > 0 ) ? 4 : 0 ) : -1 ) ;
-	// var that = this ;
-	// 這裡最後一行有 bug, 未來要改
-	// createjs.Tween.get( this.container, { loop: false } ).call( function() { that.OnDirection( direction, "walk" ) } )
-	// 													.to( { x: location_x, y: location_y }, trim_speed, createjs.Ease.quadInOut )
-	// 													.call( function() { that.OnDirection( direction, "front" ) } )
-	// 													.call( function() { if ( that.MapControlPointer.GetObjectbyGrid( x, y ).getNumChildren() != 0 ) that.MapControlPointer.GetObjectbyGrid( x, y ).getChildAt( 0 ).OnDialog() } ) ;
+	var endGrid_x = ( grid.x - 16 ) + startGrid_x, endGrid_y = ( grid.y - 11 ) + startGrid_y ;
 
 	if ( this.MapControlPointer.MapMove( { x: this.grid_x, y: this.grid_y }, { x: endGrid_x, y: endGrid_y } ) ) {
 		this.grid_x = endGrid_x, this.grid_y = endGrid_y ;

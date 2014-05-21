@@ -19,7 +19,7 @@ function Main_Map( map_num, len, hei, switch_debug ) {
 	this.GridCreate( switch_debug ) ;
 	this.container_back.addChild( this.grid ) ;
 
-	this.trim_x = 0, this.trim_y = 0 ;
+	this.trim = { x: 0, y: 0 } ;
 
 	// 地圖網格上物件管理
 	this.controlContainer = new createjs.Container() ;
@@ -35,8 +35,9 @@ function Main_Map( map_num, len, hei, switch_debug ) {
 	this.container_back.addChild( this.selectGrid ) ;
 
 	stage.on( "stagemousemove", function( evt ) {
-		that.selectGrid.x = ( that.trim_x + that.GetGrid( evt.stageX, 'x', 'real' ) - 1 ) * that.grid.size ;
-		that.selectGrid.y = ( that.trim_y + that.GetGrid( evt.stageY, 'y', 'real' ) - 1 ) * that.grid.size ;
+		var grid = that.GetGrid( { x: evt.stageX, y: evt.stageY }, "real" ) ;
+		that.selectGrid.x = ( that.trim.x + grid.x - 1 ) * that.grid.size ;
+		that.selectGrid.y = ( that.trim.y + grid.y - 1 ) * that.grid.size ;
 	} ) ;
 
 	stage.enableMouseOver( 20 ) ;
@@ -80,11 +81,10 @@ Main_Map.prototype.GridCreate = function( switch_debug ) {
 
 // type'real'    -> real coordinate to virtual grid
 // type'virtual' -> virtual grid to real coordinate 
-Main_Map.prototype.GetGrid = function( grid, select, type ) {
-	if ( select == 'x' )
-		return ( ( type == 'real' ) ? ( Math.ceil( this.grid.x_max - Math.abs( this.container_front.length - grid ) / this.grid.size ) ) : ( ( grid - 0.5 ) * this.grid.size ) ) ;
-	else if ( select == 'y' )
-		return ( ( type == 'real' ) ? ( Math.ceil( this.grid.y_max - Math.abs( this.container_front.height - grid ) / this.grid.size ) ) : ( ( grid - 0.5 ) * this.grid.size ) ) ;
+Main_Map.prototype.GetGrid = function( grid, type ) {
+	var x = ( type == 'real' ) ? ( Math.ceil( this.grid.x_max - Math.abs( this.container_front.length - grid.x ) / this.grid.size ) ) : ( ( grid.x - 0.5 ) * this.grid.size ) ;
+	var y = ( type == 'real' ) ? ( Math.ceil( this.grid.y_max - Math.abs( this.container_front.height - grid.y ) / this.grid.size ) ) : ( ( grid.y - 0.5 ) * this.grid.size ) ;
+	return { x: x, y: y } ;
 } // GetGrid()
 
 // 漂浮物件建立
@@ -157,9 +157,9 @@ Main_Map.prototype.MapMove = function( start, end ) {
 		if ( ! A_Start_Algorithm( start, end ) )
 			return false ;
 		// Compute the distance between center.
-		var distanceX = end.x - this.trim_x - 16, distanceY = end.y - this.trim_y - 11 ;
+		var distanceX = end.x - this.trim.x - 16, distanceY = end.y - this.trim.y - 11 ;
 		// Trim the distance about cursor of the map .
-		this.trim_x += distanceX, this.trim_y += distanceY ;
+		this.trim.x += distanceX, this.trim.y += distanceY ;
 		var timeDelay = Math.abs( distanceX ) + Math.abs( distanceY ) ;
 		createjs.Tween.get( this.container_back ).to( { x: this.container_back.x - distanceX * this.grid.size, y: this.container_back.y - distanceY * this.grid.size }, 100 * timeDelay ) ;
 		createjs.Tween.get( this.container_front ).to( { x: this.container_back.x - distanceX * this.grid.size, y: this.container_back.y - distanceY * this.grid.size }, 100 * timeDelay ) ;
