@@ -32,6 +32,11 @@ NPC.prototype.OnCreate = function( MapControl, Name, grid, sheet, direction ) {
 	this.OnDirection( this.container.direction, "front" ) ;
 	// Shadow created.
 	this.sprite.shadow = new createjs.Shadow( "#454", 5, 5, 5 ) ;
+	this.shadowArea = new createjs.Shape() ;
+	this.shadowArea.scaleY = 0.4 ;
+	this.shadowArea.alpha = 0.3 ;
+	this.shadowArea.graphics.f( "#000000" ).dc( 0, this.spriteSize / 2 / this.shadowArea.scaleY - 13, 25 ) ;
+	this.container.addChildAt( this.shadowArea, 0 ) ;
 	// Window of conversation.
 	this.talk = new createjs.Container() ;
 	this.talk.regX = this.spriteSize / 2, this.talk.regY = this.spriteSize / 2 ;
