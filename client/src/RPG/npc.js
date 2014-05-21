@@ -1,10 +1,10 @@
-function NPC( MapControl, Name, x, y, sheet, direction ) {
-	this.OnCreate( MapControl, Name, x, y, sheet, direction ) ;
+function NPC( MapControl, Name, grid, sheet, direction ) {
+	this.OnCreate( MapControl, Name, grid, sheet, direction ) ;
 	return this ;
 } // NPC() 
 
 // NPC character object is created.
-NPC.prototype.OnCreate = function( MapControl, Name, x, y, sheet, direction ) {
+NPC.prototype.OnCreate = function( MapControl, Name, grid, sheet, direction ) {
 	var that = this ;
 	// Magic Number !!
 	this.spriteSize = 125 ;
@@ -14,14 +14,14 @@ NPC.prototype.OnCreate = function( MapControl, Name, x, y, sheet, direction ) {
 	this.container = new createjs.Container() ;
 	this.container.regX = this.spriteSize / 2, this.container.regY = this.spriteSize / 2 ;
 	this.container.length = this.spriteSize, this.container.height = this.spriteSize ;
-	this.container.x = this.MapControlPointer.GetGrid( { x: x, y: y }, "virtual" ).x + this.container.regX ;
-	this.container.y = this.MapControlPointer.GetGrid( { x: x, y: y }, "virtual" ).y + this.container.regY * 0.3 ;
+	var realGrid = this.MapControlPointer.GetGrid( { x: grid.x, y: grid.y }, "virtual" ) ;
+	this.container.x = realGrid.x + this.container.regX, this.container.y = realGrid.y + this.container.regY * 0.3 ;
 	// Basic NPC info.
 	this.container.name = Name ;
 	this.container.type = "NPC" ;
 	this.container.direction = direction ;
 	this.container.sheet = sheet ;
-	this.container.grid_x = x, this.container.grid_y = y ;
+	this.container.grid_x = grid.x, this.container.grid_y = grid.y ;
 	// Adding to the map (in front od all map elements).
 	this.MapControlPointer.container_front.addChild( this.container ) ;
 	// NPC's sprite.
@@ -47,8 +47,9 @@ NPC.prototype.OnCreate = function( MapControl, Name, x, y, sheet, direction ) {
 } // OnCreate()
 
 // Clone the NPC. Except NPC's info isn's inherited, all for the script is inherited.
-NPC.prototype.Clone = function( name, x, y, direction ) {
-	new NPC( this.MapControlPointer, name, x, y, this.container.sheet, direction ) ;
+NPC.prototype.Clone = function( name, grid, direction ) {
+	var clone = new NPC( this.MapControlPointer, name, grid, this.container.sheet, direction ) ;
+	return clone ;
 } // Clone()
 
 // Rotate and change the sprite sheet.
