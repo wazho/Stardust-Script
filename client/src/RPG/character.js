@@ -88,7 +88,10 @@ Character.prototype.OnActive = function() {
 	createjs.Ticker.addEventListener( "tick", function() { that.OnTick( that ) ; } ) ;
 
 	stage.on( "stagemousedown", function( evt ) {
-		that.OnWalk( that.MapControlPointer.GetGrid( evt.stageX, 'x', 'real' ), that.MapControlPointer.GetGrid( evt.stageY, 'y', 'real' ) ) ;
+		if ( that.MapControlPointer.nowEventTrigger == null )
+			that.OnWalk( that.MapControlPointer.GetGrid( evt.stageX, 'x', 'real' ), that.MapControlPointer.GetGrid( evt.stageY, 'y', 'real' ) ) ;
+		else 
+			that.MapControlPointer.nowEventTrigger.OnTrigger() ;
 	}) ;
 } // OnActive()
 

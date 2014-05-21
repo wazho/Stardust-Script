@@ -46,8 +46,8 @@
 			// 建立角色物件
 			var baphomet = new Character( mapcontrol, "baphomet", 175, 55, 1.00, 16, 11, "front" ) ;
 			var farmiliar_proto = new NPC( mapcontrol, "farmiliar_01", 10, 3, { type: "monster", name: "farmiliar" }, 6 ) ;
-			farmiliar_proto.Clone( "clone_04", 28, 5, 4 ) ;
-			farmiliar_proto.Clone( "clone_04", 30, 13, 2 ) ;
+			farmiliar_proto.Clone( "clone_02", 28, 5, 4 ) ;
+			farmiliar_proto.Clone( "clone_03", 30, 13, 2 ) ;
 
 			baphomet.OnLifeModify( -999, -40 ) ;
 
@@ -57,7 +57,6 @@
 			stage.addChild( mapcontrol.container_back ) ;
 			// 主要角色匯入
 			stage.addChild( baphomet.container ) ;
-			//stage.addChild( farmiliar_01.container, farmiliar_02.container, farmiliar_03.container ) ;
 			// 地圖景效物件匯入(前端)
 			stage.addChild( mapcontrol.container_front ) ;
 			// 遊戲主框架匯入

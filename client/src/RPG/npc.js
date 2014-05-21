@@ -5,6 +5,7 @@ function NPC( MapControl, Name, x, y, sheet, direction ) {
 
 // NPC character object is created.
 NPC.prototype.OnCreate = function( MapControl, Name, x, y, sheet, direction ) {
+	var that = this ;
 	// Magic Number !!
 	this.spriteSize = 125 ;
 	// Map back and map front are both in map controller.
@@ -31,6 +32,8 @@ NPC.prototype.OnCreate = function( MapControl, Name, x, y, sheet, direction ) {
 	this.OnDirection( this.container.direction, "front" ) ;
 	// Shadow created.
 	this.sprite.shadow = new createjs.Shadow( "#454", 5, 5, 5 ) ;
+	this.container.on( "mouseover", function() { that.MapControlPointer.nowEventTrigger = that ; } ) ;
+	this.container.on( "mouseout", function() { that.MapControlPointer.nowEventTrigger = null ; } ) ;
 } // OnCreate()
 
 // Clone the NPC. Except NPC's info isn's inherited, all for the script is inherited.
@@ -49,3 +52,11 @@ NPC.prototype.OnDirection = function( direction, type ) {
 NPC.prototype.OnDialog = function() {
 	$( "#dialog_01" ).dialog( "open" ) ;
 } // OnDialog()
+
+// When NPC is clicked, it will be triggered.
+NPC.prototype.OnTrigger = function() {
+	var that = this ;
+	console.log( "You click me. " + that.container.name ) ;
+
+
+} // OnTrigger()

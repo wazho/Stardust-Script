@@ -2,6 +2,8 @@ function Main_Map( map_num, len, hei, switch_debug ) {
 	var that = this ;
 	// 背景建立
 	this.backgorond = new createjs.Container() ;
+	// Now trigger event like 'NPC'.
+	this.nowEventTrigger = null ;
 	// 容器建立(前端與後端)
 	this.container_front = new createjs.Container() ;
 	this.container_back = new createjs.Container() ;
@@ -36,6 +38,8 @@ function Main_Map( map_num, len, hei, switch_debug ) {
 		that.selectGrid.x = ( that.trim_x + that.GetGrid( evt.stageX, 'x', 'real' ) - 1 ) * that.grid.size ;
 		that.selectGrid.y = ( that.trim_y + that.GetGrid( evt.stageY, 'y', 'real' ) - 1 ) * that.grid.size ;
 	} ) ;
+
+	stage.enableMouseOver( 20 ) ;
 } // Main_Map())
 
 // // 地圖網格上物件管理, 依照名稱取得物件
