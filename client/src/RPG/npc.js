@@ -6,66 +6,87 @@ function NPC( MapControl, Name, grid, sheet, direction ) {
 // NPC character object is created.
 NPC.prototype.OnCreate = function( MapControl, Name, grid, sheet, direction ) {
 	var that = this ;
-	// Magic Number !!
+	// Size of sprite per sheet.
 	this.spriteSize = 125 ;
 	// Map back and map front are both in map controller.
 	this.MapControlPointer = MapControl ;
 	// NPC container created.
-	this.container = new createjs.Container() ;
-	this.container.regX = this.spriteSize / 2, this.container.regY = this.spriteSize / 2 ;
-	this.container.length = this.spriteSize, this.container.height = this.spriteSize ;
-	var realGrid = this.MapControlPointer.GetGrid( { x: grid.x, y: grid.y }, "virtual" ) ;
-	this.container.x = realGrid.x + this.container.regX, this.container.y = realGrid.y + this.container.regY * 0.3 ;
+	CreateContainer() ;
 	// Basic NPC info.
-	this.container.name = Name ;
-	this.container.type = "NPC" ;
-	this.container.direction = direction ;
-	this.container.sheet = sheet ;
-	this.container.grid_x = grid.x, this.container.grid_y = grid.y ;
-	// Adding to the map (in front od all map elements).
-	this.MapControlPointer.container_front.addChild( this.container ) ;
+	AddingBasicInfo() ;
 	// NPC's sprite.
-	this.sprite = new createjs.Sprite( SettingSprite( sheet.type, sheet.name ) ) ;
-	this.sprite.regX = this.spriteSize / 2, this.sprite.regY = this.spriteSize / 2 ;
-	this.container.addChild( this.sprite ) ;
-	// Default the direction of this NPC.
-	this.OnDirection( this.container.direction, "front" ) ;
+	AddingSprite() ;
 	// Shadow created.
-	this.sprite.shadow = new createjs.Shadow( "#454", 5, 5, 5 ) ;
-	this.shadowArea = new createjs.Shape() ;
-	this.shadowArea.scaleY = 0.4 ;
-	this.shadowArea.alpha = 0.3 ;
-	this.shadowArea.graphics.f( "#000000" ).dc( 0, this.spriteSize / 2 / this.shadowArea.scaleY - 13, 25 ) ;
-	this.container.addChildAt( this.shadowArea, 0 ) ;
+	AddingShadow() ;
 	// Window of conversation.
-	this.talk = new createjs.Container() ;
-	this.talk.regX = this.spriteSize / 2, this.talk.regY = this.spriteSize / 2 ;
-	this.container.addChild( this.talk ) ;
-	this.talk.bg = new createjs.Shape() ;
-	this.talk.wd = new createjs.Text( "", "17px Courier New", "#FFF" ) ;
-	this.talk.fadetime = 0 ;
-	this.talk.addChild( this.talk.bg, this.talk.wd ) ;
+	AddingTalkWindow() ;
 	// Name tag.
-	this.nameTag = new createjs.Container() ;
-	this.nameTag.regX = ( ( halfFullCheck( "half", Name ) * 1.03 + halfFullCheck( "full", Name ) * 1.71 ) * 10 ) / 2, this.nameTag.y = this.spriteSize / 2 + 10 ;
-	this.container.addChild( this.nameTag ) ;
-	this.nameTag.bg = new createjs.Text( Name, "17px Courier New", "#000" ) ;
-	this.nameTag.bg.outline = 6 ;
-	this.nameTag.wd = new createjs.Text( Name, "17px Courier New", "#FFF" ) ;
-	this.nameTag.alpha = 0 ;
-	this.nameTag.addChild( this.nameTag.bg, this.nameTag.wd ) ;
-
+	AddingNametag() ;
 	// Add NPC is passed by mouse.
-	this.container.on( "mouseover", function() { 
-		that.MapControlPointer.nowEventTrigger = that ; 
-		createjs.Tween.get( that.nameTag )
-		.to( { alpha: 1 } , 300 ) ;
-	} ) ;
-	this.container.on( "mouseout", function() { 
-		that.MapControlPointer.nowEventTrigger = null ;
-		createjs.Tween.get( that.nameTag )
-		.to( { alpha: 0 } , 300 ) ;
-	} ) ;
+	AddingMouseEvent() ;
+
+	function CreateContainer() {
+		that.container = new createjs.Container() ;
+		that.container.regX = that.spriteSize / 2, that.container.regY = that.spriteSize / 2 ;
+		that.container.length = that.spriteSize, that.container.height = that.spriteSize ;
+		var realGrid = that.MapControlPointer.GetGrid( { x: grid.x, y: grid.y }, "virtual" ) ;
+		that.container.x = realGrid.x + that.container.regX, that.container.y = realGrid.y + that.container.regY * 0.3 ;
+	} // CreateContainer()
+	function AddingBasicInfo() {
+		that.container.name = Name ;
+		that.container.type = "NPC" ;
+		that.container.direction = direction ;
+		that.container.sheet = sheet ;
+		that.container.grid_x = grid.x, that.container.grid_y = grid.y ;
+		// Adding to the map (in front od all map elements).
+		that.MapControlPointer.container_front.addChild( that.container ) ;
+	} // AddingBasicInfo()
+	function AddingSprite() {
+		that.sprite = new createjs.Sprite( SettingSprite( sheet.type, sheet.name ) ) ;
+		that.sprite.regX = that.spriteSize / 2, that.sprite.regY = that.spriteSize / 2 ;
+		that.container.addChild( that.sprite ) ;
+		// Default the direction of this NPC.
+		that.OnDirection( that.container.direction, "front" ) ;
+	} // AddingSprite()
+	function AddingShadow() {
+		that.sprite.shadow = new createjs.Shadow( "#454", 5, 5, 5 ) ;
+		that.shadowArea = new createjs.Shape() ;
+		that.shadowArea.scaleY = 0.4 ;
+		that.shadowArea.alpha = 0.3 ;
+		that.shadowArea.graphics.f( "#000000" ).dc( 0, that.spriteSize / 2 / that.shadowArea.scaleY - 13, 25 ) ;
+		that.container.addChildAt( that.shadowArea, 0 ) ;
+	} // AddingShadow()
+	function AddingTalkWindow() {
+		that.talk = new createjs.Container() ;
+		that.talk.regX = that.spriteSize / 2, that.talk.regY = that.spriteSize / 2 ;
+		that.container.addChild( that.talk ) ;
+		that.talk.bg = new createjs.Shape() ;
+		that.talk.wd = new createjs.Text( "", "17px Courier New", "#FFF" ) ;
+		that.talk.fadetime = 0 ;
+		that.talk.addChild( that.talk.bg, that.talk.wd ) ;
+	} // AddingTalkWindow()
+	function AddingNametag() {
+		that.nameTag = new createjs.Container() ;
+		that.nameTag.regX = ( ( halfFullCheck( "half", Name ) * 1.03 + halfFullCheck( "full", Name ) * 1.71 ) * 10 ) / 2, that.nameTag.y = that.spriteSize / 2 + 10 ;
+		that.container.addChild( that.nameTag ) ;
+		that.nameTag.bg = new createjs.Text( Name, "17px Courier New", "#000" ) ;
+		that.nameTag.bg.outline = 6 ;
+		that.nameTag.wd = new createjs.Text( Name, "17px Courier New", "#FFF" ) ;
+		that.nameTag.alpha = 0 ;
+		that.nameTag.addChild( that.nameTag.bg, that.nameTag.wd ) ;
+	} // AddingNametag()
+	function AddingMouseEvent() {
+		that.container.on( "mouseover", function() { 
+			that.MapControlPointer.nowEventTrigger = that ; 
+			createjs.Tween.get( that.nameTag )
+			.to( { alpha: 1 } , 300 ) ;
+		} ) ;
+		that.container.on( "mouseout", function() { 
+			that.MapControlPointer.nowEventTrigger = null ;
+			createjs.Tween.get( that.nameTag )
+			.to( { alpha: 0 } , 300 ) ;
+		} ) ;
+	} // AddingMouseEvent()
 } // OnCreate()
 
 // Clone the NPC. Except NPC's info isn's inherited, all for the script is inherited.
