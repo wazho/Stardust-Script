@@ -42,7 +42,7 @@ NPC.prototype.OnCreate = function( MapControl, Name, grid, sheet, direction ) {
 	this.talk.addChild( this.talk.bg, this.talk.wd ) ;
 	// Name tag.
 	this.nameTag = new createjs.Container() ;
-	this.nameTag.regX = ( ( halfFullCheck( "half", Name ) * 1.03 + halfFullCheck( "full", Name ) * 1.71 ) * 10 ) / 2, this.nameTag.y = this.spriteSize / 2 + 20 ;
+	this.nameTag.regX = ( ( halfFullCheck( "half", Name ) * 1.03 + halfFullCheck( "full", Name ) * 1.71 ) * 10 ) / 2, this.nameTag.y = this.spriteSize / 2 + 10 ;
 	this.container.addChild( this.nameTag ) ;
 	this.nameTag.bg = new createjs.Text( Name, "17px Courier New", "#000" ) ;
 	this.nameTag.bg.outline = 6 ;
@@ -50,7 +50,7 @@ NPC.prototype.OnCreate = function( MapControl, Name, grid, sheet, direction ) {
 	this.nameTag.alpha = 0 ;
 	this.nameTag.addChild( this.nameTag.bg, this.nameTag.wd ) ;
 
-
+	// Add NPC is passed by mouse.
 	this.container.on( "mouseover", function() { 
 		that.MapControlPointer.nowEventTrigger = that ; 
 		createjs.Tween.get( that.nameTag )
@@ -87,9 +87,12 @@ NPC.prototype.OnTalk = function( text ) {
 	this.talk.bg.alpha = 0.65 ;
 	this.talk.bg.graphics.f( "#000" ).r( 0, 0, chat_len, 25 ) ;
 	this.talk.wd.text = text ;
-	this.talk.wd.x = 10, this.talk.wd.y = 6 ;
+	this.talk.wd.x = 10, this.talk.wd.y = 5 ;
 	this.talk.wd.alpha = 0.9 ;
 	this.talk.x = 67 - chat_len / 2, this.talk.y = -15 ;
+	createjs.Tween.get( that.talk )
+	.to( { alpha: 0 } , 0 )
+	.to( { alpha: 1 } , 300 ) ;
 	// Fade animation.
 	createjs.Tween.get( that.container )
 	.call( function() { 
@@ -104,8 +107,8 @@ NPC.prototype.OnTalk = function( text ) {
 		else if ( type == "fade" ) {
 			pt.talk.fadetime += 3000 ;
 			pt.TimeSleep( function() {
-	 			pt.talk.wd.text = "" ;
-				pt.talk.bg.graphics.c() ;
+				createjs.Tween.get( that.talk )
+				.to( { alpha: 0 } , 300 ) ;
 			} ) ;
 		} // else if
 	} // OffTalk()
