@@ -2,17 +2,17 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>Stardust Script - Making map</title>
+	<title>Stardust Script - Making NPC</title>
 	<!-- jQuery & UI css library -->
 	<link href="css/pepper-grinder/jquery-ui-1.10.4.custom.css" rel="stylesheet">
 	<script src="src/jquery-2.1.1.min.js"></script>
 	<script src="src/jquery-ui-1.10.4.custom.min.js"></script>
 	<!-- CreateJS & Tiled Map Editor library --> 
 	<script src="src/createjs-2013.12.12.min.js"></script>
-	<script src="src/build/map/show_layer.js"></script>
-	<script src="src/build/map/character_layer.js"></script>
-	<script src="src/build/map/command_layer.js"></script>
-	<script src="src/build/map/generation_layer.js"></script>
+	<script src="src/build/npc/show_layer.js"></script>
+	<script src="src/build/npc/character_layer.js"></script>
+	<script src="src/build/npc/command_layer.js"></script>
+	<script src="src/build/npc/generation_layer.js"></script>
 
 	<script>
 		var stage ;
@@ -25,7 +25,7 @@
 			var command_layer = new CommandLayer() ;
 			var generation_layer = new GenerationLayer() ;
 
-			// stage.addChild( show_layer, character_layer, command_layer, generation_layer ) ;
+			stage.addChild( show_layer.box, character_layer.box, command_layer.box, generation_layer.box ) ;
 
 			// Refresh frame number - FPS
 			createjs.Ticker.addEventListener( "tick", function ( event ) { stage.update() ; } ) ;
