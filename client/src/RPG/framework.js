@@ -1,9 +1,9 @@
-function Main_Framework( len, hei ) {
+function Main_Framework( canvasSize ) {
 	// 容器建立
 	this.container = new createjs.Container() ;
 	this.container.name = 'Framework' ;
-	this.container.length = len ;
-	this.container.height = hei ;
+	this.container.length = canvasSize.length ;
+	this.container.height = canvasSize.height ;
 	// 跑馬燈匯入
 	this.marquee = new createjs.Container() ;
 	this.container.addChild( this.marquee ) ;
