@@ -15,7 +15,6 @@ Character.prototype.OnCreate = function( MapControl, Name, HP, SP, Speed, x, y, 
 	this.hp_max = HP, this.hp = HP ;
 	this.sp_max = SP, this.sp = SP ;
 	this.speed = Speed, this.direction = 4 ;
-	this.grid_x = x, this.grid_y = y ;
 	// 容器建立
 	this.container = new createjs.Container() ;
 	this.container.name = Name ;
@@ -23,6 +22,7 @@ Character.prototype.OnCreate = function( MapControl, Name, HP, SP, Speed, x, y, 
 	this.container.length = this.spriteSize, this.container.height = this.spriteSize ;
 	this.container.x = this.MapControlPointer.GetGrid( { x: 16, y: 11 }, "virtual" ).x + this.container.regX ;
 	this.container.y = this.MapControlPointer.GetGrid( { x: 16, y: 11 }, "virtual" ).y + this.container.regY * 0.3 ;
+	this.container.grid_x = x, this.container.grid_y = y ;
 	// 圖層建立
 	this.sprite = new createjs.Sprite( SettingSprite( "character", Name ) ) ;
 	this.sprite.regX = this.spriteSize / 2, this.sprite.regY = this.spriteSize / 2 ;
@@ -82,28 +82,34 @@ Character.prototype.OnTick = function( that ) {
 		that.OnTalk( this.name + " : " + "You key in 'wwwwwwwwwwwwwwwwwwwwwww'." ) ;
 } // OnTick()
 
-// 開始動作監聽
+// Starting mouse listener on player.
 Character.prototype.OnActive = function() {
 	var that = this ; 
 	createjs.Ticker.addEventListener( "tick", function() { that.OnTick( that ) ; } ) ;
 
 	stage.on( "stagemousedown", function( evt ) {
-		if ( that.MapControlPointer.nowEventTrigger == null ) 
-			that.OnWalk( that.MapControlPointer.GetGrid( { x: evt.stageX, y: evt.stageY }, "real" ) ) ;
+		if ( that.MapControlPointer.nowEventTrigger == null ) {
+			var trimedGrid = that.MapControlPointer.GetGrid( { x: evt.stageX, y: evt.stageY }, "real" ) ;
+			trimedGrid.x += that.MapControlPointer.trim.x, trimedGrid.y += that.MapControlPointer.trim.y ;
+			that.OnWalk( trimedGrid ) ;
+		} // if
 		else 
 			that.MapControlPointer.nowEventTrigger.OnTrigger() ;
 	}) ;
 } // OnActive()
 
-// 角色移動, 使用虛擬坐標
+// Assign the character walking.
 Character.prototype.OnWalk = function( grid ) {
 	// Virtual grid system.
-	var startGrid_x = this.grid_x, startGrid_y = this.grid_y ;
-	var endGrid_x = ( grid.x - 16 ) + startGrid_x, endGrid_y = ( grid.y - 11 ) + startGrid_y ;
+	var gridSize = this.MapControlPointer.grid.size ;
+	var startGrid = { x: this.container.grid_x, y: this.container.grid_y } ;
+	var endGrid = { x: grid.x, y: grid.y } ;
 
-	if ( this.MapControlPointer.MapMove( { x: this.grid_x, y: this.grid_y }, { x: endGrid_x, y: endGrid_y } ) ) {
-		this.grid_x = endGrid_x, this.grid_y = endGrid_y ;
-		sendPlayerStateToServer() ;
+	if ( this.MapControlPointer.MapMove( { x: startGrid.x, y: startGrid.y }, { x: endGrid.x, y: endGrid.y } ) ) {
+		this.container.grid_x = endGrid.x, this.container.grid_y = endGrid.y ;
+		var realGrid = this.MapControlPointer.GetGrid( { x: endGrid.x, y: endGrid.y }, "virtual" ) ;
+		createjs.Tween.get( this.container ).to( { x: realGrid.x + this.container.regX, y: realGrid.y + this.container.regY * 0.3 }, 750 ) ;
+		// sendPlayerStateToServer() ;
 	} // if
 } // OnWalk()
 

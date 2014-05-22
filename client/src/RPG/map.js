@@ -24,7 +24,7 @@ function Main_Map( mapNum, canvasSize, switchDebug ) {
 		that.grid.size = that.DrawMap( mapNum ) ;
 		that.grid.maxX = Math.ceil( that.container_front.length / that.grid.size ) ;
 		that.grid.maxY = Math.ceil( that.container_front.height / that.grid.size ) ;
-		that.GridCreate( switchDebug ) ;
+		that.DebugMode( switchDebug ) ;
 		that.container_back.addChild( that.grid ) ;
 	} // CreateGridSystem()
 	function AddingFollowingCursor() {
@@ -50,17 +50,17 @@ function Main_Map( mapNum, canvasSize, switchDebug ) {
 	} // AddingFollowingCursor()
 } // Main_Map())
 
-// // 除錯模式, 畫格建立顯示
-Main_Map.prototype.GridCreate = function( switch_debug ) {
+// Debug mode. Draw the block of grids.
+Main_Map.prototype.DebugMode = function( switchDebug ) {
 	this.debug_mode = new createjs.Shape() ;
 	this.debug_mode.alpha = 0.1 ;
 	for ( i = 0 ; i < ( this.container_front.length / this.grid.size ) ; i ++ )
 		for ( j = 0 ; j < ( this.container_front.height / this.grid.size ) ; j ++ )
 			this.debug_mode.graphics.f( "#FFF" ).r( ( ( ( i + j ) % 2 ) ?              0 : this.grid.size ) + this.grid.size * i, this.grid.size * j, this.grid.size, this.grid.size ),
 			this.debug_mode.graphics.f( "#000" ).r( ( ( ( i + j ) % 2 ) ? this.grid.size :              0 ) + this.grid.size * i, this.grid.size * j, this.grid.size, this.grid.size ) ;
-	if ( switch_debug )
+	if ( switchDebug )
 		this.grid.addChild( this.debug_mode ) ;
-} // GridCreate()
+} // DebugMode()
 
 // type'real'    -> real coordinate to virtual grid
 // type'virtual' -> virtual grid to real coordinate 
@@ -146,12 +146,12 @@ Main_Map.prototype.MapMove = function( start, end ) {
 
 		// ~~~~~~~~~~
 
-		console.log( aStarTile[end.y-2][end.x-2].walkable, aStarTile[end.y-2][end.x-1].walkable, aStarTile[end.y-2][end.x].walkable ) ;
-		console.log( aStarTile[end.y-1][end.x-2].walkable, 9, aStarTile[end.y-1][end.x].walkable ) ;
-		console.log( aStarTile[end.y][end.x-2].walkable, aStarTile[end.y][end.x-1].walkable, aStarTile[end.y][end.x].walkable ) ;
+		// console.log( aStarTile[end.y-2][end.x-2].walkable, aStarTile[end.y-2][end.x-1].walkable, aStarTile[end.y-2][end.x].walkable ) ;
+		// console.log( aStarTile[end.y-1][end.x-2].walkable, 9, aStarTile[end.y-1][end.x].walkable ) ;
+		// console.log( aStarTile[end.y][end.x-2].walkable, aStarTile[end.y][end.x-1].walkable, aStarTile[end.y][end.x].walkable ) ;
 
 
-		console.log( start.x + "," + start.y + " to " + end.x + "," + end.y ) ;
+		// console.log( start.x + "," + start.y + " to " + end.x + "," + end.y ) ;
 
 		return true ;
 

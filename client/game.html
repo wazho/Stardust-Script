@@ -44,32 +44,32 @@
 			// 建立遊戲框架
 			var framework = new Main_Framework( canvasSize ) ;
 			// 建立角色物件
-			var baphomet = new Character( mapcontrol, "baphomet", 175, 55, 1.00, 16, 11, "front" ) ;
+			var mainCharacter = new Character( mapcontrol, "baphomet", 175, 55, 1.00, 16, 11, "front" ) ;
 			var farmiliar_proto = new NPC( mapcontrol, "farmiliar_01", { x: 10, y: 3 }, { type: "monster", name: "farmiliar" }, 6 ) ;
 			var farmiliar_clone01 = farmiliar_proto.Clone( "clone_01", { x: 28, y: 5 }, 4 ) ;
 			var farmiliar_clone02 = farmiliar_proto.Clone( "clone_02", { x: 30, y: 13 }, 2 ) ;
 			var baphomet_proto = new NPC( mapcontrol, "baphomet_01", { x: 15, y: 6 }, { type: "character", name: "baphomet" }, 6 ) ;
 
-			baphomet.OnLifeModify( -999, -40 ) ;
+			mainCharacter.OnLifeModify( -999, -40 ) ;
 
 			// 地圖背景匯入
 			stage.addChild( mapcontrol.backgorond ) ;
 			// 地圖景效物件匯入(後端)
 			stage.addChild( mapcontrol.container_back ) ;
 			// 主要角色匯入
-			stage.addChild( baphomet.container ) ;
+			mapcontrol.container_front.addChild( mainCharacter.container ) ;
 			// 地圖景效物件匯入(前端)
 			stage.addChild( mapcontrol.container_front ) ;
 			// 遊戲主框架匯入
 			stage.addChild( framework.container ) ;
 
 			fpsLabel = new createjs.Text( "-- fps", "bold 18px Arial", "#FFF" ) ;
-			fpsLabel.x = 10, fpsLabel.y = 20 ;
+			fpsLabel.x = 10, fpsLabel.y = 250 ;
 			stage.addChild( fpsLabel ) ;
 
 			// FPS
 			createjs.Ticker.addEventListener( "tick", tick ) ;
-			createjs.Ticker.setFPS( 100 ) ;
+			createjs.Ticker.setFPS( 80 ) ;
 		} // init()
 	</script>
 
