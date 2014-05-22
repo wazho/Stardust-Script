@@ -77,14 +77,18 @@ NPC.prototype.OnCreate = function( MapControl, Name, grid, sheet, direction ) {
 	} // AddingNametag()
 	function AddingMouseEvent() {
 		that.container.on( "mouseover", function() { 
-			that.MapControlPointer.nowEventTrigger = that ; 
-			createjs.Tween.get( that.nameTag )
-			.to( { alpha: 1 } , 300 ) ;
+			if ( that.MapControlPointer.nowEventTrigger != "TriggerNow" ) {
+				that.MapControlPointer.nowEventTrigger = that ; 
+				createjs.Tween.get( that.nameTag )
+				.to( { alpha: 1 } , 300 ) ;
+			} // if
 		} ) ;
 		that.container.on( "mouseout", function() { 
-			that.MapControlPointer.nowEventTrigger = null ;
-			createjs.Tween.get( that.nameTag )
-			.to( { alpha: 0 } , 300 ) ;
+			if ( that.MapControlPointer.nowEventTrigger != "TriggerNow" ) {
+				that.MapControlPointer.nowEventTrigger = null ;
+				createjs.Tween.get( that.nameTag )
+				.to( { alpha: 0 } , 300 ) ;
+			} // if
 		} ) ;
 	} // AddingMouseEvent()
 } // OnCreate()
@@ -161,15 +165,37 @@ NPC.prototype.OnMove = function( grid ) {
 
 // Open a dialog for player's window.
 NPC.prototype.OnDialog = function() {
-	$( "#dialog_01" ).dialog( "open" ) ;
+	
 } // OnDialog()
+
+// Cutin a picture media in npc framework.
+// parameter(src) : file where is it.
+// parameter(location) : where is this picture put on this stage.
+NPC.prototype.OnCutin = function( src, location ) {
+	var that = this ;
+	var container = new createjs.Container() ;	var pic = new createjs.Bitmap( src ) ;
+	container.addChild( pic ) ;
+	stage.addChild( container ) ;
+	if ( location == 1 )
+		pic.x = 0, pic.y = 150 ;
+	createjs.Tween.get( container )
+	.to( { alpha: 0 }, 0 )
+	.to( { alpha: 1 }, 500 )
+	// Will delete.
+	.wait( 5000 )
+	.call( function() { that.MapControlPointer.nowEventTrigger = null ; } ) ;
+} // OnCutin()
 
 // When NPC is clicked, it will be triggered.
 NPC.prototype.OnTrigger = function() {
 	var that = this ;
-	this.OnTalk( "You click me. I'm " + that.container.name ) ;
+	this.MapControlPointer.nowEventTrigger = "TriggerNow" ;
+	this.OnTalk( that.container.name + ": You click me." ) ;
+	this.OnCutin( "npc/sage_l.png", 1 ) ;
+
+	// Example:
 	// this.OnMove( { x: 1, y: 1 } ) ;
-	this.OnWalk( { x: this.container.grid_x + 1, y: this.container.grid_y } ) ;
+	// this.OnWalk( { x: this.container.grid_x + 1, y: this.container.grid_y } ) ;
 } // OnTrigger()
 
 // Sleeping function.

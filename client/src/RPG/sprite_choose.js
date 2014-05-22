@@ -15,6 +15,16 @@ SettingSprite = function( type, name ) {
 				}
 			} )
 	} // if
+	else if ( type == "npc" ) {
+		if ( name == "sage" )
+			spriteSheet = new createjs.SpriteSheet( {
+				"images": ["npc/sage.png"], 
+				"frames": { "width": 125, "height": 125, "regX": 0, "regY": 0, "count": 36 },
+				"animations": {
+					"front": { "frames": [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,17,17,17,17], "speed": 0.1 }
+				}
+			} ) 
+	} // else if
 	else if ( type == "monster" ) {
 		if ( name == "farmiliar" )
 			spriteSheet = new createjs.SpriteSheet( {

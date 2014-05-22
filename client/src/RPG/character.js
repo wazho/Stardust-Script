@@ -93,7 +93,7 @@ Character.prototype.OnActive = function() {
 			trimedGrid.x += that.MapControlPointer.trim.x, trimedGrid.y += that.MapControlPointer.trim.y ;
 			that.OnWalk( trimedGrid ) ;
 		} // if
-		else 
+		else if ( that.MapControlPointer.nowEventTrigger != "TriggerNow" )
 			that.MapControlPointer.nowEventTrigger.OnTrigger() ;
 	}) ;
 } // OnActive()

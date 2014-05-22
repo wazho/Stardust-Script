@@ -70,7 +70,9 @@ Main_Map.prototype.GetGrid = function( grid, type ) {
 	return { x: x, y: y } ;
 } // GetGrid()
 
-// DrawMap
+// Draw the map.
+// Back part is drawing the floor texture.
+// Front part is putting the objects, characters.
 Main_Map.prototype.DrawMap = function( index ) {
 	var mapPixel = cacheMapData.map[index].tilePixel ;
 	var mapName = cacheMapData.map[index].name ;
