@@ -140,6 +140,25 @@ NPC.prototype.OnTalk = function( text ) {
 	} // OffTalk()
 } // OnTalk()
 
+// Assign the NPC walking.
+NPC.prototype.OnWalk = function( grid ) {
+	// Virtual grid system.
+	var gridSize = this.MapControlPointer.grid.size ;
+	var startGrid = { x: this.container.grid_x, y: this.container.grid_y } ;
+	var endGrid = { x: grid.x, y: grid.y } ;
+	var realGrid = this.MapControlPointer.GetGrid( { x: endGrid.x, y: endGrid.y }, "virtual" ) ;
+	createjs.Tween.get( this.container ).to( { x: realGrid.x + this.container.regX, y: realGrid.y + this.container.regY * 0.3 }, 1000 ) ;
+	this.container.grid_x = endGrid.x, this.container.grid_y = endGrid.y ;
+} // OnWalk()
+
+// Assign the NPC walking.
+NPC.prototype.OnMove = function( grid ) {
+	// Virtual grid system.
+	var realGrid = this.MapControlPointer.GetGrid( { x: grid.x, y: grid.y }, "virtual" ) ;
+	this.container.x = realGrid.x + this.container.regX, this.container.y = realGrid.y + this.container.regY * 0.3 ;
+	this.container.grid_x = grid.x, this.container.grid_y = grid.y ;
+} // OnWalk()
+
 // Open a dialog for player's window.
 NPC.prototype.OnDialog = function() {
 	$( "#dialog_01" ).dialog( "open" ) ;
@@ -149,6 +168,8 @@ NPC.prototype.OnDialog = function() {
 NPC.prototype.OnTrigger = function() {
 	var that = this ;
 	this.OnTalk( "You click me. I'm " + that.container.name ) ;
+	// this.OnMove( { x: 1, y: 1 } ) ;
+	this.OnWalk( { x: this.container.grid_x + 1, y: this.container.grid_y } ) ;
 } // OnTrigger()
 
 // Sleeping function.

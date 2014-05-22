@@ -1,0 +1,65 @@
+<!DOCTYPE  html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Stardust Script - Making map</title>
+	<!-- jQuery & UI css library -->
+	<link href="css/pepper-grinder/jquery-ui-1.10.4.custom.css" rel="stylesheet">
+	<script src="src/jquery-2.1.1.min.js"></script>
+	<script src="src/jquery-ui-1.10.4.custom.min.js"></script>
+	<!-- CreateJS & Tiled Map Editor library --> 
+	<script src="src/createjs-2013.12.12.min.js"></script>
+	<script src="src/build/map/show_layer.js"></script>
+	<script src="src/build/map/character_layer.js"></script>
+	<script src="src/build/map/command_layer.js"></script>
+	<script src="src/build/map/generation_layer.js"></script>
+
+	<script>
+		var stage ;
+		function init() {
+			stage = new createjs.Stage( "myCanvas" ) ;
+    		document.body.style.cursor = "url('pic/cursor/normal_select.cur'), default" ;
+
+			var show_layer = new ShowLayer() ;
+			var character_layer = new CharacterLayer() ;
+			var command_layer = new CommandLayer() ;
+			var generation_layer = new GenerationLayer() ;
+
+			// stage.addChild( show_layer, character_layer, command_layer, generation_layer ) ;
+
+			// Refresh frame number - FPS
+			createjs.Ticker.addEventListener( "tick", function ( event ) { stage.update() ; } ) ;
+			createjs.Ticker.setFPS( 60 ) ;
+		} // init()
+	</script>
+
+	<!-- Right click is blocked. -->
+	<script>
+		$( document ).ready( function() {
+			$( document ).bind( "contextmenu", function( event ) {
+				return false ;
+			} ) ;
+		} ) ;
+	</script>
+
+	<style>
+		#myCanvas {
+			top: 50% ;
+			left: 50% ;
+			margin-left: -500px ;
+			margin-top: -285px ;
+			border-radius: 10px ;
+			position: absolute ;
+		}
+	</style>
+</head>
+
+<body onload="init()" background="pic/backgroung.png">
+	<canvas id="myCanvas" width="1000" height="550">
+		Alternative Content
+	</canvas>
+
+	<a href="https://github.com/grass0916/Stardust-Script"><img style="position: absolute; top: 0; left: 0; border: 0;" src="pic/fork_me_on_github.png" alt="Fork me on GitHub"></a>
+</body>
+
+</html>
