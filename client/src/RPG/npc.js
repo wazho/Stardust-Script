@@ -134,11 +134,19 @@ NPC.prototype.OnTalk = function( text ) {
 		} // if
 		else if ( type == "fade" ) {
 			pt.talk.fadetime += 3000 ;
-			pt.TimeSleep( function() {
-				createjs.Tween.get( that.talk )
-				.to( { alpha: 0 } , 300 ) ;
-			} ) ;
+			TimeSleep( function() { createjs.Tween.get( that.talk ).to( { alpha: 0 } , 300 ) ; } ) ;
 		} // else if
+
+		function TimeSleep( func ) {
+			setTimeout( function() {
+				if ( that.talk.fadetime > 0 ) {
+					that.talk.fadetime -= 1000 ;
+					TimeSleep( func ) ;
+				} // if
+				else
+					func() ;
+			}, 1000 ) ;
+		} // TimeSleep()
 	} // OffTalk()
 } // OnTalk()
 
@@ -165,19 +173,34 @@ NPC.prototype.OnMove = function( grid ) {
 NPC.prototype.OnDialog = function( text ) {
 	var that = this ;
 	// Initial of dialog.
-	// dialog.removeAllChildren() ;
-	var container = FirstCreate() ;
+	if ( ! dialog.getChildByName( "dialog_window" ) )
+		var container = FirstCreate() ;
+	else
+		var container = Refresh() ;
 
 	// Part of text Line.
 	var textLine = new createjs.Container() ;
+	textLine.name = "text_line" ;
 	textLine.x = 30, textLine.y = 20 ;
 	textLine.text1 = new createjs.Container() ;
-	textLine.text1.bg = new createjs.Text( text, "20px Courier New", "#000" ) ;
+	textLine.text1.x = 0, textLine.text1.y = 0 ;
+	textLine.text1.bg = new createjs.Text( text.first, "20px Courier New", "#000" ) ;
 	textLine.text1.bg.outline = 5 ;
-	textLine.text1.wd = new createjs.Text( text, "20px Courier New", "#FFF" ) ;
+	textLine.text1.wd = new createjs.Text( text.first, "20px Courier New", "#FFF" ) ;
 	textLine.text1.addChild( textLine.text1.bg, textLine.text1.wd ) ;
-	textLine.addChild( textLine.text1 ) ;
-
+	textLine.text2 = new createjs.Container() ;
+	textLine.text2.x = 0, textLine.text2.y = 30 ;
+	textLine.text2.bg = new createjs.Text( text.second, "20px Courier New", "#000" ) ;
+	textLine.text2.bg.outline = 5 ;
+	textLine.text2.wd = new createjs.Text( text.second, "20px Courier New", "#FFF" ) ;
+	textLine.text2.addChild( textLine.text2.bg, textLine.text2.wd ) ;
+	textLine.text3 = new createjs.Container() ;
+	textLine.text3.x = 0, textLine.text3.y = 60 ;
+	textLine.text3.bg = new createjs.Text( text.third, "20px Courier New", "#000" ) ;
+	textLine.text3.bg.outline = 5 ;
+	textLine.text3.wd = new createjs.Text( text.third, "20px Courier New", "#FFF" ) ;
+	textLine.text3.addChild( textLine.text3.bg, textLine.text3.wd ) ;
+	textLine.addChild( textLine.text1, textLine.text2, textLine.text3 ) ;
 	container.addChild( textLine ) ;
 
 	function FirstCreate() {
@@ -213,6 +236,15 @@ NPC.prototype.OnDialog = function( text ) {
 		.to( { alpha: 1 }, 500 ) ;
 		return container ;
 	} // FirstCreate()
+	function Refresh() {
+		var container = dialog.getChildByName( "dialog_window" ) ;
+		var textLine = container.getChildByName( "text_line" ) ;
+		createjs.Tween.get( textLine )
+		.to( { alpha: 0 }, 300 )
+		.to( { alpha: 1 }, 0 )
+		.call( function() { textLine.removeAllChildren() ; } ) ;
+		return container ;
+	} // Refresh()
 } // OnDialog()
 
 // Cutin a picture media in npc framework.
@@ -238,9 +270,13 @@ NPC.prototype.OnCutin = function( src, location ) {
 NPC.prototype.OnTrigger = function() {
 	var that = this ;
 	this.MapControlPointer.nowEventTrigger = "TriggerNow" ;
+
+	// Cammand start.
 	this.OnTalk( that.container.name + ": You click me." ) ;
 	this.OnCutin( "npc/sage_l.png", 1 ) ;
-	this.OnDialog( "Hello, 你好。長度測試長度測試" ) ;
+	this.OnDialog( { first: "Hello, 你好。長度測試長度測試", second: " --Second.", third: " --Third." } ) ;
+
+	setTimeout( function() { that.OnDialog( { first: "Next page." } ) ; }, 5000 ) ;
 
 	createjs.Tween.get().wait( 3000 ).call( function() { TriggerInit() ; } ) ;
 
@@ -258,16 +294,3 @@ NPC.prototype.OnTrigger = function() {
 		} ) ;
 	} // TriggerInit()
 } // OnTrigger()
-
-// Sleeping function.
-NPC.prototype.TimeSleep = function( func ) {
-	var that = this ;
-	setTimeout( function() {
-		if ( that.talk.fadetime > 0 ) {
-			that.talk.fadetime -= 1000 ;
-			that.TimeSleep( func ) ;
-		} // if
-		else
-			func() ;
-	}, 1000 ) ;
-} // TimeSleep()
