@@ -162,21 +162,57 @@ NPC.prototype.OnMove = function( grid ) {
 } // OnWalk()
 
 // Open a dialog for player's window.
-NPC.prototype.OnDialog = function() {
+NPC.prototype.OnDialog = function( text ) {
 	var that = this ;
 	// Initial of dialog.
 	// dialog.removeAllChildren() ;
-	var container = new createjs.Container() ;
-	container.name = "dialog_window" ;
-	container.x = 300, container.y = this.MapControlPointer.container_front.height - 160 ;
-	var dialogWindow = new createjs.Shape() ;
-	dialogWindow.graphics.f( "#000" ).r( 0, 0, 630, 150 ) ;
-	dialogWindow.alpha = 0.5 ;
-	container.addChild( dialogWindow ) ;
-	dialog.addChild( container ) ;
-	createjs.Tween.get( container )
-	.to( { alpha: 0 }, 0 )
-	.to( { alpha: 1 }, 500 ) ;
+	var container = FirstCreate() ;
+
+	// Part of text Line.
+	var textLine = new createjs.Container() ;
+	textLine.x = 30, textLine.y = 20 ;
+	textLine.text1 = new createjs.Container() ;
+	textLine.text1.bg = new createjs.Text( text, "20px Courier New", "#000" ) ;
+	textLine.text1.bg.outline = 5 ;
+	textLine.text1.wd = new createjs.Text( text, "20px Courier New", "#FFF" ) ;
+	textLine.text1.addChild( textLine.text1.bg, textLine.text1.wd ) ;
+	textLine.addChild( textLine.text1 ) ;
+
+	container.addChild( textLine ) ;
+
+	function FirstCreate() {
+		// Create a container of dialog.
+		var container = new createjs.Container() ;
+		container.name = "dialog_window" ;
+		container.x = 300, container.y = that.MapControlPointer.container_front.height - 160 ;
+		// Part of dialog window.
+		var dialogWindow = new createjs.Shape() ;
+		dialogWindow.graphics.f( "#000" ).r( 0, 0, 630, 150 ) ;
+		dialogWindow.alpha = 0.5 ;
+		// Part of name tag.
+		var Name = that.container.name ;
+		var nameLength = ( ( halfFullCheck( "half", Name ) * 1.12 + halfFullCheck( "full", Name ) * 1.88 ) * 27 ) / 2 ;
+		var nameTag = new createjs.Container() ;
+		nameTag.bg = new createjs.Shape() ;
+		nameTag.bg.graphics.f( "#000" ).r( 0, 0, nameLength + 40, 40 ) ;
+		nameTag.bg.alpha = 0.5 ;
+		nameTag.nameWord = new createjs.Container() ;
+		nameTag.nameWord.x = ( nameLength + 40 ) / 2, nameTag.nameWord.y = 10 ;
+		nameTag.nameWord.regX = ( ( halfFullCheck( "half", Name ) * 1.0 + halfFullCheck( "full", Name ) * 1.7 ) * 15 ) / 2 ;
+		nameTag.nameWord.bg = new createjs.Text( Name, "25px Courier New", "#000" ) ;
+		nameTag.nameWord.bg.outline = 6 ;
+		nameTag.nameWord.wd = new createjs.Text( Name, "25px Courier New", "#FFF" ) ;
+		nameTag.nameWord.addChild( nameTag.nameWord.bg, nameTag.nameWord.wd ) ;
+		nameTag.addChild( nameTag.bg, nameTag.nameWord ) ;
+		nameTag.x = 0, nameTag.y = -40 ;
+		createjs.Tween.get( nameTag ).to( { x: ( 315 - ( nameLength + 40 ) / 2 ) }, 1000 ) ;
+		container.addChild( dialogWindow, nameTag ) ;
+		dialog.addChild( container ) ;
+		createjs.Tween.get( container )
+		.to( { alpha: 0 }, 0 )
+		.to( { alpha: 1 }, 500 ) ;
+		return container ;
+	} // FirstCreate()
 } // OnDialog()
 
 // Cutin a picture media in npc framework.
@@ -198,34 +234,29 @@ NPC.prototype.OnCutin = function( src, location ) {
 	.to( { alpha: 1 }, 500 ) ;
 } // OnCutin()
 
-// 
-NPC.prototype.TriggerInit = function() {
-	var that = this ;
-	createjs.Tween.get( dialog )
-	.to( { alpha: 0 }, 300 )
-	.to( { alpha: 1 }, 0 )
-	.call( function() {
-		that.MapControlPointer.nowEventTrigger = null ;
-		dialog.removeAllChildren() ;	
-	} ) ;
-} // TriggerInit()
-
 // When NPC is clicked, it will be triggered.
 NPC.prototype.OnTrigger = function() {
 	var that = this ;
 	this.MapControlPointer.nowEventTrigger = "TriggerNow" ;
 	this.OnTalk( that.container.name + ": You click me." ) ;
 	this.OnCutin( "npc/sage_l.png", 1 ) ;
-	this.OnDialog() ;
+	this.OnDialog( "Hello, 你好。長度測試長度測試" ) ;
 
-	createjs.Tween.get()
-	.wait( 1500 )
-	.call( function() { that.TriggerInit() ; } ) ;
-
+	createjs.Tween.get().wait( 3000 ).call( function() { TriggerInit() ; } ) ;
 
 	// Example:
 	// this.OnMove( { x: 1, y: 1 } ) ;
 	// this.OnWalk( { x: this.container.grid_x + 1, y: this.container.grid_y } ) ;
+
+	function TriggerInit() {
+		createjs.Tween.get( dialog )
+		.to( { alpha: 0 }, 300 )
+		.to( { alpha: 1 }, 0 )
+		.call( function() {
+			that.MapControlPointer.nowEventTrigger = null ;
+			dialog.removeAllChildren() ;	
+		} ) ;
+	} // TriggerInit()
 } // OnTrigger()
 
 // Sleeping function.
