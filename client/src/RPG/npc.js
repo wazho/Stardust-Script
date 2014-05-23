@@ -165,7 +165,8 @@ NPC.prototype.OnMove = function( grid ) {
 
 // Open a dialog for player's window.
 NPC.prototype.OnDialog = function() {
-	
+
+
 } // OnDialog()
 
 // Cutin a picture media in npc framework.
@@ -173,25 +174,44 @@ NPC.prototype.OnDialog = function() {
 // parameter(location) : where is this picture put on this stage.
 NPC.prototype.OnCutin = function( src, location ) {
 	var that = this ;
-	var container = new createjs.Container() ;	var pic = new createjs.Bitmap( src ) ;
+	// Initial of dialog.
+	dialog.removeAllChildren() ;
+	var container = new createjs.Container() ;
+	var pic = new createjs.Bitmap( src ) ;
 	container.addChild( pic ) ;
-	stage.addChild( container ) ;
+	dialog.addChild( container ) ;
 	if ( location == 1 )
 		pic.x = 0, pic.y = 150 ;
 	createjs.Tween.get( container )
 	.to( { alpha: 0 }, 0 )
-	.to( { alpha: 1 }, 500 )
-	// Will delete.
-	.wait( 5000 )
-	.call( function() { that.MapControlPointer.nowEventTrigger = null ; } ) ;
+	.to( { alpha: 1 }, 500 ) ;
+	return container ;
 } // OnCutin()
+
+// 
+NPC.prototype.TriggerInit = function() {
+	var that = this ;
+	createjs.Tween.get( dialog )
+	.to( { alpha: 0 }, 500 )
+	.to( { alpha: 1 }, 0 )
+	.call( function() {
+		that.MapControlPointer.nowEventTrigger = null ;
+		dialog.removeAllChildren() ;	
+	} ) ;
+} // TriggerInit()
 
 // When NPC is clicked, it will be triggered.
 NPC.prototype.OnTrigger = function() {
 	var that = this ;
 	this.MapControlPointer.nowEventTrigger = "TriggerNow" ;
 	this.OnTalk( that.container.name + ": You click me." ) ;
-	this.OnCutin( "npc/sage_l.png", 1 ) ;
+	var cutin = this.OnCutin( "npc/sage_l.png", 1 ) ;
+
+
+	createjs.Tween.get()
+	.wait( 1500 )
+	.call( function() { that.TriggerInit() ; } ) ;
+
 
 	// Example:
 	// this.OnMove( { x: 1, y: 1 } ) ;
