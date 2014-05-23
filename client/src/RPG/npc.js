@@ -77,18 +77,16 @@ NPC.prototype.OnCreate = function( MapControl, Name, grid, sheet, direction ) {
 	} // AddingNametag()
 	function AddingMouseEvent() {
 		that.container.on( "mouseover", function() { 
-			if ( that.MapControlPointer.nowEventTrigger != "TriggerNow" ) {
+			if ( that.MapControlPointer.nowEventTrigger != "TriggerNow" )
 				that.MapControlPointer.nowEventTrigger = that ; 
-				createjs.Tween.get( that.nameTag )
-				.to( { alpha: 1 } , 300 ) ;
-			} // if
+			createjs.Tween.get( that.nameTag )
+			.to( { alpha: 1 } , 300 ) ;
 		} ) ;
 		that.container.on( "mouseout", function() { 
-			if ( that.MapControlPointer.nowEventTrigger != "TriggerNow" ) {
+			if ( that.MapControlPointer.nowEventTrigger != "TriggerNow" )
 				that.MapControlPointer.nowEventTrigger = null ;
-				createjs.Tween.get( that.nameTag )
-				.to( { alpha: 0 } , 300 ) ;
-			} // if
+			createjs.Tween.get( that.nameTag )
+			.to( { alpha: 0 } , 300 ) ;
 		} ) ;
 	} // AddingMouseEvent()
 } // OnCreate()
@@ -165,8 +163,20 @@ NPC.prototype.OnMove = function( grid ) {
 
 // Open a dialog for player's window.
 NPC.prototype.OnDialog = function() {
-
-
+	var that = this ;
+	// Initial of dialog.
+	// dialog.removeAllChildren() ;
+	var container = new createjs.Container() ;
+	container.name = "dialog_window" ;
+	container.x = 300, container.y = this.MapControlPointer.container_front.height - 160 ;
+	var dialogWindow = new createjs.Shape() ;
+	dialogWindow.graphics.f( "#000" ).r( 0, 0, 630, 150 ) ;
+	dialogWindow.alpha = 0.5 ;
+	container.addChild( dialogWindow ) ;
+	dialog.addChild( container ) ;
+	createjs.Tween.get( container )
+	.to( { alpha: 0 }, 0 )
+	.to( { alpha: 1 }, 500 ) ;
 } // OnDialog()
 
 // Cutin a picture media in npc framework.
@@ -177,22 +187,22 @@ NPC.prototype.OnCutin = function( src, location ) {
 	// Initial of dialog.
 	dialog.removeAllChildren() ;
 	var container = new createjs.Container() ;
+	container.name = "cutin_pic" ;
 	var pic = new createjs.Bitmap( src ) ;
 	container.addChild( pic ) ;
 	dialog.addChild( container ) ;
 	if ( location == 1 )
-		pic.x = 0, pic.y = 150 ;
+		container.x = 0, container.y = 150 ;
 	createjs.Tween.get( container )
 	.to( { alpha: 0 }, 0 )
 	.to( { alpha: 1 }, 500 ) ;
-	return container ;
 } // OnCutin()
 
 // 
 NPC.prototype.TriggerInit = function() {
 	var that = this ;
 	createjs.Tween.get( dialog )
-	.to( { alpha: 0 }, 500 )
+	.to( { alpha: 0 }, 300 )
 	.to( { alpha: 1 }, 0 )
 	.call( function() {
 		that.MapControlPointer.nowEventTrigger = null ;
@@ -205,8 +215,8 @@ NPC.prototype.OnTrigger = function() {
 	var that = this ;
 	this.MapControlPointer.nowEventTrigger = "TriggerNow" ;
 	this.OnTalk( that.container.name + ": You click me." ) ;
-	var cutin = this.OnCutin( "npc/sage_l.png", 1 ) ;
-
+	this.OnCutin( "npc/sage_l.png", 1 ) ;
+	this.OnDialog() ;
 
 	createjs.Tween.get()
 	.wait( 1500 )
