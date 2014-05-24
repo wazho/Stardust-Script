@@ -185,26 +185,8 @@ NPC.prototype._dialogPromise = null ;
 // Open a dialog for player's window.
 NPC.prototype.OnDialog = function( text ) {
 	var that = this ;
-	// Checking is already promised.
-	if ( this._dialogPromise == null ) {
-		var dfd = $.Deferred() ;
-		this._dialogPromise = dfd.promise() ;
-		Start( this ) ;
-	} // if
-	else {
-		this._dialogPromise.then( function() { 
-			that._dialogPromise = that._dialogPromise.then( function () {
-				var dfd = $.Deferred() ;
-				Start( that ) ;
-				createjs.Tween.get( that )
-				.call( function () {
-					dfd.resolve() ;
-				} ) ;
-				return dfd.promise() ;
-			} ) ;
-		} ) ;
-		return ;
-	} // else
+
+	Start( this ) ;
 
 	function Start( pt ) {
 		var that = pt ;
@@ -230,7 +212,8 @@ NPC.prototype.OnDialog = function( text ) {
 			container.name = "dialog_window" ;
 			container.x = 300, container.y = that.MapControlPointer.container_front.height - 160 ;
 			// Part of dialog window.
-			dialogWindow = RadiusRect( 0, 0, 630, 150, 20, "#000", 0.5 ) ;
+			var dialogWindow_top = RadiusRect( 0, 0, 630, 150, 20, "#000", 0.5 ) ;
+			var dialogWindow_btm = RadiusRect_3( 0, 115, 630, 35, 20, "#CCC", 0.5 ) ;
 			// Part of name tag.
 			var Name = that.container.name ;
 			var nameLength = ( ( halfFullCheck( "half", Name ) * 1.12 + halfFullCheck( "full", Name ) * 1.88 ) * 27 ) / 2 ;
@@ -245,14 +228,21 @@ NPC.prototype.OnDialog = function( text ) {
 			// Part of next page.
 			var nextPage = new createjs.Container() ;
 			nextPage.name = "next_page" ;
-			nextPage.bg = RadiusRect_3( 0, 115, 630, 35, 20, "#CCC", 0.5 ) ;
 			nextPage.button = AddingTextLine( "Next >>", 530, 122, "25px Comic Sans MS", 6 ) ;
-			nextPage.addChild( nextPage.bg, nextPage.button ) ;
-			nextPage.on( "click", function() { 
-				dfd.resolve() ;
+			nextPage.addChild( nextPage.button ) ;
+			nextPage.button.on( "click", function() { 
+				
+			} ) ;
+			// Part of cancel page.
+			var cancelPage = new createjs.Container() ;
+			cancelPage.name = "cancel_page" ;
+			cancelPage.button = AddingTextLine( "Cancel", 35, 122, "25px Comic Sans MS", 6 ) ;
+			cancelPage.addChild( cancelPage.button ) ;
+			cancelPage.on( "click", function() { 
+				that.trigegrInit() ;
 			} ) ;
 			// All adding to the top container.
-			container.addChild( dialogWindow, nameTag, nextPage ) ;
+			container.addChild( dialogWindow_top, dialogWindow_btm, nameTag, nextPage, cancelPage ) ;
 			dialog.addChild( container ) ;
 			createjs.Tween.get( container )
 			.to( { alpha: 0 }, 0 )
@@ -262,10 +252,7 @@ NPC.prototype.OnDialog = function( text ) {
 		function Refresh() {
 			var container = dialog.getChildByName( "dialog_window" ) ;
 			var textLine = container.getChildByName( "text_line" ) ;
-			createjs.Tween.get( textLine )
-			.to( { alpha: 0 }, 300 )
-			.to( { alpha: 1 }, 0 )
-			.call( function() { textLine.removeAllChildren() ; } ) ;
+			container.removeChild( textLine ) ;
 			return container ;
 		} // Refresh()
 		function AddingTextLine( str, x, y, font, outline ) {
@@ -341,9 +328,9 @@ NPC.prototype.OnTrigger = function() {
 	this.OnTalk( that.container.name + ": You click me." ) ;
 	this.OnCutin( "npc/sage_l.png", 1 ) ;
 	this.OnDialog( { first: "Hello.", second: "你好。", third: "こんにちは." } ) ;
-	this.OnDialog( { first: "Second." } ) ;
-	this.OnDialog( { first: "        Third." } ) ;
-	this.OnDialog( { first: "               Fourth." } ) ;
+	// this.OnDialog( { first: "Second." } ) ;
+	// this.OnDialog( { first: "        Third." } ) ;
+	// this.OnDialog( { first: "               Fourth." } ) ;
 	//this.OnWalk( { x: this.container.grid_x + 3, y: this.container.grid_y } ) ;
 	//this.OnWalk( { x: this.container.grid_x, y: this.container.grid_y - 3 } ) ;
 
@@ -356,7 +343,7 @@ NPC.prototype.OnTrigger = function() {
 	// this.OnMove( { x: 1, y: 1 } ) ;
 	// this.OnWalk( { x: this.container.grid_x + 1, y: this.container.grid_y } ) ;
 
-	function TriggerInit() {
+	this.trigegrInit = function TriggerInit() {
 		createjs.Tween.get( dialog )
 		.to( { alpha: 0 }, 300 )
 		.to( { alpha: 1 }, 0 )
@@ -365,4 +352,6 @@ NPC.prototype.OnTrigger = function() {
 			dialog.removeAllChildren() ;	
 		} ) ;
 	} // TriggerInit()
+
+
 } // OnTrigger()
