@@ -156,8 +156,9 @@ NPC.prototype.OnWalk = function( grid ) {
 	// Checking is already promised.
 	if ( this._dialogPromise == null )
 		return ;
-	else
+	else {
 		this._dialogPromise.then( function() { Start( that ) ; } ) ;
+	} // else
 
 	// Queue to jQ's promise.
 	function Start() {
@@ -329,8 +330,9 @@ NPC.prototype.OnTrigger = function() {
 	this.OnCutin( "npc/sage_l.png", 1 ) ;
 	this.OnDialog( { first: "Hello.", second: "你好。", third: "こんにちは." } ) ;
 	this.OnDialog( { first: "Second." } ) ;
-	this.OnWalk( { x: this.container.grid_x + 3, y: this.container.grid_y } ) ;
-	this.OnWalk( { x: this.container.grid_x, y: this.container.grid_y - 3 } ) ;
+	this.OnDialog( { first: "Third." } ) ;
+	//this.OnWalk( { x: this.container.grid_x + 3, y: this.container.grid_y } ) ;
+	//this.OnWalk( { x: this.container.grid_x, y: this.container.grid_y - 3 } ) ;
 
 	// setTimeout( function() { that.OnDialog( { first: "Next page." } ) ; }, 5000 ) ;
 	// createjs.Tween.get().wait( 8000 ).call( function() { TriggerInit() ; } ) ;

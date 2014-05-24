@@ -99,6 +99,13 @@ Main_Map.prototype.DrawMap = function( index ) {
 		object.scaleX = mapObject[count].sx, object.scaleY = mapObject[count].sy ;
 		object.regX = object.getBounds().width / 2, object.regY = object.getBounds().height / 2 ; 
 		this.container_front.addChild( object ) ;
+		// Get each division range of objects.
+		var objectDivi = G.cacheObjectDivi[mapObject[count].n-1] ;
+		var objectHeight = 2 * object.regY * object.scaleY ;
+		var point = new createjs.Shape() ;
+		point.graphics.f( "#F00" ).dc( 0, 0, 3 ) ;
+		point.x = object.x, point.y = object.y + objectHeight / 2 - objectHeight * ( 1 - objectDivi ) ;
+		this.container_front.addChild( point ) ;
 	} // for
 
 	return mapPixel ;

@@ -9,9 +9,11 @@ function GlobalValues() {
 		this.cacheTile[i+1] = new createjs.Bitmap( this.tileSrc + texture_adding[i].file ) ;
 	// Objects.
 	this.cacheObject = new Array( object_adding.length ) ;
+	this.cacheObjectDivi = new Array( object_adding.length ) ;
 	for ( i = 0 ; i < object_adding.length ; i ++ ) {
 		this.cacheObject[i] = new createjs.Bitmap( this.objectSrc + object_adding[i].file ) ;
-		this.cacheObject[i].name = ( i + 1 ) ;
+		this.cacheObject[i].name = object_adding[i].file ;
+		this.cacheObjectDivi[i] = object_adding[i].divi ;
 	} // for
 } // GlobalValues()
 
