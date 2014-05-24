@@ -138,5 +138,17 @@ var object_adding = [
 	{	file : "35.png",
 		decs : "", 
 		divi : 0.70
+	},
+	{	file : "36.png",
+		decs : "", 
+		divi : 0
+	},
+	{	file : "37.png",
+		decs : "", 
+		divi : 0
+	},
+	{	file : "38.png",
+		decs : "", 
+		divi : 0
 	}
 ] ;

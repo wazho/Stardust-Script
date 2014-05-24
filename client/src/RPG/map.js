@@ -82,7 +82,7 @@ Main_Map.prototype.DrawMap = function( index ) {
 	console.log( "Now Loading map: " + mapName + " (" + mapLength + "*" + mapHeight + ")" ) ;
 
 	var map = new createjs.Container() ;
-
+	// Back of map that there is texture.
 	for ( row = 0 ; row < mapHeight ; row ++ )
 		for ( column = 0 ; column < mapLength ; column ++ ) {
 			var tileIndex_row = Math.floor( mapTile[row][column].i / ( 256 / mapPixel ) ) ;
@@ -93,6 +93,7 @@ Main_Map.prototype.DrawMap = function( index ) {
 			tile.x = mapPixel * column, tile.y = mapPixel * row ;
 			this.container_back.addChild( tile ) ;
 		} // for
+	// Front of map that there are objects.
 	for ( count = 0 ; count < mapObject.length ; count ++ ) {
 		var object = G.cacheObject[mapObject[count].n-1].clone( false ) ;
 		object.x = mapObject[count].rx, object.y = mapObject[count].ry ;
@@ -102,10 +103,14 @@ Main_Map.prototype.DrawMap = function( index ) {
 		// Get each division range of objects, then trim to really center y of objects.
 		var objectDivi = G.cacheObjectDivi[mapObject[count].n-1] ;
 		var objectHeight = object.getBounds().height * object.scaleY ;
-		object.y = object.y - objectHeight / 2 + objectHeight * objectDivi ;
+		object.y = Math.floor( object.y - objectHeight / 2 + objectHeight * objectDivi ) ;
 		object.regY = object.regY - object.getBounds().height / 2 + object.getBounds().height * objectDivi ;
 	} // for
-
+	// Resorting of objects.
+	for ( m = this.container_front.getNumChildren() ; m > 0 ; m -- )
+		for ( n = 0 ; n < m - 1 ; n ++ )
+			if ( this.container_front.getChildAt( n ).y > this.container_front.getChildAt( n + 1 ).y ) 
+				this.container_front.swapChildren( this.container_front.getChildAt( n ), this.container_front.getChildAt( n + 1 ) ) ;
 	return mapPixel ;
 } // DrawMap()
 

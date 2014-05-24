@@ -1,5 +1,11 @@
 function Character( MapControl, Name, HP, SP, Speed, x, y, direction ) {
 	this.OnCreate( MapControl, Name, HP, SP, Speed, x, y, direction ) ;
+	this.MapControlPointer.container_front.addChild( this.container ) ;
+	// Resorting of objects.
+	for ( m = this.MapControlPointer.container_front.getNumChildren() ; m > 0 ; m -- )
+		for ( n = 0 ; n < m - 1 ; n ++ )
+			if ( this.MapControlPointer.container_front.getChildAt( n ).y > this.MapControlPointer.container_front.getChildAt( n + 1 ).y ) 
+				this.MapControlPointer.container_front.swapChildren( this.MapControlPointer.container_front.getChildAt( n ), this.MapControlPointer.container_front.getChildAt( n + 1 ) ) ;
 	return this ;
 } // Character() 
 
@@ -100,17 +106,27 @@ Character.prototype.OnActive = function() {
 
 // Assign the character walking.
 Character.prototype.OnWalk = function( grid ) {
+	var that = this ;
 	// Virtual grid system.
 	var gridSize = this.MapControlPointer.grid.size ;
 	var startGrid = { x: this.container.grid_x, y: this.container.grid_y } ;
 	var endGrid = { x: grid.x, y: grid.y } ;
-
+	// Checking the grid is walkable or not, then walk to there using 'A* algorithm'.
 	if ( this.MapControlPointer.MapMove( { x: startGrid.x, y: startGrid.y }, { x: endGrid.x, y: endGrid.y } ) ) {
 		this.container.grid_x = endGrid.x, this.container.grid_y = endGrid.y ;
 		var realGrid = this.MapControlPointer.GetGrid( { x: endGrid.x, y: endGrid.y }, "virtual" ) ;
-		createjs.Tween.get( this.container ).to( { x: realGrid.x + this.container.regX, y: realGrid.y + this.container.regY * 0.3 }, 750 ) ;
+		createjs.Tween.get( this.container )
+		.to( { x: realGrid.x + this.container.regX, y: realGrid.y + this.container.regY * 0.3 }, 750 )
+		.call( function() { ResortingObjectsAndChars() ; } ) ;
 		// sendPlayerStateToServer() ;
 	} // if
+
+	function ResortingObjectsAndChars() {
+		for ( i = that.MapControlPointer.container_front.getNumChildren() ; i > 0 ; i -- )
+			for ( j = 0 ; j < i - 1 ; j ++ )
+				if ( that.MapControlPointer.container_front.getChildAt( j ).y > that.MapControlPointer.container_front.getChildAt( j + 1 ).y ) 
+					that.MapControlPointer.container_front.swapChildren( that.MapControlPointer.container_front.getChildAt( j ), that.MapControlPointer.container_front.getChildAt( j + 1 ) ) ;
+	} // ResortingObjectsAndChars()
 } // OnWalk()
 
 // 旋轉角色方向/改變播放圖層

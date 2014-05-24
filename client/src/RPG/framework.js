@@ -28,8 +28,13 @@ function Main_Framework( canvasSize ) {
 	this.container.addChild( this.condition ) ;
 	this.OnCondition() ;
 	// 背景音樂播放
-	var instance = createjs.Sound.play( "BGM.mp3", { loop: true } ) ;
-	instance.volume = 0.0001 ;
+	setTimeout( function() {
+		var instance = createjs.Sound.play( "BGM/1.mp3", { loop: true } ) ;
+		setTimeout( function() {
+			instance = createjs.Sound.play( "BGM/1.mp3", { loop: true } ) ;
+			instance.volume = 0.001 ;
+		}, 1000 ) ;
+	}, 1000 ) ;
 } // Main_Framework()
 
 // 物品欄建立
@@ -100,13 +105,13 @@ Main_Framework.prototype.OnBoxAnimation = function( container, length, height, x
 			if ( evt.stageX < x || evt.stageX > ( x + length ) || evt.stageY < ( y - height + fade_y ) ) {
 				boxShow = false ;
 				var tween2 = createjs.Tween.get( container, { loop: false } ).to( { y: y }, speed, createjs.Ease.elasticOut ) ;
-				createjs.Sound.play( "sound/slash.wav" ) ; 
+				createjs.Sound.play( "slash.wav" ) ; 
 			} // if
 		} // if
 		else if ( ! boxShow && evt.stageX > x && evt.stageX < ( x + length - 207 ) && evt.stageY > y ) {
 			boxShow = true ;
 			var tween1 = createjs.Tween.get( container, { loop: false } ).to( { y: y - height + fade_y }, speed, createjs.Ease.sineOut ) ;
-			createjs.Sound.play( "sound/slash.wav" ) ;
+			createjs.Sound.play( "slash.wav" ) ;
 		} // else if
 	}) ;
 } // OnBoxAnimation()
@@ -139,7 +144,7 @@ Main_Framework.prototype.OnCondition = function() {
 Main_Framework.prototype.OnTopMarquee = function( x, y, length, height, start_x, start_y, end_x, end_y, color, alpha_bg, alpha_text, speed ) {
 	this.marquee.bg.graphics.f( color ).r( x, y, length, height ) ;
 	this.marquee.bg.alpha = alpha_bg ;
-
+	this.marquee.bg.cache( 0, 0, length, height ) ;
 	this.marquee.text.x = start_x, this.marquee.text.y = start_y ;
 	this.marquee.text.alpha = alpha_text ;
 	createjs.Tween.get( this.marquee.text, { loop: true } ).to( { x: end_x, y: end_y }, speed ) ;

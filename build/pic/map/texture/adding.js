@@ -25,5 +25,32 @@ var texture_adding = [
 	},
 	{	file : "9.png",
 		decs : "water"
+	},
+	{	file : "10.png",
+		decs : "grass and stone"
+	},
+	{	file : "11.png",
+		decs : "circle brick"
+	},
+	{	file : "12.png",
+		decs : "grass and sand"
+	},
+	{	file : "13.png",
+		decs : "grass and sand"
+	},
+	{	file : "14.png",
+		decs : "grass and sand"
+	},
+	{	file : "15.png",
+		decs : "stone and brick"
+	},
+	{	file : "16.png",
+		decs : "stone and brick"
+	},
+	{	file : "17.png",
+		decs : "stone and brick"
+	},
+	{	file : "18.png",
+		decs : "grass and stone"
 	}
 ] ;
