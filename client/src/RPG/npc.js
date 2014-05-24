@@ -152,13 +152,23 @@ NPC.prototype.OnTalk = function( text ) {
 
 // Assign the NPC walking.
 NPC.prototype.OnWalk = function( grid ) {
-	// Virtual grid system.
-	var gridSize = this.MapControlPointer.grid.size ;
-	var startGrid = { x: this.container.grid_x, y: this.container.grid_y } ;
-	var endGrid = { x: grid.x, y: grid.y } ;
-	var realGrid = this.MapControlPointer.GetGrid( { x: endGrid.x, y: endGrid.y }, "virtual" ) ;
-	createjs.Tween.get( this.container ).to( { x: realGrid.x + this.container.regX, y: realGrid.y + this.container.regY * 0.3 }, 1000 ) ;
-	this.container.grid_x = endGrid.x, this.container.grid_y = endGrid.y ;
+	var that = this ;
+	// Checking is already promised.
+	if ( this._dialogPromise == null )
+		return ;
+	else
+		this._dialogPromise.then( function() { Start( that ) ; } ) ;
+
+	// Queue to jQ's promise.
+	function Start() {
+		// Virtual grid system.
+		var gridSize = that.MapControlPointer.grid.size ;
+		var startGrid = { x: that.container.grid_x, y: that.container.grid_y } ;
+		var endGrid = { x: grid.x, y: grid.y } ;
+		var realGrid = that.MapControlPointer.GetGrid( { x: endGrid.x, y: endGrid.y }, "virtual" ) ;
+		createjs.Tween.get( that.container ).to( { x: realGrid.x + that.container.regX, y: realGrid.y + that.container.regY * 0.3 }, 1000 ) ;
+		that.container.grid_x = endGrid.x, that.container.grid_y = endGrid.y ;
+	} // Start()
 } // OnWalk()
 
 // Assign the NPC walking.
@@ -169,95 +179,126 @@ NPC.prototype.OnMove = function( grid ) {
 	this.container.grid_x = grid.x, this.container.grid_y = grid.y ;
 } // OnWalk()
 
+NPC.prototype._dialogPromise = null ;
+
 // Open a dialog for player's window.
 NPC.prototype.OnDialog = function( text ) {
 	var that = this ;
-	// Initial of dialog.
-	if ( ! dialog.getChildByName( "dialog_window" ) )
-		var container = FirstCreate() ;
-	else
-		var container = Refresh() ;
+	// Checking is already promised.
+	if ( this._dialogPromise == null ) {
+		var dfd = $.Deferred() ;
+		this._dialogPromise = dfd.promise() ;
+		Start( this ) ;
+	} // if
+	else {
+		this._dialogPromise.then( function() { Start( that ) ; } ) ;
+		return ;
+	} // else
 
-	// Part of text Line.
-	var textLine = new createjs.Container() ;
-	textLine.name = "text_line" ;
-	textLine.x = 30, textLine.y = 20 ;
-	textLine.text1 = AddingTextLine( text.first, 0, 0 ) ;
-	textLine.text2 = AddingTextLine( text.second, 0, 30 ) ;
-	textLine.text3 = AddingTextLine( text.third, 0, 60 ) ;
-	textLine.addChild( textLine.text1, textLine.text2, textLine.text3 ) ;
-	container.addChild( textLine ) ;
+	function Start( pt ) {
+		var that = pt ;
+		// Initial of dialog.
+		if ( ! dialog.getChildByName( "dialog_window" ) )
+			var container = FirstCreate() ;
+		else
+			var container = Refresh() ;
 
-	function FirstCreate() {
-		// Create a container of dialog.
-		var container = new createjs.Container() ;
-		container.name = "dialog_window" ;
-		container.x = 300, container.y = that.MapControlPointer.container_front.height - 160 ;
-		// Part of dialog window.
-		dialogWindow = RadiusRect( 0, 0, 630, 150, 20 ) ;
-		dialogWindow.alpha = 0.5 ;
-		// Part of name tag.
-		var Name = that.container.name ;
-		var nameLength = ( ( halfFullCheck( "half", Name ) * 1.12 + halfFullCheck( "full", Name ) * 1.88 ) * 27 ) / 2 ;
-		var nameTag = new createjs.Container() ;
-		nameTag.bg = RadiusRect_2( 0, 0, nameLength + 40, 40, 20 ) ;
-		nameTag.bg.alpha = 0.5 ;
-		nameTag.nameWord = new createjs.Container() ;
-		nameTag.nameWord.x = ( nameLength + 40 ) / 2, nameTag.nameWord.y = 10 ;
-		nameTag.nameWord.regX = ( ( halfFullCheck( "half", Name ) * 1.0 + halfFullCheck( "full", Name ) * 1.7 ) * 15 ) / 2 ;
-		nameTag.nameWord.bg = new createjs.Text( Name, "25px Courier New", "#000" ) ;
-		nameTag.nameWord.bg.outline = 6 ;
-		nameTag.nameWord.wd = new createjs.Text( Name, "25px Courier New", "#FFF" ) ;
-		nameTag.nameWord.addChild( nameTag.nameWord.bg, nameTag.nameWord.wd ) ;
-		nameTag.addChild( nameTag.bg, nameTag.nameWord ) ;
-		nameTag.x = 0, nameTag.y = -40 ;
-		createjs.Tween.get( nameTag ).to( { x: ( 315 - ( nameLength + 40 ) / 2 ) }, 1000 ) ;
-		container.addChild( dialogWindow, nameTag ) ;
-		dialog.addChild( container ) ;
-		createjs.Tween.get( container )
-		.to( { alpha: 0 }, 0 )
-		.to( { alpha: 1 }, 500 ) ;
-		return container ;
+		// Part of text Line.
+		var textLine = new createjs.Container() ;
+		textLine.name = "text_line" ;
+		textLine.x = 30, textLine.y = 20 ;
+		textLine.text1 = AddingTextLine( text.first, 0, 0, "20px Courier New", 5 ) ;
+		textLine.text2 = AddingTextLine( text.second, 0, 30, "20px Courier New", 5 ) ;
+		textLine.text3 = AddingTextLine( text.third, 0, 60, "20px Courier New", 5 ) ;
+		textLine.addChild( textLine.text1, textLine.text2, textLine.text3 ) ;
+		container.addChild( textLine ) ;
 
-		function RadiusRect( x, y, w, h, radius ) {
-			var context = new createjs.Shape() ;
-			var r = x + w, b = y + h ;
-			context.graphics.f( "#000" ).moveTo( x + radius, y )
-			.lineTo( r - radius, y ).quadraticCurveTo( r, y, r, y + radius )
-			.lineTo( r, y + h - radius ).quadraticCurveTo( r, b, r - radius, b )
-			.lineTo( x + radius, b ).quadraticCurveTo( x, b, x, b - radius )
-			.lineTo( x, y + radius ).quadraticCurveTo( x, y, x + radius, y ) ;
-			return context ;
-		} // RadiusRect()
-		function RadiusRect_2( x, y, w, h, radius ) {
-			var context = new createjs.Shape() ;
-			var r = x + w, b = y + h ;
-			context.graphics.f( "#000" ).moveTo( x + radius, y )
-			.lineTo( r - radius, y ).quadraticCurveTo( r, y, r, y + radius )
-			.lineTo( r, y + h - radius ).quadraticCurveTo( r, b, r + radius, b )
-			.lineTo( x - radius, b ).quadraticCurveTo( x, b, x, b - radius )
-			.lineTo( x, y + radius ).quadraticCurveTo( x, y, x + radius, y ) ;
-			return context ;
-		} // RadiusRect_2()
-	} // FirstCreate()
-	function Refresh() {
-		var container = dialog.getChildByName( "dialog_window" ) ;
-		var textLine = container.getChildByName( "text_line" ) ;
-		createjs.Tween.get( textLine )
-		.to( { alpha: 0 }, 300 )
-		.to( { alpha: 1 }, 0 )
-		.call( function() { textLine.removeAllChildren() ; } ) ;
-		return container ;
-	} // Refresh()
-	function AddingTextLine( str, x, y ) {
-		var text = new createjs.Container() ;
-		text.x = x, text.y = y ;
-		text.bg = new createjs.Text( str, "20px Courier New", "#000" ) ;
-		text.bg.outline = 5 ;
-		text.wd = new createjs.Text( str, "20px Courier New", "#FFF" ) ;
-		text.addChild( text.bg, text.wd ) ;
-		return text ;
-	} // AddingTextLine()
+		function FirstCreate() {
+			// Create a container of dialog.
+			var container = new createjs.Container() ;
+			container.name = "dialog_window" ;
+			container.x = 300, container.y = that.MapControlPointer.container_front.height - 160 ;
+			// Part of dialog window.
+			dialogWindow = RadiusRect( 0, 0, 630, 150, 20, "#000", 0.5 ) ;
+			// Part of name tag.
+			var Name = that.container.name ;
+			var nameLength = ( ( halfFullCheck( "half", Name ) * 1.12 + halfFullCheck( "full", Name ) * 1.88 ) * 27 ) / 2 ;
+			var nameTag = new createjs.Container() ;
+			nameTag.x = 0, nameTag.y = -40 ;
+			nameTag.bg = RadiusRect_2( 0, 0, nameLength + 40, 40, 20, "#000", 0.5 ) ;
+			nameTag.nameWord = AddingTextLine( Name, ( nameLength + 40 ) / 2, 10, "25px Courier New", 6 ) ; ;
+			nameTag.nameWord.regX = ( ( halfFullCheck( "half", Name ) * 1.0 + halfFullCheck( "full", Name ) * 1.7 ) * 15 ) / 2 ;
+			nameTag.addChild( nameTag.bg, nameTag.nameWord ) ;
+			createjs.Tween.get( nameTag ).to( { x: ( 315 - ( nameLength + 40 ) / 2 ) }, 1000 ) ;
+			// Part of next page.
+			var nextPage = new createjs.Container() ;
+			nextPage.bg = RadiusRect_3( 0, 115, 630, 35, 20, "#CCC", 0.5 ) ;
+			nextPage.button = AddingTextLine( "Next >>", 530, 122, "25px Comic Sans MS", 6 ) ;
+			nextPage.addChild( nextPage.bg, nextPage.button ) ;
+			nextPage.on( "click", function() { 
+				dfd.resolve() ;
+			} ) ;
+			// All adding to the top container.
+			container.addChild( dialogWindow, nameTag, nextPage ) ;
+			dialog.addChild( container ) ;
+			createjs.Tween.get( container )
+			.to( { alpha: 0 }, 0 )
+			.to( { alpha: 1 }, 500 ) ;
+			return container ;
+
+			function RadiusRect( x, y, w, h, radius, color, alpha ) {
+				var context = new createjs.Shape() ;
+				var r = x + w, b = y + h ;
+				context.graphics.f( color ).moveTo( x + radius, y )
+				.lineTo( r - radius, y ).quadraticCurveTo( r, y, r, y + radius )
+				.lineTo( r, y + h - radius ).quadraticCurveTo( r, b, r - radius, b )
+				.lineTo( x + radius, b ).quadraticCurveTo( x, b, x, b - radius )
+				.lineTo( x, y + radius ).quadraticCurveTo( x, y, x + radius, y ) ;
+				context.alpha = alpha ;
+				return context ;
+			} // RadiusRect()
+			function RadiusRect_2( x, y, w, h, radius, color, alpha ) {
+				var context = new createjs.Shape() ;
+				var r = x + w, b = y + h ;
+				context.graphics.f( color ).moveTo( x + radius, y )
+				.lineTo( r - radius, y ).quadraticCurveTo( r, y, r, y + radius )
+				.lineTo( r, y + h - radius ).quadraticCurveTo( r, b, r + radius, b )
+				.lineTo( x - radius, b ).quadraticCurveTo( x, b, x, b - radius )
+				.lineTo( x, y + radius ).quadraticCurveTo( x, y, x + radius, y ) ;
+				context.alpha = alpha ;
+				return context ;
+			} // RadiusRect_2()
+			function RadiusRect_3( x, y, w, h, radius, color, alpha ) {
+				var context = new createjs.Shape() ;
+				var r = x + w, b = y + h ;
+				context.graphics.f( color ).moveTo( x + radius, y )
+				.lineTo( r, y ).quadraticCurveTo( r, y, r, y + radius )
+				.lineTo( r, y + h - radius ).quadraticCurveTo( r, b, r - radius, b )
+				.lineTo( x + radius, b ).quadraticCurveTo( x, b, x, b - radius )
+				.lineTo( x, y ).quadraticCurveTo( x, y, x + radius, y ) ;
+				context.alpha = alpha ;
+				return context ;
+			} // RadiusRect_3()
+		} // FirstCreate()
+		function Refresh() {
+			var container = dialog.getChildByName( "dialog_window" ) ;
+			var textLine = container.getChildByName( "text_line" ) ;
+			createjs.Tween.get( textLine )
+			.to( { alpha: 0 }, 300 )
+			.to( { alpha: 1 }, 0 )
+			.call( function() { textLine.removeAllChildren() ; } ) ;
+			return container ;
+		} // Refresh()
+		function AddingTextLine( str, x, y, font, outline ) {
+			var text = new createjs.Container() ;
+			text.x = x, text.y = y ;
+			text.bg = new createjs.Text( str, font, "#000" ) ;
+			text.bg.outline = outline ;
+			text.wd = new createjs.Text( str, font, "#FFF" ) ;
+			text.addChild( text.bg, text.wd ) ;
+			return text ;
+		} // AddingTextLine()
+	} // Start()
 } // OnDialog()
 
 // Cutin a picture media in npc framework.
@@ -283,17 +324,20 @@ NPC.prototype.OnCutin = function( src, location ) {
 NPC.prototype.OnTrigger = function() {
 	var that = this ;
 	this.MapControlPointer.nowEventTrigger = "TriggerNow" ;
-
 	// Cammand start.
 	this.OnTalk( that.container.name + ": You click me." ) ;
 	this.OnCutin( "npc/sage_l.png", 1 ) ;
 	this.OnDialog( { first: "Hello.", second: "你好。", third: "こんにちは." } ) ;
+	this.OnDialog( { first: "Second." } ) ;
+	this.OnWalk( { x: this.container.grid_x + 3, y: this.container.grid_y } ) ;
+	this.OnWalk( { x: this.container.grid_x, y: this.container.grid_y - 3 } ) ;
 
-	setTimeout( function() { that.OnDialog( { first: "Next page." } ) ; }, 5000 ) ;
-
-	createjs.Tween.get().wait( 8000 ).call( function() { TriggerInit() ; } ) ;
+	// setTimeout( function() { that.OnDialog( { first: "Next page." } ) ; }, 5000 ) ;
+	// createjs.Tween.get().wait( 8000 ).call( function() { TriggerInit() ; } ) ;
 
 	// Example:
+	// this.OnTalk( that.container.name + ": You click me." ) ;
+	// this.OnCutin( "npc/sage_l.png", 1 ) ;
 	// this.OnMove( { x: 1, y: 1 } ) ;
 	// this.OnWalk( { x: this.container.grid_x + 1, y: this.container.grid_y } ) ;
 
