@@ -153,12 +153,8 @@ NPC.prototype.OnTalk = function( text ) {
 // Assign the NPC walking.
 NPC.prototype.OnWalk = function( grid ) {
 	var that = this ;
-	// Checking is already promised.
-	if ( this._dialogPromise == null )
-		return ;
-	else {
-		this._dialogPromise.then( function() { Start( that ) ; } ) ;
-	} // else
+
+	Start( this ) ; 
 
 	// Queue to jQ's promise.
 	function Start() {
@@ -179,8 +175,6 @@ NPC.prototype.OnMove = function( grid ) {
 	this.container.x = realGrid.x + this.container.regX, this.container.y = realGrid.y + this.container.regY * 0.3 ;
 	this.container.grid_x = grid.x, this.container.grid_y = grid.y ;
 } // OnWalk()
-
-NPC.prototype._dialogPromise = null ;
 
 // Open a dialog for player's window.
 NPC.prototype.OnDialog = function( text ) {

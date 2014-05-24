@@ -11,6 +11,7 @@ function Character( MapControl, Name, HP, SP, Speed, x, y, direction ) {
 
 // 角色建立
 Character.prototype.OnCreate = function( MapControl, Name, HP, SP, Speed, x, y, direction ) {
+	var that = this ;
 	// Magic Number !!
 	this.spriteSize = 125 ;
 	this.effectSpriteSize = 200 ;
@@ -65,12 +66,16 @@ Character.prototype.OnCreate = function( MapControl, Name, HP, SP, Speed, x, y, 
 	this.OnActive() ;
 	// 自動恢復生命條
 	this.sp_recover = createjs.Tween.get( this, { loop: true } ).wait( 1000 ).call( function() { this.OnLifeModify( 2, 2 ) ; } ) ;
+	// Resorting the back, front map container.
+	this.resortingOrder = function ResortingObjectsAndChars() {
+		for ( i = that.MapControlPointer.container_front.getNumChildren() ; i > 0 ; i -- )
+			for ( j = 0 ; j < i - 1 ; j ++ )
+				if ( that.MapControlPointer.container_front.getChildAt( j ).y > that.MapControlPointer.container_front.getChildAt( j + 1 ).y ) 
+					that.MapControlPointer.container_front.swapChildren( that.MapControlPointer.container_front.getChildAt( j ), that.MapControlPointer.container_front.getChildAt( j + 1 ) ) ;
+	} // ResortingObjectsAndChars()
+	// Move to assign location.
+	this.OnMove( { x: x, y: y } ) ;
 } // OnCreate()
-
-// 角色移動
-Character.prototype.OnMove = function( x, y ) {
-	this.container.x += x, this.container.y += y ;
-} // OnMove()
 
 // 按鍵監聽
 Character.prototype.OnTick = function( that ) {
@@ -104,6 +109,22 @@ Character.prototype.OnActive = function() {
 	}) ;
 } // OnActive()
 
+// 角色移動
+Character.prototype.OnMove = function( grid ) {
+	var that = this ;
+	// Virtual grid system.
+	var gridSize = this.MapControlPointer.grid.size ;
+	var endGrid = { x: grid.x, y: grid.y } ;
+	// Checking the grid is walkable or not.
+	if ( this.MapControlPointer.MapMove( { x: 0, y: 0 }, { x: endGrid.x, y: endGrid.y } ) ) {
+		this.container.grid_x = endGrid.x, this.container.grid_y = endGrid.y ;
+		var realGrid = this.MapControlPointer.GetGrid( { x: endGrid.x, y: endGrid.y }, "virtual" ) ;
+		this.container.x = realGrid.x + this.container.regX, this.container.y = realGrid.y + this.container.regY * 0.3 ;
+		this.resortingOrder() ;
+	} // if
+
+} // OnMove()
+
 // Assign the character walking.
 Character.prototype.OnWalk = function( grid ) {
 	var that = this ;
@@ -117,16 +138,9 @@ Character.prototype.OnWalk = function( grid ) {
 		var realGrid = this.MapControlPointer.GetGrid( { x: endGrid.x, y: endGrid.y }, "virtual" ) ;
 		createjs.Tween.get( this.container )
 		.to( { x: realGrid.x + this.container.regX, y: realGrid.y + this.container.regY * 0.3 }, 750 )
-		.call( function() { ResortingObjectsAndChars() ; } ) ;
+		.call( function() { that.resortingOrder() ; } ) ;
 		// sendPlayerStateToServer() ;
 	} // if
-
-	function ResortingObjectsAndChars() {
-		for ( i = that.MapControlPointer.container_front.getNumChildren() ; i > 0 ; i -- )
-			for ( j = 0 ; j < i - 1 ; j ++ )
-				if ( that.MapControlPointer.container_front.getChildAt( j ).y > that.MapControlPointer.container_front.getChildAt( j + 1 ).y ) 
-					that.MapControlPointer.container_front.swapChildren( that.MapControlPointer.container_front.getChildAt( j ), that.MapControlPointer.container_front.getChildAt( j + 1 ) ) ;
-	} // ResortingObjectsAndChars()
 } // OnWalk()
 
 // 旋轉角色方向/改變播放圖層

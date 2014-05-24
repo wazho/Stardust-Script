@@ -130,6 +130,14 @@ Main_Map.prototype.MapMove = function( start, end ) {
 	// If it's walkable, then move the map to center.
 	var ifWalkable = mapTile[end.y-1][end.x-1].w ;
 	if ( ifWalkable == 1 ) {
+		// Only checking the end grid.
+		if ( start.x == 0 && start.y == 0 ) {
+			var distanceX = end.x - this.trim.x - 16, distanceY = end.y - this.trim.y - 11 ;
+			this.trim.x += distanceX, this.trim.y += distanceY ;
+			this.container_back.x = this.container_back.x - distanceX * this.grid.size, this.container_back.y = this.container_back.y - distanceY * this.grid.size ;
+			this.container_front.x = this.container_front.x - distanceX * this.grid.size, this.container_front.y = this.container_front.y - distanceY * this.grid.size ;
+			return true ;
+		} // if
 		// Checking the route is exist or not.
 		if ( ! A_Start_Algorithm( start, end ) )
 			return false ;
