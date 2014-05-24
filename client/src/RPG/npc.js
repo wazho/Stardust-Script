@@ -209,8 +209,7 @@ NPC.prototype.OnDialog = function( text ) {
 		container.name = "dialog_window" ;
 		container.x = 300, container.y = that.MapControlPointer.container_front.height - 160 ;
 		// Part of dialog window.
-		var dialogWindow = new createjs.Shape() ;
-		dialogWindow.graphics.f( "#000" ).r( 0, 0, 630, 150 ) ;
+		dialogWindow = RadiusRect( 0, 0, 630, 150, 20 ) ;
 		dialogWindow.alpha = 0.5 ;
 		// Part of name tag.
 		var Name = that.container.name ;
@@ -235,6 +234,17 @@ NPC.prototype.OnDialog = function( text ) {
 		.to( { alpha: 0 }, 0 )
 		.to( { alpha: 1 }, 500 ) ;
 		return container ;
+
+		function RadiusRect( x, y, w, h, radius ) {
+			var context = new createjs.Shape() ;
+			var r = x + w, b = y + h ;
+			context.graphics.f( "#000" ).moveTo( x + radius, y )
+			.lineTo( r - radius, y ).quadraticCurveTo( r, y, r, y + radius )
+			.lineTo( r, y + h - radius ).quadraticCurveTo( r, b, r - radius, b )
+			.lineTo( x + radius, b ).quadraticCurveTo( x, b, x, b - radius )
+			.lineTo( x, y + radius ).quadraticCurveTo( x, y, x + radius, y ) ;
+			return context ;
+		} // RadiusRect()
 	} // FirstCreate()
 	function Refresh() {
 		var container = dialog.getChildByName( "dialog_window" ) ;
@@ -278,7 +288,7 @@ NPC.prototype.OnTrigger = function() {
 
 	setTimeout( function() { that.OnDialog( { first: "Next page." } ) ; }, 5000 ) ;
 
-	createjs.Tween.get().wait( 3000 ).call( function() { TriggerInit() ; } ) ;
+	createjs.Tween.get().wait( 8000 ).call( function() { TriggerInit() ; } ) ;
 
 	// Example:
 	// this.OnMove( { x: 1, y: 1 } ) ;
