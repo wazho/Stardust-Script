@@ -47,10 +47,11 @@
 			// 建立遊戲框架
 			var framework = new Main_Framework( canvasSize ) ;
 			// 建立角色物件
-			var mainCharacter = new Character( mapcontrol, "baphomet", 175, 55, 1.00, 30, 18, "front" ) ;
+			var mainCharacter = new Character( mapcontrol, "baphomet", 175, 55, 1.00, 25, 39, "front" ) ;
 			var farmiliar_proto = new NPC( mapcontrol, "farmiliar_01", { x: 10, y: 3 }, { type: "monster", name: "farmiliar" }, 6 ) ;
 			var farmiliar_clone01 = farmiliar_proto.Clone( "clone_01", { x: 4, y: 7 }, 4 ) ;
 			var farmiliar_clone02 = farmiliar_proto.Clone( "clone_02", { x: 1, y: 6 }, 2 ) ;
+			var farmiliar_clone03 = farmiliar_proto.Clone( "clone_03", { x: 23, y: 37 }, 2 ) ;
 			var sage_proto = new NPC( mapcontrol, "Sage", { x: 33, y: 8 }, { type: "npc", name: "sage" }, 7 ) ;
 
 			mainCharacter.OnLifeModify( -999, -40 ) ;

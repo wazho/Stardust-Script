@@ -122,7 +122,6 @@ Character.prototype.OnMove = function( grid ) {
 		this.container.x = realGrid.x + this.container.regX, this.container.y = realGrid.y + this.container.regY * 0.3 ;
 		this.resortingOrder() ;
 	} // if
-
 } // OnMove()
 
 // Assign the character walking.

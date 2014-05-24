@@ -153,10 +153,8 @@ NPC.prototype.OnTalk = function( text ) {
 // Assign the NPC walking.
 NPC.prototype.OnWalk = function( grid ) {
 	var that = this ;
-
 	Start( this ) ; 
 
-	// Queue to jQ's promise.
 	function Start() {
 		// Virtual grid system.
 		var gridSize = that.MapControlPointer.grid.size ;
@@ -168,12 +166,18 @@ NPC.prototype.OnWalk = function( grid ) {
 	} // Start()
 } // OnWalk()
 
-// Assign the NPC walking.
+// Assign the NPC to grid.
 NPC.prototype.OnMove = function( grid ) {
-	// Virtual grid system.
-	var realGrid = this.MapControlPointer.GetGrid( { x: grid.x, y: grid.y }, "virtual" ) ;
-	this.container.x = realGrid.x + this.container.regX, this.container.y = realGrid.y + this.container.regY * 0.3 ;
-	this.container.grid_x = grid.x, this.container.grid_y = grid.y ;
+	var that = this ;
+	Start( this ) ; 
+
+	function Start() {
+		// Virtual grid system.
+		var endGrid = { x: grid.x, y: grid.y } ;
+		var realGrid = that.MapControlPointer.GetGrid( { x: endGrid.x, y: endGrid.y }, "virtual" ) ;
+		that.container.x = realGrid.x + that.container.regX, that.container.y = realGrid.y + that.container.regY * 0.3 ;
+		that.container.grid_x = endGrid.x, that.container.grid_y = endGrid.y ;
+	} // Start()
 } // OnWalk()
 
 // Open a dialog for player's window.
@@ -322,8 +326,8 @@ NPC.prototype.OnTrigger = function() {
 	this.OnTalk( that.container.name + ": You click me." ) ;
 	this.OnCutin( "npc/sage_l.png", 1 ) ;
 	this.OnDialog( { first: "Hello.", second: "你好。", third: "こんにちは." } ) ;
-	// this.OnDialog( { first: "Second." } ) ;
-	// this.OnDialog( { first: "        Third." } ) ;
+	this.OnDialog( { first: "Second." } ) ;
+	this.OnDialog( { first: "        Third." } ) ;
 	// this.OnDialog( { first: "               Fourth." } ) ;
 	//this.OnWalk( { x: this.container.grid_x + 3, y: this.container.grid_y } ) ;
 	//this.OnWalk( { x: this.container.grid_x, y: this.container.grid_y - 3 } ) ;
