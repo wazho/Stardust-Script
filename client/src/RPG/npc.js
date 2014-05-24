@@ -215,8 +215,7 @@ NPC.prototype.OnDialog = function( text ) {
 		var Name = that.container.name ;
 		var nameLength = ( ( halfFullCheck( "half", Name ) * 1.12 + halfFullCheck( "full", Name ) * 1.88 ) * 27 ) / 2 ;
 		var nameTag = new createjs.Container() ;
-		nameTag.bg = new createjs.Shape() ;
-		nameTag.bg.graphics.f( "#000" ).r( 0, 0, nameLength + 40, 40 ) ;
+		nameTag.bg = RadiusRect_2( 0, 0, nameLength + 40, 40, 20 ) ;
 		nameTag.bg.alpha = 0.5 ;
 		nameTag.nameWord = new createjs.Container() ;
 		nameTag.nameWord.x = ( nameLength + 40 ) / 2, nameTag.nameWord.y = 10 ;
@@ -245,6 +244,16 @@ NPC.prototype.OnDialog = function( text ) {
 			.lineTo( x, y + radius ).quadraticCurveTo( x, y, x + radius, y ) ;
 			return context ;
 		} // RadiusRect()
+		function RadiusRect_2( x, y, w, h, radius ) {
+			var context = new createjs.Shape() ;
+			var r = x + w, b = y + h ;
+			context.graphics.f( "#000" ).moveTo( x + radius, y )
+			.lineTo( r - radius, y ).quadraticCurveTo( r, y, r, y + radius )
+			.lineTo( r, y + h - radius ).quadraticCurveTo( r, b, r + radius, b )
+			.lineTo( x - radius, b ).quadraticCurveTo( x, b, x, b - radius )
+			.lineTo( x, y + radius ).quadraticCurveTo( x, y, x + radius, y ) ;
+			return context ;
+		} // RadiusRect_2()
 	} // FirstCreate()
 	function Refresh() {
 		var container = dialog.getChildByName( "dialog_window" ) ;
