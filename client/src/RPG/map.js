@@ -96,16 +96,14 @@ Main_Map.prototype.DrawMap = function( index ) {
 	for ( count = 0 ; count < mapObject.length ; count ++ ) {
 		var object = G.cacheObject[mapObject[count].n-1].clone( false ) ;
 		object.x = mapObject[count].rx, object.y = mapObject[count].ry ;
-		object.scaleX = mapObject[count].sx, object.scaleY = mapObject[count].sy ;
 		object.regX = object.getBounds().width / 2, object.regY = object.getBounds().height / 2 ; 
+		object.scaleX = mapObject[count].sx, object.scaleY = mapObject[count].sy ;
 		this.container_front.addChild( object ) ;
-		// Get each division range of objects.
+		// Get each division range of objects, then trim to really center y of objects.
 		var objectDivi = G.cacheObjectDivi[mapObject[count].n-1] ;
-		var objectHeight = 2 * object.regY * object.scaleY ;
-		var point = new createjs.Shape() ;
-		point.graphics.f( "#F00" ).dc( 0, 0, 3 ) ;
-		point.x = object.x, point.y = object.y + objectHeight / 2 - objectHeight * ( 1 - objectDivi ) ;
-		this.container_front.addChild( point ) ;
+		var objectHeight = object.getBounds().height * object.scaleY ;
+		object.y = object.y - objectHeight / 2 + objectHeight * objectDivi ;
+		object.regY = object.regY - object.getBounds().height / 2 + object.getBounds().height * objectDivi ;
 	} // for
 
 	return mapPixel ;
