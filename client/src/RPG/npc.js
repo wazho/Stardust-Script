@@ -192,7 +192,17 @@ NPC.prototype.OnDialog = function( text ) {
 		Start( this ) ;
 	} // if
 	else {
-		this._dialogPromise.then( function() { Start( that ) ; } ) ;
+		this._dialogPromise.then( function() { 
+			that._dialogPromise = that._dialogPromise.then( function () {
+				var dfd = $.Deferred() ;
+				Start( that ) ;
+				createjs.Tween.get( that )
+				.call( function () {
+					dfd.resolve() ;
+				} ) ;
+				return dfd.promise() ;
+			} ) ;
+		} ) ;
 		return ;
 	} // else
 
@@ -225,6 +235,7 @@ NPC.prototype.OnDialog = function( text ) {
 			var Name = that.container.name ;
 			var nameLength = ( ( halfFullCheck( "half", Name ) * 1.12 + halfFullCheck( "full", Name ) * 1.88 ) * 27 ) / 2 ;
 			var nameTag = new createjs.Container() ;
+			nameTag.name = "tag_name" ;
 			nameTag.x = 0, nameTag.y = -40 ;
 			nameTag.bg = RadiusRect_2( 0, 0, nameLength + 40, 40, 20, "#000", 0.5 ) ;
 			nameTag.nameWord = AddingTextLine( Name, ( nameLength + 40 ) / 2, 10, "25px Courier New", 6 ) ; ;
@@ -233,6 +244,7 @@ NPC.prototype.OnDialog = function( text ) {
 			createjs.Tween.get( nameTag ).to( { x: ( 315 - ( nameLength + 40 ) / 2 ) }, 1000 ) ;
 			// Part of next page.
 			var nextPage = new createjs.Container() ;
+			nextPage.name = "next_page" ;
 			nextPage.bg = RadiusRect_3( 0, 115, 630, 35, 20, "#CCC", 0.5 ) ;
 			nextPage.button = AddingTextLine( "Next >>", 530, 122, "25px Comic Sans MS", 6 ) ;
 			nextPage.addChild( nextPage.bg, nextPage.button ) ;
@@ -246,40 +258,6 @@ NPC.prototype.OnDialog = function( text ) {
 			.to( { alpha: 0 }, 0 )
 			.to( { alpha: 1 }, 500 ) ;
 			return container ;
-
-			function RadiusRect( x, y, w, h, radius, color, alpha ) {
-				var context = new createjs.Shape() ;
-				var r = x + w, b = y + h ;
-				context.graphics.f( color ).moveTo( x + radius, y )
-				.lineTo( r - radius, y ).quadraticCurveTo( r, y, r, y + radius )
-				.lineTo( r, y + h - radius ).quadraticCurveTo( r, b, r - radius, b )
-				.lineTo( x + radius, b ).quadraticCurveTo( x, b, x, b - radius )
-				.lineTo( x, y + radius ).quadraticCurveTo( x, y, x + radius, y ) ;
-				context.alpha = alpha ;
-				return context ;
-			} // RadiusRect()
-			function RadiusRect_2( x, y, w, h, radius, color, alpha ) {
-				var context = new createjs.Shape() ;
-				var r = x + w, b = y + h ;
-				context.graphics.f( color ).moveTo( x + radius, y )
-				.lineTo( r - radius, y ).quadraticCurveTo( r, y, r, y + radius )
-				.lineTo( r, y + h - radius ).quadraticCurveTo( r, b, r + radius, b )
-				.lineTo( x - radius, b ).quadraticCurveTo( x, b, x, b - radius )
-				.lineTo( x, y + radius ).quadraticCurveTo( x, y, x + radius, y ) ;
-				context.alpha = alpha ;
-				return context ;
-			} // RadiusRect_2()
-			function RadiusRect_3( x, y, w, h, radius, color, alpha ) {
-				var context = new createjs.Shape() ;
-				var r = x + w, b = y + h ;
-				context.graphics.f( color ).moveTo( x + radius, y )
-				.lineTo( r, y ).quadraticCurveTo( r, y, r, y + radius )
-				.lineTo( r, y + h - radius ).quadraticCurveTo( r, b, r - radius, b )
-				.lineTo( x + radius, b ).quadraticCurveTo( x, b, x, b - radius )
-				.lineTo( x, y ).quadraticCurveTo( x, y, x + radius, y ) ;
-				context.alpha = alpha ;
-				return context ;
-			} // RadiusRect_3()
 		} // FirstCreate()
 		function Refresh() {
 			var container = dialog.getChildByName( "dialog_window" ) ;
@@ -299,6 +277,40 @@ NPC.prototype.OnDialog = function( text ) {
 			text.addChild( text.bg, text.wd ) ;
 			return text ;
 		} // AddingTextLine()
+
+		function RadiusRect( x, y, w, h, radius, color, alpha ) {
+			var context = new createjs.Shape() ;
+			var r = x + w, b = y + h ;
+			context.graphics.f( color ).moveTo( x + radius, y )
+			.lineTo( r - radius, y ).quadraticCurveTo( r, y, r, y + radius )
+			.lineTo( r, y + h - radius ).quadraticCurveTo( r, b, r - radius, b )
+			.lineTo( x + radius, b ).quadraticCurveTo( x, b, x, b - radius )
+			.lineTo( x, y + radius ).quadraticCurveTo( x, y, x + radius, y ) ;
+			context.alpha = alpha ;
+			return context ;
+		} // RadiusRect()
+		function RadiusRect_2( x, y, w, h, radius, color, alpha ) {
+			var context = new createjs.Shape() ;
+			var r = x + w, b = y + h ;
+			context.graphics.f( color ).moveTo( x + radius, y )
+			.lineTo( r - radius, y ).quadraticCurveTo( r, y, r, y + radius )
+			.lineTo( r, y + h - radius ).quadraticCurveTo( r, b, r + radius, b )
+			.lineTo( x - radius, b ).quadraticCurveTo( x, b, x, b - radius )
+			.lineTo( x, y + radius ).quadraticCurveTo( x, y, x + radius, y ) ;
+			context.alpha = alpha ;
+			return context ;
+		} // RadiusRect_2()
+		function RadiusRect_3( x, y, w, h, radius, color, alpha ) {
+			var context = new createjs.Shape() ;
+			var r = x + w, b = y + h ;
+			context.graphics.f( color ).moveTo( x + radius, y )
+			.lineTo( r, y ).quadraticCurveTo( r, y, r, y + radius )
+			.lineTo( r, y + h - radius ).quadraticCurveTo( r, b, r - radius, b )
+			.lineTo( x + radius, b ).quadraticCurveTo( x, b, x, b - radius )
+			.lineTo( x, y ).quadraticCurveTo( x, y, x + radius, y ) ;
+			context.alpha = alpha ;
+			return context ;
+		} // RadiusRect_3()
 	} // Start()
 } // OnDialog()
 
@@ -330,7 +342,8 @@ NPC.prototype.OnTrigger = function() {
 	this.OnCutin( "npc/sage_l.png", 1 ) ;
 	this.OnDialog( { first: "Hello.", second: "你好。", third: "こんにちは." } ) ;
 	this.OnDialog( { first: "Second." } ) ;
-	this.OnDialog( { first: "Third." } ) ;
+	this.OnDialog( { first: "        Third." } ) ;
+	this.OnDialog( { first: "               Fourth." } ) ;
 	//this.OnWalk( { x: this.container.grid_x + 3, y: this.container.grid_y } ) ;
 	//this.OnWalk( { x: this.container.grid_x, y: this.container.grid_y - 3 } ) ;
 
