@@ -182,24 +182,9 @@ NPC.prototype.OnDialog = function( text ) {
 	var textLine = new createjs.Container() ;
 	textLine.name = "text_line" ;
 	textLine.x = 30, textLine.y = 20 ;
-	textLine.text1 = new createjs.Container() ;
-	textLine.text1.x = 0, textLine.text1.y = 0 ;
-	textLine.text1.bg = new createjs.Text( text.first, "20px Courier New", "#000" ) ;
-	textLine.text1.bg.outline = 5 ;
-	textLine.text1.wd = new createjs.Text( text.first, "20px Courier New", "#FFF" ) ;
-	textLine.text1.addChild( textLine.text1.bg, textLine.text1.wd ) ;
-	textLine.text2 = new createjs.Container() ;
-	textLine.text2.x = 0, textLine.text2.y = 30 ;
-	textLine.text2.bg = new createjs.Text( text.second, "20px Courier New", "#000" ) ;
-	textLine.text2.bg.outline = 5 ;
-	textLine.text2.wd = new createjs.Text( text.second, "20px Courier New", "#FFF" ) ;
-	textLine.text2.addChild( textLine.text2.bg, textLine.text2.wd ) ;
-	textLine.text3 = new createjs.Container() ;
-	textLine.text3.x = 0, textLine.text3.y = 60 ;
-	textLine.text3.bg = new createjs.Text( text.third, "20px Courier New", "#000" ) ;
-	textLine.text3.bg.outline = 5 ;
-	textLine.text3.wd = new createjs.Text( text.third, "20px Courier New", "#FFF" ) ;
-	textLine.text3.addChild( textLine.text3.bg, textLine.text3.wd ) ;
+	textLine.text1 = AddingTextLine( text.first, 0, 0 ) ;
+	textLine.text2 = AddingTextLine( text.second, 0, 30 ) ;
+	textLine.text3 = AddingTextLine( text.third, 0, 60 ) ;
 	textLine.addChild( textLine.text1, textLine.text2, textLine.text3 ) ;
 	container.addChild( textLine ) ;
 
@@ -264,6 +249,15 @@ NPC.prototype.OnDialog = function( text ) {
 		.call( function() { textLine.removeAllChildren() ; } ) ;
 		return container ;
 	} // Refresh()
+	function AddingTextLine( str, x, y ) {
+		var text = new createjs.Container() ;
+		text.x = x, text.y = y ;
+		text.bg = new createjs.Text( str, "20px Courier New", "#000" ) ;
+		text.bg.outline = 5 ;
+		text.wd = new createjs.Text( str, "20px Courier New", "#FFF" ) ;
+		text.addChild( text.bg, text.wd ) ;
+		return text ;
+	} // AddingTextLine()
 } // OnDialog()
 
 // Cutin a picture media in npc framework.
@@ -293,7 +287,7 @@ NPC.prototype.OnTrigger = function() {
 	// Cammand start.
 	this.OnTalk( that.container.name + ": You click me." ) ;
 	this.OnCutin( "npc/sage_l.png", 1 ) ;
-	this.OnDialog( { first: "Hello, 你好。長度測試長度測試", second: " --Second.", third: " --Third." } ) ;
+	this.OnDialog( { first: "Hello.", second: "你好。", third: "こんにちは." } ) ;
 
 	setTimeout( function() { that.OnDialog( { first: "Next page." } ) ; }, 5000 ) ;
 
