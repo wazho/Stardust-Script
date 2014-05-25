@@ -1,3 +1,4 @@
+var async = require( 'async' ) ;
 var express = require( 'express' ) ;
 var app = express() ;
 var server = require( 'http' ).createServer( app ) ;
@@ -12,6 +13,7 @@ app.use( express.static( __dirname + "/client/pic" ) ) ;
 app.use( express.static( __dirname + "/client/skin" ) ) ;
 app.use( express.static( __dirname + "/client/sound" ) ) ;
 app.use( express.static( __dirname + "/client/src" ) ) ;
+app.use( express.static( __dirname + "/node_modules" ) ) ;
 
 // Server socket listener.
 server.listen( port ) ;

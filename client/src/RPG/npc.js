@@ -153,7 +153,8 @@ NPC.prototype.OnTalk = function( text ) {
 // Assign the NPC walking.
 NPC.prototype.OnWalk = function( grid ) {
 	var that = this ;
-	Start( this ) ; 
+
+	Start( that ) ; 
 
 	function Start() {
 		// Virtual grid system.
@@ -180,11 +181,14 @@ NPC.prototype.OnMove = function( grid ) {
 	} // Start()
 } // OnWalk()
 
+NPC.prototype._dialogPromise = null ;
+
 // Open a dialog for player's window.
 NPC.prototype.OnDialog = function( text ) {
 	var that = this ;
 
 	Start( this ) ;
+	return true ;
 
 	function Start( pt ) {
 		var that = pt ;
@@ -229,7 +233,8 @@ NPC.prototype.OnDialog = function( text ) {
 			nextPage.button = AddingTextLine( "Next >>", 530, 122, "25px Comic Sans MS", 6 ) ;
 			nextPage.addChild( nextPage.button ) ;
 			nextPage.button.on( "click", function() { 
-				
+
+				return ;
 			} ) ;
 			// Part of cancel page.
 			var cancelPage = new createjs.Container() ;
@@ -325,15 +330,31 @@ NPC.prototype.OnTrigger = function() {
 	// Cammand start.
 	this.OnTalk( that.container.name + ": You click me." ) ;
 	this.OnCutin( "npc/sage_l.png", 1 ) ;
-	this.OnDialog( { first: "Hello.", second: "你好。", third: "こんにちは." } ) ;
-	this.OnDialog( { first: "Second." } ) ;
-	this.OnDialog( { first: "        Third." } ) ;
-	// this.OnDialog( { first: "               Fourth." } ) ;
-	//this.OnWalk( { x: this.container.grid_x + 3, y: this.container.grid_y } ) ;
-	//this.OnWalk( { x: this.container.grid_x, y: this.container.grid_y - 3 } ) ;
 
-	// setTimeout( function() { that.OnDialog( { first: "Next page." } ) ; }, 5000 ) ;
-	// createjs.Tween.get().wait( 8000 ).call( function() { TriggerInit() ; } ) ;
+	async.series([
+		function( callback ) {
+        	setTimeout(function(){
+				console.log( that.OnDialog( { first: "Hello." } ) + "   Function1." ) ;
+				callback( null, 'one' ) ;
+        	}, 2000);
+		},
+		function( callback ) {
+        	setTimeout(function(){
+				console.log( that.OnDialog( { second: "你好。" } ) + "   Function2." ) ;
+				callback( null, 'two' ) ;
+    		}, 5000);
+		}
+	], function( err, results ) {
+		console.log( "callback: " + results ) ;
+	});
+
+	// this.OnDialog( { first: "Hello.", second: "你好。", third: "こんにちは." } ) ;
+	// this.OnDialog( { first: "Second." } ) ;
+	// this.OnDialog( { first: "        Third." } ) ;
+	// this.OnDialog( { first: "               Fourth." } ) ;
+	// this.OnWalk( { x: this.container.grid_x + 3, y: this.container.grid_y } ) ;
+	// this.OnWalk( { x: this.container.grid_x, y: this.container.grid_y - 3 } ) ;
+
 
 	// Example:
 	// this.OnTalk( that.container.name + ": You click me." ) ;

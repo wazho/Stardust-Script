@@ -21,6 +21,9 @@
 	<script src="RPG/character.js"></script>
 	<script src="RPG/monster.js"></script>
 	<script src="RPG/framework.js"></script>
+
+
+	<script src="async/lib/async.js"></script>
 	<!-- NodeJS for socket connetion -->
 	<script src="../socket.io/socket.io.js"></script>
 	<script src="RPG/server_connection.js"></script>
@@ -51,8 +54,8 @@
 			var farmiliar_proto = new NPC( mapcontrol, "farmiliar_01", { x: 10, y: 3 }, { type: "monster", name: "farmiliar" }, 6 ) ;
 			var farmiliar_clone01 = farmiliar_proto.Clone( "clone_01", { x: 4, y: 7 }, 4 ) ;
 			var farmiliar_clone02 = farmiliar_proto.Clone( "clone_02", { x: 1, y: 6 }, 2 ) ;
-			var farmiliar_clone03 = farmiliar_proto.Clone( "clone_03", { x: 23, y: 37 }, 2 ) ;
 			var sage_proto = new NPC( mapcontrol, "Sage", { x: 33, y: 8 }, { type: "npc", name: "sage" }, 7 ) ;
+			var sage_clone01 = sage_proto.Clone( "clone_03", { x: 23, y: 37 }, 2 ) ;
 
 			mainCharacter.OnLifeModify( -999, -40 ) ;
 
