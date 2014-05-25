@@ -1,6 +1,6 @@
 var NPC_Function_sage = function( that ) {
-	that.OnTalk( that.container.name + ": You click me." ) ;
-	that.OnCutin( "npc/sage_l.png", 1 ) ;
+	that.OnTalk( that.container.name + ": God will bless you and me." ) ;
+	that.OnCutin( "npc_texture/sage_l.png", 1 ) ;
 
 	var checkTime = 100 ;
 	async.series([
@@ -20,7 +20,7 @@ var NPC_Function_sage = function( that ) {
 				setTimeout( function() {
 					if ( that._dialogNext ) {
 						that._dialogNext = false ;
-						that.OnDialog( { second: "你好。" } ) ;
+						that.OnDialog( { second: "Nice to meet you." } ) ;
 					} // if
 					else
 						Loop( checkTime ) ;
@@ -36,7 +36,7 @@ var NPC_Function_sage = function( that ) {
 				setTimeout( function() {
 					if ( that._dialogNext ) {
 						that._dialogNext = false ;
-						that.OnDialog( { third: "嗨。" } ) ;
+						that.OnDialog( { third: "其實我會說中文。" } ) ;
 					} // if
 					else
 						Loop( checkTime ) ;
@@ -51,7 +51,7 @@ var NPC_Function_sage = function( that ) {
 			function Loop( checkTime ) {
 				setTimeout( function() {
 					if ( that._dialogNext ) {
-						that.OnWalk( { x: that.container.grid_x + 3, y: that.container.grid_y } ) ;
+						that.OnWalk( { x: that.container.grid_x, y: that.container.grid_y + 1 } ) ;
 					} // if
 					else
 						Loop( checkTime ) ;
@@ -67,7 +67,7 @@ var NPC_Function_sage = function( that ) {
 				setTimeout( function() {
 					if ( that._dialogNext ) {
 						that._dialogNext = false ;
-						that.OnDialog( { third: "第四句話，第五步驟。" } ) ;
+						that.OnDialog( { third: "I'm walking down one grid." } ) ;
 					} // if
 					else
 						Loop( checkTime ) ;
