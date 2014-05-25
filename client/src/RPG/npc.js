@@ -181,7 +181,7 @@ NPC.prototype.OnMove = function( grid ) {
 	} // Start()
 } // OnWalk()
 
-NPC.prototype._dialogPromise = null ;
+NPC.prototype._dialogNext = false ;
 
 // Open a dialog for player's window.
 NPC.prototype.OnDialog = function( text ) {
@@ -233,7 +233,7 @@ NPC.prototype.OnDialog = function( text ) {
 			nextPage.button = AddingTextLine( "Next >>", 530, 122, "25px Comic Sans MS", 6 ) ;
 			nextPage.addChild( nextPage.button ) ;
 			nextPage.button.on( "click", function() { 
-
+				that._dialogNext = true ;
 				return ;
 			} ) ;
 			// Part of cancel page.
@@ -332,20 +332,83 @@ NPC.prototype.OnTrigger = function() {
 	this.OnCutin( "npc/sage_l.png", 1 ) ;
 
 	async.series([
+		// One
 		function( callback ) {
-        	setTimeout(function(){
-				console.log( that.OnDialog( { first: "Hello." } ) + "   Function1." ) ;
+	        that._dialogNext = false ;
+        	setTimeout( function() {
+				that.OnDialog( { first: "Hello." } ) ;
 				callback( null, 'one' ) ;
-        	}, 2000);
+        	}, 0 ) ;
 		},
+		// Two
 		function( callback ) {
-        	setTimeout(function(){
-				console.log( that.OnDialog( { second: "你好。" } ) + "   Function2." ) ;
-				callback( null, 'two' ) ;
-    		}, 5000);
+			var checkTime = 300 ;
+			Loop( checkTime ) ;
+
+			function Loop( checkTime ) {
+	        	setTimeout( function() {
+	        		if ( that._dialogNext ) {
+	        			that._dialogNext = false ;
+						that.OnDialog( { second: "你好。" } ) ;
+	        		} // if
+					else
+						Loop( checkTime ) ;
+	    		}, checkTime ) ;
+	        } // Loop()
+			callback( null, 'two' ) ;
+		},
+		// Three
+		function( callback ) {
+			var checkTime = 300 ;
+			Loop( checkTime ) ;
+
+			function Loop( checkTime ) {
+	        	setTimeout( function() {
+	        		if ( that._dialogNext ) {
+	        			that._dialogNext = false ;
+						that.OnDialog( { third: "嗨。" } ) ;
+	        		} // if
+					else
+						Loop( checkTime ) ;
+	    		}, checkTime ) ;
+	        } // Loop()
+			callback( null, 'three' ) ;
+		},
+		// Four
+		function( callback ) {
+			var checkTime = 300 ;
+			Loop( checkTime ) ;
+
+			function Loop( checkTime ) {
+	        	setTimeout( function() {
+	        		if ( that._dialogNext ) {
+						that.OnWalk( { x: that.container.grid_x + 3, y: that.container.grid_y } ) ;
+	        		} // if
+					else
+						Loop( checkTime ) ;
+	    		}, checkTime ) ;
+	        } // Loop()
+			callback( null, 'four' ) ;
+		},
+		// Five
+		function( callback ) {
+			var checkTime = 300 ;
+			Loop( checkTime ) ;
+
+			function Loop( checkTime ) {
+	        	setTimeout( function() {
+	        		if ( that._dialogNext ) {
+	        			that._dialogNext = false ;
+						that.OnDialog( { third: "第四句話，第五步驟。" } ) ;
+	        		} // if
+					else
+						Loop( checkTime ) ;
+	    		}, checkTime ) ;
+	        } // Loop()
+			callback( null, 'three' ) ;
 		}
 	], function( err, results ) {
-		console.log( "callback: " + results ) ;
+		console.log( "callback: " + results + " (" + err + ")" ) ;
 	});
 
 	// this.OnDialog( { first: "Hello.", second: "你好。", third: "こんにちは." } ) ;
