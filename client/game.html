@@ -13,6 +13,7 @@
 	<script src="map_adding.js"></script>
 	<script src="map_texture/texture/adding.js"></script>
 	<script src="map_texture/object/adding.js"></script>
+	<script src="npc_adding.js"></script>
 	<!-- RPG source -->
 	<script src="RPG/global_function.js"></script>
 	<script src="RPG/sprite_choose.js"></script>
@@ -21,8 +22,7 @@
 	<script src="RPG/character.js"></script>
 	<script src="RPG/monster.js"></script>
 	<script src="RPG/framework.js"></script>
-
-
+	<!-- NodeJS for async solution -->
 	<script src="async/lib/async.js"></script>
 	<!-- NodeJS for socket connetion -->
 	<script src="../socket.io/socket.io.js"></script>
@@ -38,40 +38,42 @@
 	<script>
 		// Canvas stage.
 		var stage ;
-		// Dialog layer.
+		// Canvas size.
+		var canvasSize = { length: 992, height: 576 } ;
+		// Dialog layer, global using.
 		var dialog = new createjs.Container() ;
+
 		function init() {
 			stage = new createjs.Stage( "myCanvas" ) ;
     		document.body.style.cursor = "url('cursor/normal_select.cur'), default" ;
-			// 定義畫布長寬
-			var canvasSize = { length: 992, height: 576 } ;
-			// 建立地圖框架
-			var mapcontrol = new Main_Map( 2, canvasSize, false ) ;
+
+			// Create the map control object, it the highest level.
+			// Back map(texture), front map(objects, characters) all in the object.
+			var mapControl = new Main_Map( 2, canvasSize, false ) ;
+			// Adding the NPCs which is on this map.
+			for ( i = 0 ; i < npc_adding.length ; i ++ )
+				if ( npc_adding[i].map == "village" )
+					new NPC( mapControl, npc_adding[i].name, npc_adding[i].grid, npc_adding[i].sprite, npc_adding[i].direct ) ;
+
 			// 建立遊戲框架
 			var framework = new Main_Framework( canvasSize ) ;
 			// 建立角色物件
-			var mainCharacter = new Character( mapcontrol, "baphomet", 175, 55, 1.00, 25, 39, "front" ) ;
-			var farmiliar_proto = new NPC( mapcontrol, "farmiliar_01", { x: 10, y: 3 }, { type: "monster", name: "farmiliar" }, 6 ) ;
-			var farmiliar_clone01 = farmiliar_proto.Clone( "clone_01", { x: 4, y: 7 }, 4 ) ;
-			var farmiliar_clone02 = farmiliar_proto.Clone( "clone_02", { x: 1, y: 6 }, 2 ) ;
-			var sage_proto = new NPC( mapcontrol, "Sage", { x: 33, y: 8 }, { type: "npc", name: "sage" }, 7 ) ;
-			var sage_clone01 = sage_proto.Clone( "clone_03", { x: 23, y: 37 }, 2 ) ;
-
+			var mainCharacter = new Character( mapControl, "baphomet", 175, 55, 1.00, 25, 39, "front" ) ;
 			mainCharacter.OnLifeModify( -999, -40 ) ;
 
 			// 地圖背景匯入
-			stage.addChild( mapcontrol.backgorond ) ;
+			stage.addChild( mapControl.backgorond ) ;
 			// 地圖景效物件匯入(後端)
-			stage.addChild( mapcontrol.container_back ) ;
+			stage.addChild( mapControl.container_back ) ;
 			// 地圖景效物件匯入(前端)
-			stage.addChild( mapcontrol.container_front ) ;
+			stage.addChild( mapControl.container_front ) ;
 			// 遊戲主框架匯入
 			// stage.addChild( framework.container ) ;
 			// Adding dialog layer.
 			stage.addChild( dialog ) ;
 
-			fpsLabel = new createjs.Text( "-- fps", "bold 18px Arial", "#FFF" ) ;
-			fpsLabel.x = 10, fpsLabel.y = 250 ;
+			fpsLabel = new createjs.Text( "-- fps", "bold 20px Arial", "#FFF" ) ;
+			fpsLabel.x = 20, fpsLabel.y = 20 ;
 			stage.addChild( fpsLabel ) ;
 
 			// FPS

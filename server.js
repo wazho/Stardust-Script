@@ -9,6 +9,7 @@ var port = 8001 ;
 // Static files.
 app.use( express.static( __dirname + "/client/css" ) ) ;
 app.use( express.static( __dirname + "/client/map" ) ) ;
+app.use( express.static( __dirname + "/client/npc" ) ) ;
 app.use( express.static( __dirname + "/client/pic" ) ) ;
 app.use( express.static( __dirname + "/client/skin" ) ) ;
 app.use( express.static( __dirname + "/client/sound" ) ) ;
