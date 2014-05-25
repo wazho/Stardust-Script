@@ -13,6 +13,8 @@
 	<script src="map_adding.js"></script>
 	<script src="map_texture/texture/adding.js"></script>
 	<script src="map_texture/object/adding.js"></script>
+	<script src="npc_src/sage.js"></script>
+	<script src="npc_src/bat.js"></script>
 	<script src="npc_adding.js"></script>
 	<!-- RPG source -->
 	<script src="RPG/global_function.js"></script>
@@ -47,13 +49,15 @@
 			stage = new createjs.Stage( "myCanvas" ) ;
     		document.body.style.cursor = "url('cursor/normal_select.cur'), default" ;
 
+    		var mapNum = 2 ;
+
 			// Create the map control object, it the highest level.
 			// Back map(texture), front map(objects, characters) all in the object.
-			var mapControl = new Main_Map( 2, canvasSize, false ) ;
+			var mapControl = new Main_Map( mapNum, canvasSize, false ) ;
 			// Adding the NPCs which is on this map.
 			for ( i = 0 ; i < npc_adding.length ; i ++ )
-				if ( npc_adding[i].map == "village" )
-					new NPC( mapControl, npc_adding[i].name, npc_adding[i].grid, npc_adding[i].sprite, npc_adding[i].direct ) ;
+				if ( npc_adding[i].map == cacheMapData.map[mapNum].name ) 
+					new NPC( mapControl, npc_adding[i].name, npc_adding[i].grid, npc_adding[i].sprite, npc_adding[i].direct, npc_adding[i].func ) ;
 
 			// 建立遊戲框架
 			var framework = new Main_Framework( canvasSize ) ;

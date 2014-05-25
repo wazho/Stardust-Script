@@ -1,10 +1,10 @@
-function NPC( MapControl, Name, grid, sheet, direction ) {
-	this.OnCreate( MapControl, Name, grid, sheet, direction ) ;
+function NPC( MapControl, Name, grid, sheet, direction, tirggerFunc ) {
+	this.OnCreate( MapControl, Name, grid, sheet, direction, tirggerFunc ) ;
 	return this ;
 } // NPC() 
 
 // NPC character object is created.
-NPC.prototype.OnCreate = function( MapControl, Name, grid, sheet, direction ) {
+NPC.prototype.OnCreate = function( MapControl, Name, grid, sheet, direction, tirggerFunc ) {
 	var that = this ;
 	// Size of sprite per sheet.
 	this.spriteSize = 125 ;
@@ -38,6 +38,7 @@ NPC.prototype.OnCreate = function( MapControl, Name, grid, sheet, direction ) {
 		that.container.direction = direction ;
 		that.container.sheet = sheet ;
 		that.container.grid_x = grid.x, that.container.grid_y = grid.y ;
+		that.tirggerFunction = tirggerFunc ;
 		// Adding to the map (in front od all map elements).
 		that.MapControlPointer.container_front.addChild( that.container ) ;
 	} // AddingBasicInfo()
@@ -100,7 +101,7 @@ NPC.prototype.OnCreate = function( MapControl, Name, grid, sheet, direction ) {
 
 // Clone the NPC. Except NPC's info isn's inherited, all for the script is inherited.
 NPC.prototype.Clone = function( name, grid, direction ) {
-	var clone = new NPC( this.MapControlPointer, name, grid, this.container.sheet, direction ) ;
+	var clone = new NPC( this.MapControlPointer, name, grid, this.container.sheet, direction, this.tirggerFunction ) ;
 	return clone ;
 } // Clone()
 
@@ -337,115 +338,6 @@ NPC.prototype.OnCutin = function( src, location ) {
 NPC.prototype.OnTrigger = function() {
 	var that = this ;
 	this.MapControlPointer.nowEventTrigger = "TriggerNow" ;
-	// Cammand start.
-	this.OnTalk( that.container.name + ": You click me." ) ;
-	this.OnCutin( "npc/sage_l.png", 1 ) ;
-
-Test() ;
-
-function Test() {
-	var checkTime = 100 ;
-	async.series([
-		// One
-		function( callback ) {
-			that._dialogNext = false ;
-			setTimeout( function() {
-				that.OnDialog( { first: "Hello." } ) ;
-				callback( null, 'one' ) ;
-			}, 0 ) ;
-		},
-		// Two
-		function( callback ) {
-			Loop( checkTime ) ;
-
-			function Loop( checkTime ) {
-				setTimeout( function() {
-					if ( that._dialogNext ) {
-						that._dialogNext = false ;
-						that.OnDialog( { second: "你好。" } ) ;
-					} // if
-					else
-						Loop( checkTime ) ;
-				}, checkTime ) ;
-			} // Loop()
-			callback( null, 'two' ) ;
-		},
-		// Three
-		function( callback ) {
-			Loop( checkTime ) ;
-
-			function Loop( checkTime ) {
-				setTimeout( function() {
-					if ( that._dialogNext ) {
-						that._dialogNext = false ;
-						that.OnDialog( { third: "嗨。" } ) ;
-					} // if
-					else
-						Loop( checkTime ) ;
-				}, checkTime ) ;
-			} // Loop()
-			callback( null, 'three' ) ;
-		},
-		// Four
-		function( callback ) {
-			Loop( checkTime ) ;
-
-			function Loop( checkTime ) {
-				setTimeout( function() {
-					if ( that._dialogNext ) {
-						that.OnWalk( { x: that.container.grid_x + 3, y: that.container.grid_y } ) ;
-					} // if
-					else
-						Loop( checkTime ) ;
-				}, checkTime ) ;
-			} // Loop()
-			callback( null, 'four' ) ;
-		},
-		// Five
-		function( callback ) {
-			Loop( checkTime ) ;
-
-			function Loop( checkTime ) {
-				setTimeout( function() {
-					if ( that._dialogNext ) {
-						that._dialogNext = false ;
-						that.OnDialog( { third: "第四句話，第五步驟。" } ) ;
-					} // if
-					else
-						Loop( checkTime ) ;
-				}, checkTime ) ;
-			} // Loop()
-			callback( null, 'five' ) ;
-		},
-		// Good bye
-		function( callback ) {
-			Loop( checkTime ) ;
-
-			function Loop( checkTime ) {
-				setTimeout( function() {
-					if ( that._dialogNext ) {
-						that._dialogNext = false ;
-						that.triggerInit() ;
-					} // if
-					else
-						Loop( checkTime ) ;
-				}, checkTime ) ;
-			} // Loop()
-			callback( null, 'end' ) ;
-		}
-	], function( err, results ) {
-		console.log( "callback: " + results + " (" + err + ")" ) ;
-	});
-}
-
-
-	// this.OnDialog( { first: "Hello.", second: "你好。", third: "こんにちは." } ) ;
-	// this.OnDialog( { first: "Second." } ) ;
-	// this.OnDialog( { first: "		Third." } ) ;
-	// this.OnDialog( { first: "		       Fourth." } ) ;
-	// this.OnWalk( { x: this.container.grid_x + 3, y: this.container.grid_y } ) ;
-	// this.OnWalk( { x: this.container.grid_x, y: this.container.grid_y - 3 } ) ;
-
 
 	// Example:
 	// this.OnTalk( that.container.name + ": You click me." ) ;
@@ -463,5 +355,6 @@ function Test() {
 		} ) ;
 	} // TriggerInit()
 
-
+	// Cammand start.
+	this.tirggerFunction( that ) ;
 } // OnTrigger()
