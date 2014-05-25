@@ -341,30 +341,33 @@ NPC.prototype.OnTrigger = function() {
 	this.OnTalk( that.container.name + ": You click me." ) ;
 	this.OnCutin( "npc/sage_l.png", 1 ) ;
 
+Test() ;
+
+function Test() {
 	var checkTime = 100 ;
 	async.series([
 		// One
 		function( callback ) {
-	        that._dialogNext = false ;
-        	setTimeout( function() {
+			that._dialogNext = false ;
+			setTimeout( function() {
 				that.OnDialog( { first: "Hello." } ) ;
 				callback( null, 'one' ) ;
-        	}, 0 ) ;
+			}, 0 ) ;
 		},
 		// Two
 		function( callback ) {
 			Loop( checkTime ) ;
 
 			function Loop( checkTime ) {
-	        	setTimeout( function() {
-	        		if ( that._dialogNext ) {
-	        			that._dialogNext = false ;
+				setTimeout( function() {
+					if ( that._dialogNext ) {
+						that._dialogNext = false ;
 						that.OnDialog( { second: "你好。" } ) ;
-	        		} // if
+					} // if
 					else
 						Loop( checkTime ) ;
-	    		}, checkTime ) ;
-	        } // Loop()
+				}, checkTime ) ;
+			} // Loop()
 			callback( null, 'two' ) ;
 		},
 		// Three
@@ -372,15 +375,15 @@ NPC.prototype.OnTrigger = function() {
 			Loop( checkTime ) ;
 
 			function Loop( checkTime ) {
-	        	setTimeout( function() {
-	        		if ( that._dialogNext ) {
-	        			that._dialogNext = false ;
+				setTimeout( function() {
+					if ( that._dialogNext ) {
+						that._dialogNext = false ;
 						that.OnDialog( { third: "嗨。" } ) ;
-	        		} // if
+					} // if
 					else
 						Loop( checkTime ) ;
-	    		}, checkTime ) ;
-	        } // Loop()
+				}, checkTime ) ;
+			} // Loop()
 			callback( null, 'three' ) ;
 		},
 		// Four
@@ -388,14 +391,14 @@ NPC.prototype.OnTrigger = function() {
 			Loop( checkTime ) ;
 
 			function Loop( checkTime ) {
-	        	setTimeout( function() {
-	        		if ( that._dialogNext ) {
+				setTimeout( function() {
+					if ( that._dialogNext ) {
 						that.OnWalk( { x: that.container.grid_x + 3, y: that.container.grid_y } ) ;
-	        		} // if
+					} // if
 					else
 						Loop( checkTime ) ;
-	    		}, checkTime ) ;
-	        } // Loop()
+				}, checkTime ) ;
+			} // Loop()
 			callback( null, 'four' ) ;
 		},
 		// Five
@@ -403,15 +406,15 @@ NPC.prototype.OnTrigger = function() {
 			Loop( checkTime ) ;
 
 			function Loop( checkTime ) {
-	        	setTimeout( function() {
-	        		if ( that._dialogNext ) {
-	        			that._dialogNext = false ;
+				setTimeout( function() {
+					if ( that._dialogNext ) {
+						that._dialogNext = false ;
 						that.OnDialog( { third: "第四句話，第五步驟。" } ) ;
-	        		} // if
+					} // if
 					else
 						Loop( checkTime ) ;
-	    		}, checkTime ) ;
-	        } // Loop()
+				}, checkTime ) ;
+			} // Loop()
 			callback( null, 'five' ) ;
 		},
 		// Good bye
@@ -419,25 +422,27 @@ NPC.prototype.OnTrigger = function() {
 			Loop( checkTime ) ;
 
 			function Loop( checkTime ) {
-	        	setTimeout( function() {
-	        		if ( that._dialogNext ) {
-	        			that._dialogNext = false ;
+				setTimeout( function() {
+					if ( that._dialogNext ) {
+						that._dialogNext = false ;
 						that.triggerInit() ;
-	        		} // if
+					} // if
 					else
 						Loop( checkTime ) ;
-	    		}, checkTime ) ;
-	        } // Loop()
+				}, checkTime ) ;
+			} // Loop()
 			callback( null, 'end' ) ;
 		}
 	], function( err, results ) {
 		console.log( "callback: " + results + " (" + err + ")" ) ;
 	});
+}
+
 
 	// this.OnDialog( { first: "Hello.", second: "你好。", third: "こんにちは." } ) ;
 	// this.OnDialog( { first: "Second." } ) ;
-	// this.OnDialog( { first: "        Third." } ) ;
-	// this.OnDialog( { first: "               Fourth." } ) ;
+	// this.OnDialog( { first: "		Third." } ) ;
+	// this.OnDialog( { first: "		       Fourth." } ) ;
 	// this.OnWalk( { x: this.container.grid_x + 3, y: this.container.grid_y } ) ;
 	// this.OnWalk( { x: this.container.grid_x, y: this.container.grid_y - 3 } ) ;
 
