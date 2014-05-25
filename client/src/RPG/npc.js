@@ -89,6 +89,13 @@ NPC.prototype.OnCreate = function( MapControl, Name, grid, sheet, direction ) {
 			.to( { alpha: 0 } , 300 ) ;
 		} ) ;
 	} // AddingMouseEvent()
+
+	this.resortingOrder = function ResortingObjectsAndChars() {
+		for ( i = that.MapControlPointer.container_front.getNumChildren() ; i > 0 ; i -- )
+			for ( j = 0 ; j < i - 1 ; j ++ )
+				if ( that.MapControlPointer.container_front.getChildAt( j ).y > that.MapControlPointer.container_front.getChildAt( j + 1 ).y ) 
+					that.MapControlPointer.container_front.swapChildren( that.MapControlPointer.container_front.getChildAt( j ), that.MapControlPointer.container_front.getChildAt( j + 1 ) ) ;
+	} // ResortingObjectsAndChars()
 } // OnCreate()
 
 // Clone the NPC. Except NPC's info isn's inherited, all for the script is inherited.
@@ -161,9 +168,11 @@ NPC.prototype.OnWalk = function( grid ) {
 		var gridSize = that.MapControlPointer.grid.size ;
 		var startGrid = { x: that.container.grid_x, y: that.container.grid_y } ;
 		var endGrid = { x: grid.x, y: grid.y } ;
-		var realGrid = that.MapControlPointer.GetGrid( { x: endGrid.x, y: endGrid.y }, "virtual" ) ;
-		createjs.Tween.get( that.container ).to( { x: realGrid.x + that.container.regX, y: realGrid.y + that.container.regY * 0.3 }, 1000 ) ;
 		that.container.grid_x = endGrid.x, that.container.grid_y = endGrid.y ;
+		var realGrid = that.MapControlPointer.GetGrid( { x: endGrid.x, y: endGrid.y }, "virtual" ) ;
+		createjs.Tween.get( that.container )
+		.to( { x: realGrid.x + that.container.regX, y: realGrid.y + that.container.regY * 0.3 }, 1000 )
+		.call( function() { that.resortingOrder() ; } ) ;
 	} // Start()
 } // OnWalk()
 
@@ -178,6 +187,7 @@ NPC.prototype.OnMove = function( grid ) {
 		var realGrid = that.MapControlPointer.GetGrid( { x: endGrid.x, y: endGrid.y }, "virtual" ) ;
 		that.container.x = realGrid.x + that.container.regX, that.container.y = realGrid.y + that.container.regY * 0.3 ;
 		that.container.grid_x = endGrid.x, that.container.grid_y = endGrid.y ;
+		that.resortingOrder() ;
 	} // Start()
 } // OnWalk()
 
@@ -242,7 +252,7 @@ NPC.prototype.OnDialog = function( text ) {
 			cancelPage.button = AddingTextLine( "Cancel", 35, 122, "25px Comic Sans MS", 6 ) ;
 			cancelPage.addChild( cancelPage.button ) ;
 			cancelPage.on( "click", function() { 
-				that.trigegrInit() ;
+				that.triggerInit() ;
 			} ) ;
 			// All adding to the top container.
 			container.addChild( dialogWindow_top, dialogWindow_btm, nameTag, nextPage, cancelPage ) ;
@@ -331,6 +341,7 @@ NPC.prototype.OnTrigger = function() {
 	this.OnTalk( that.container.name + ": You click me." ) ;
 	this.OnCutin( "npc/sage_l.png", 1 ) ;
 
+	var checkTime = 100 ;
 	async.series([
 		// One
 		function( callback ) {
@@ -342,7 +353,6 @@ NPC.prototype.OnTrigger = function() {
 		},
 		// Two
 		function( callback ) {
-			var checkTime = 300 ;
 			Loop( checkTime ) ;
 
 			function Loop( checkTime ) {
@@ -359,7 +369,6 @@ NPC.prototype.OnTrigger = function() {
 		},
 		// Three
 		function( callback ) {
-			var checkTime = 300 ;
 			Loop( checkTime ) ;
 
 			function Loop( checkTime ) {
@@ -376,7 +385,6 @@ NPC.prototype.OnTrigger = function() {
 		},
 		// Four
 		function( callback ) {
-			var checkTime = 300 ;
 			Loop( checkTime ) ;
 
 			function Loop( checkTime ) {
@@ -392,7 +400,6 @@ NPC.prototype.OnTrigger = function() {
 		},
 		// Five
 		function( callback ) {
-			var checkTime = 300 ;
 			Loop( checkTime ) ;
 
 			function Loop( checkTime ) {
@@ -405,7 +412,23 @@ NPC.prototype.OnTrigger = function() {
 						Loop( checkTime ) ;
 	    		}, checkTime ) ;
 	        } // Loop()
-			callback( null, 'three' ) ;
+			callback( null, 'five' ) ;
+		},
+		// Good bye
+		function( callback ) {
+			Loop( checkTime ) ;
+
+			function Loop( checkTime ) {
+	        	setTimeout( function() {
+	        		if ( that._dialogNext ) {
+	        			that._dialogNext = false ;
+						that.triggerInit() ;
+	        		} // if
+					else
+						Loop( checkTime ) ;
+	    		}, checkTime ) ;
+	        } // Loop()
+			callback( null, 'end' ) ;
 		}
 	], function( err, results ) {
 		console.log( "callback: " + results + " (" + err + ")" ) ;
@@ -425,7 +448,7 @@ NPC.prototype.OnTrigger = function() {
 	// this.OnMove( { x: 1, y: 1 } ) ;
 	// this.OnWalk( { x: this.container.grid_x + 1, y: this.container.grid_y } ) ;
 
-	this.trigegrInit = function TriggerInit() {
+	this.triggerInit = function TriggerInit() {
 		createjs.Tween.get( dialog )
 		.to( { alpha: 0 }, 300 )
 		.to( { alpha: 1 }, 0 )
