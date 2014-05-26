@@ -164,6 +164,8 @@ Main_Map.prototype.MapMove = function( start, end ) {
 		var	pow = Math.pow ;
 		var	sqrt = Math.sqrt ;
 
+		
+
 		// ~~~~~~~~~~
 
 		// console.log( aStarTile[end.y-2][end.x-2].walkable, aStarTile[end.y-2][end.x-1].walkable, aStarTile[end.y-2][end.x].walkable ) ;
