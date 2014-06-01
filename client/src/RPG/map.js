@@ -146,8 +146,8 @@ Main_Map.prototype.MapMove = function( start, end ) {
 		// Trim the distance about cursor of the map .
 		this.trim.x += distanceX, this.trim.y += distanceY ;
 		var timeDelay = Math.abs( distanceX ) + Math.abs( distanceY ) ;
-		createjs.Tween.get( this.container_back ).to( { x: this.container_back.x - distanceX * this.grid.size, y: this.container_back.y - distanceY * this.grid.size }, 100 * timeDelay ) ;
-		createjs.Tween.get( this.container_front ).to( { x: this.container_back.x - distanceX * this.grid.size, y: this.container_back.y - distanceY * this.grid.size }, 100 * timeDelay ) ;
+		createjs.Tween.get( this.container_back ).to( { x: this.container_back.x - distanceX * this.grid.size, y: this.container_back.y - distanceY * this.grid.size }, 200 * timeDelay ) ;
+		createjs.Tween.get( this.container_front ).to( { x: this.container_back.x - distanceX * this.grid.size, y: this.container_back.y - distanceY * this.grid.size }, 200 * timeDelay ) ;
 	} // if
 
 	return ( ifWalkable == 1 ) ? true : false ;

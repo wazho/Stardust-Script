@@ -170,31 +170,69 @@ Character.prototype.OnWalk = function( grid ) {
 	// Virtual grid system.
 	var gridSize = this.MapControlPointer.grid.size ;
 	var startGrid = { x: this.container.grid_x, y: this.container.grid_y } ;
-	var endGrid = { x: grid.x, y: grid.y } ;
+	// var endGrid = { x: grid.x, y: grid.y } ;
 	// Checking the grid is walkable or not, then walk to there using 'A* algorithm'.
-	if ( this.MapControlPointer.MapMove( { x: startGrid.x, y: startGrid.y }, { x: endGrid.x, y: endGrid.y } ) ) {
-		this.container.grid_x = endGrid.x, this.container.grid_y = endGrid.y ;
-		var realGrid = this.MapControlPointer.GetGrid( { x: endGrid.x, y: endGrid.y }, "virtual" ) ;
-		createjs.Tween.get( this.container )
+
+	// if ( this.MapControlPointer.MapMove( { x: startGrid.x, y: startGrid.y }, { x: endGrid.x, y: endGrid.y } ) ) {
+	// 	this.container.grid_x = endGrid.x, this.container.grid_y = endGrid.y ;
+	// 	var realGrid = this.MapControlPointer.GetGrid( { x: endGrid.x, y: endGrid.y }, "virtual" ) ;
+	// 	createjs.Tween.get( this.container )
+	// 	.call( function() { that.OnDirection( 0, { part: "body", mode: "walk_E" } ) ; } )
+	// 	.call( function() { that.OnDirection( 0, { part: "hair", mode: "stable_E" } ) ; } )
+	// 	.to( { x: realGrid.x + this.container.regX, y: realGrid.y + this.container.regY * 0.3 }, 750 )
+	// 	.call( function() { that.resortingOrder() ; } )
+	// 	.call( function() { that.OnDirection( 5, { part: "body", mode: "stand_A" } ) ; } )
+	// 	.call( function() { that.OnDirection( 5, { part: "hair", mode: "stable_A" } ) ; } ) ;
+	// 	// sendPlayerStateToServer() ;
+	// } // if
+
+	Recursive( 25 ) ;
+
+	function Recursive( num ) {
+		if ( num < 1 ) {
+			setTimeout( function() { Stop() ; }, 200 ) ;
+			return ;
+		} //
+		setTimeout( function() { 
+			if ( that.MapControlPointer.MapMove( { x: startGrid.x, y: startGrid.y }, { x: startGrid.x, y: startGrid.y - 1 } ) ) {
+				that.container.grid_y = startGrid.y -= 1 ;
+				WalkDirection_0() ;
+				Recursive( num - 1 ) ;
+			} // if
+			else
+				setTimeout( function() { Stop() ; }, 200 ) ;
+		}, 200 ) ;
+	} // Recursive()
+
+	function WalkDirection_0() {
+		var realGrid = that.MapControlPointer.GetGrid( { x: startGrid.x, y: startGrid.y }, "virtual" ) ;
+		createjs.Tween.get( that.container )
 		.call( function() { that.OnDirection( 0, { part: "body", mode: "walk_E" } ) ; } )
 		.call( function() { that.OnDirection( 0, { part: "hair", mode: "stable_E" } ) ; } )
-		.to( { x: realGrid.x + this.container.regX, y: realGrid.y + this.container.regY * 0.3 }, 750 )
-		.call( function() { that.resortingOrder() ; } )
-		.call( function() { that.OnDirection( 5, { part: "body", mode: "stand_A" } ) ; } )
-		.call( function() { that.OnDirection( 5, { part: "hair", mode: "stable_A" } ) ; } ) ;
-		// sendPlayerStateToServer() ;
-	} // if
+		.to( { x: realGrid.x + that.container.regX, y: realGrid.y + that.container.regY * 0.3 }, 200 )
+		.call( function() { that.resortingOrder() ; } ) ;
+	} // WalkDirection_0()
+	function Stop() {
+		createjs.Tween.get( that.container )
+		.call( function() { that.OnDirection( 5, { part: "body", mode: "stand_E" } ) ; } )
+		.call( function() { that.OnDirection( 5, { part: "hair", mode: "stable_E" } ) ; } ) ;
+	} // Stop()
 } // OnWalk()
 
 // 旋轉角色方向/改變播放圖層
 Character.prototype.OnDirection = function( direction, type ) {
 	if ( type.part == "body" ) {
 		this.sprite.body.scaleX = ( direction != -1 ) ? ( ( direction > 0 && direction <= 4 ) ? -1 : 1 ) : direction ;
-		this.sprite.body.gotoAndPlay( type.mode ) ;
+		// If not the same animation must change.
+		if ( this.sprite.body.currentAnimation != type.mode )
+			this.sprite.body.gotoAndPlay( type.mode ) ;
+		console.log( this.sprite.body.currentAnimation ) ;
 	} // if
 	else if ( type.part == "hair" ) {
 		this.sprite.hair.scaleX = ( direction != -1 ) ? ( ( direction > 0 && direction <= 4 ) ? -1 : 1 ) : direction ;
-		this.sprite.hair.gotoAndPlay( type.mode ) ;
+		// If not the same animation must change.
+		if ( this.sprite.hair.currentAnimation != type.mode )
+			this.sprite.hair.gotoAndPlay( type.mode ) ;
 	} // else if
 
 	this.direction = ( direction != -1 ) ? direction : this.direction ;
