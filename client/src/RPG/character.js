@@ -43,10 +43,12 @@ Character.prototype.OnCreate = function( MapControl, Name, LifeBar, grid, Speed,
 		that.container.grid_x = grid.x, that.container.grid_y = grid.y ;
 	} // CreateContainer()
 	function AddingBasicInfo() {
-		that.name = Name ;
-		that.hp_max = LifeBar.HP, that.hp = LifeBar.HP ;
-		that.sp_max = LifeBar.SP, that.sp = LifeBar.SP ;
-		that.speed = Speed, that.direction = direction ;
+		that.container.name = Name ;
+		that.container.hp_max = LifeBar.HP, that.container.hp = LifeBar.HP ;
+		that.container.sp_max = LifeBar.SP, that.container.sp = LifeBar.SP ;
+		that.container.speed = Speed ;
+		that.container.direction = direction ;
+		that.container.sheet = sheet ;
 	} // AddingBasicInfo()
 	function AddingSprite() {
 		that.sprite = new createjs.Container() ;
@@ -170,8 +172,12 @@ Character.prototype.OnWalk = function( grid ) {
 		this.container.grid_x = endGrid.x, this.container.grid_y = endGrid.y ;
 		var realGrid = this.MapControlPointer.GetGrid( { x: endGrid.x, y: endGrid.y }, "virtual" ) ;
 		createjs.Tween.get( this.container )
+		.call( function() { that.OnDirection( 0, { part: "body", mode: "walk_E" } ) ; } )
+		.call( function() { that.OnDirection( 0, { part: "hair", mode: "stable_E" } ) ; } )
 		.to( { x: realGrid.x + this.container.regX, y: realGrid.y + this.container.regY * 0.3 }, 750 )
-		.call( function() { that.resortingOrder() ; } ) ;
+		.call( function() { that.resortingOrder() ; } )
+		.call( function() { that.OnDirection( 5, { part: "body", mode: "stand_A" } ) ; } )
+		.call( function() { that.OnDirection( 5, { part: "hair", mode: "stable_A" } ) ; } ) ;
 		// sendPlayerStateToServer() ;
 	} // if
 } // OnWalk()
@@ -235,9 +241,9 @@ Character.prototype.OnPlaySound = function( motivation ) {
 Character.prototype.LifeBar = function() {
 	this.lifebar.bg.regX = 0, this.talk.bg.y = 0 ;
 	this.lifebar.bg.graphics.f( "#181789" ).r( ( this.container.length / 2 - 75 / 2 ) , this.container.height, 75, 11 ) ;
-	var per_hp = 1 - ( this.hp_max - this.hp ) / this.hp_max ;
+	var per_hp = 1 - ( this.container.hp_max - this.container.hp ) / this.container.hp_max ;
 	this.lifebar.bg.graphics.f( "#19FF1C" ).r( ( this.container.length / 2 - 75 / 2 + 1 ) , this.container.height + 1, 73 * per_hp, 4 ) ;
-	var per_sp = 1 - ( this.sp_max - this.sp ) / this.sp_max ;
+	var per_sp = 1 - ( this.container.sp_max - this.container.sp ) / this.container.sp_max ;
 	this.lifebar.bg.graphics.f( "#006BDC" ).r( ( this.container.length / 2 - 75 / 2 + 1 ) , this.container.height + 6, 73 * per_sp, 4 ) ;
 } // LifeBar()
 
