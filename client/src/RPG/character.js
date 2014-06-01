@@ -52,17 +52,21 @@ Character.prototype.OnCreate = function( MapControl, Name, LifeBar, grid, Speed,
 	} // AddingBasicInfo()
 	function AddingSprite() {
 		that.sprite = new createjs.Container() ;
+		that.sprite.scaleX = that.sprite.scaleY = 2 ;
 		that.sprite.body = new createjs.Sprite( SettingSprite( { target: "character", part: "body" }, sheet.body ) ) ;
-		that.sprite.body.regX = that.spriteSize / 2, that.sprite.body.regY = that.spriteSize / 2 ;
-		that.sprite.body.x = 0, that.sprite.body.y = 21 ;
+		that.sprite.body.regX = Math.ceil( that.spriteSize / 2 ), that.sprite.body.regY = 81 * that.sprite.scaleY ;
+		that.sprite.body.x = 0, that.sprite.body.y = 47 * that.sprite.scaleY ;
 		that.sprite.hair = new createjs.Sprite( SettingSprite( { target: "character", part: "hair" }, sheet.hair ) ) ;
-		that.sprite.hair.regX = Math.ceil( 75 / 2 ), that.sprite.hair.regY = Math.ceil( 75 / 2 ) ;
-		that.sprite.hair.x = 0, that.sprite.hair.y = -18 ;
+		that.sprite.hair.regX = Math.ceil( 75 / 2 ), that.sprite.hair.regY = Math.ceil( 75 / 2 ) * that.sprite.scaleY ;
+		that.sprite.hair.x = -2, that.sprite.hair.y = -11 / that.sprite.scaleY ;
 		that.sprite.addChild( that.sprite.body, that.sprite.hair ) ;
 		that.container.addChild( that.sprite ) ;
 		// Default the direction of this character.
 		that.OnDirection( this.direction, { part: "body", mode: "stand_A" } ) ;
 		that.OnDirection( this.direction, { part: "hair", mode: "stable_A" } ) ;
+		// Breath animation.
+		createjs.Tween.get( that.sprite.body, { loop: true } ).to( { scaleY: 0.97 }, 1500 ).to( { scaleY: 1 }, 1500 ) ;
+		createjs.Tween.get( that.sprite.hair, { loop: true } ).to( { y: that.sprite.hair.y + 3 }, 1500 ).to( { y: that.sprite.hair.y }, 1500 ) ;
 	} // AddingSprite()
 	function AddingShadow() {
 		// that.sprite.shadow = new createjs.Shadow( "#454", 5, 5, 5 ) ;
