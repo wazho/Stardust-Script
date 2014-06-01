@@ -52,7 +52,7 @@ Character.prototype.OnCreate = function( MapControl, Name, LifeBar, grid, Speed,
 	} // AddingBasicInfo()
 	function AddingSprite() {
 		that.sprite = new createjs.Container() ;
-		that.sprite.scaleX = that.sprite.scaleY = 2 ;
+		that.sprite.scaleX = that.sprite.scaleY = 1 ;
 		that.sprite.body = new createjs.Sprite( SettingSprite( { target: "character", part: "body" }, sheet.body ) ) ;
 		that.sprite.body.regX = Math.ceil( that.spriteSize / 2 ), that.sprite.body.regY = 81 * that.sprite.scaleY ;
 		that.sprite.body.x = 0, that.sprite.body.y = 47 * that.sprite.scaleY ;
