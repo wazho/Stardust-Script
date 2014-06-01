@@ -43,7 +43,7 @@ NPC.prototype.OnCreate = function( MapControl, Name, grid, sheet, direction, tir
 		that.MapControlPointer.container_front.addChild( that.container ) ;
 	} // AddingBasicInfo()
 	function AddingSprite() {
-		that.sprite = new createjs.Sprite( SettingSprite( sheet.type, sheet.name ) ) ;
+		that.sprite = new createjs.Sprite( SettingSprite( { target: sheet.type, part: "" }, sheet.name ) ) ;
 		that.sprite.regX = that.spriteSize / 2, that.sprite.regY = that.spriteSize / 2 ;
 		that.container.addChild( that.sprite ) ;
 		// Default the direction of this NPC.

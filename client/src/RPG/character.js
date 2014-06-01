@@ -21,23 +21,29 @@ Character.prototype.OnCreate = function( MapControl, Name, HP, SP, Speed, x, y, 
 	this.name = Name ;
 	this.hp_max = HP, this.hp = HP ;
 	this.sp_max = SP, this.sp = SP ;
-	this.speed = Speed, this.direction = 4 ;
+	this.speed = Speed, this.direction = direction ;
 	// 容器建立
 	this.container = new createjs.Container() ;
 	this.container.name = Name ;
 	this.container.regX = this.spriteSize / 2, this.container.regY = this.spriteSize / 2 ;
 	this.container.length = this.spriteSize, this.container.height = this.spriteSize ;
-	this.container.x = this.MapControlPointer.GetGrid( { x: 16, y: 11 }, "virtual" ).x + this.container.regX ;
-	this.container.y = this.MapControlPointer.GetGrid( { x: 16, y: 11 }, "virtual" ).y + this.container.regY * 0.3 ;
+	// this.container.x = this.MapControlPointer.GetGrid( { x: 16, y: 11 }, "virtual" ).x + this.container.regX ;
+	// this.container.y = this.MapControlPointer.GetGrid( { x: 16, y: 11 }, "virtual" ).y + this.container.regY * 0.3 ;
 	this.container.grid_x = x, this.container.grid_y = y ;
 	// 圖層建立
-	this.sprite = new createjs.Sprite( SettingSprite( "character", Name ) ) ;
-	this.sprite.regX = this.spriteSize / 2, this.sprite.regY = this.spriteSize / 2 ;
+	this.sprite = new createjs.Container() ;
+	this.sprite.body = new createjs.Sprite( SettingSprite( { target: "character", part: "body" }, Name ) ) ;
+	this.sprite.body.regX = this.spriteSize / 2, this.sprite.body.regY = this.spriteSize / 3 ;
+	this.sprite.hair = new createjs.Sprite( SettingSprite( { target: "character", part: "hair" }, "style1_white" ) ) ;
+	this.sprite.hair.regX = Math.ceil( 75 / 2 ), this.sprite.hair.regY = Math.ceil( 75 / 2 ) ;
+	this.sprite.hair.x = 0, this.sprite.hair.y = -18 ;
+	this.sprite.addChild( this.sprite.body, this.sprite.hair ) ;
 	this.container.addChild( this.sprite ) ;
 	// 預設動畫的方向
-	this.OnDirection( this.direction, "front" ) ;
+	this.OnDirection( this.direction, { part: "body", mode: "stand_A" } ) ;
+	this.OnDirection( this.direction, { part: "hair", mode: "stable_A" } ) ;
 	// 陰影建立
-	this.sprite.shadow = new createjs.Shadow( "#454", 5, 5, 5 ) ;
+	// this.sprite.shadow = new createjs.Shadow( "#454", 5, 5, 5 ) ;
 	// 隨從建立
 	this.follower = new createjs.Container() ;
 	this.container.addChild( this.follower ) ;
@@ -144,9 +150,16 @@ Character.prototype.OnWalk = function( grid ) {
 
 // 旋轉角色方向/改變播放圖層
 Character.prototype.OnDirection = function( direction, type ) {
-	this.sprite.scaleX = ( direction != -1 ) ? ( ( direction > 0 && direction <= 4 ) ? -1 : 1 ) : direction ;
+	if ( type.part == "body" ) {
+		this.sprite.body.scaleX = ( direction != -1 ) ? ( ( direction > 0 && direction <= 4 ) ? -1 : 1 ) : direction ;
+		this.sprite.body.gotoAndPlay( type.mode ) ;
+	} // if
+	else if ( type.part == "hair" ) {
+		this.sprite.hair.scaleX = ( direction != -1 ) ? ( ( direction > 0 && direction <= 4 ) ? -1 : 1 ) : direction ;
+		this.sprite.hair.gotoAndPlay( type.mode ) ;
+	} // else if
+
 	this.direction = ( direction != -1 ) ? direction : this.direction ;
-	this.sprite.gotoAndPlay( type ) ;
 } // OnDirection()
 
 // 角色進行對話
@@ -210,7 +223,7 @@ Character.prototype.OnLifeModify = function( HP, SP ) {
 Character.prototype.OnEffect = function( effect_num, times ) {
 	// 預先重置特效容器
 	this.effect.removeChild( this.effect.sprite ) ;
-	this.effect.sprite = new createjs.Sprite( SettingSprite( "effect", "sk_blessing" ) ) ;
+	this.effect.sprite = new createjs.Sprite( SettingSprite( { target: "effect", part: "" }, "sk_blessing" ) ) ;
 	this.effect.addChild( this.effect.sprite ) ;
 	this.effect.sprite.gotoAndPlay( "active" ) ;
 	this.effect.sprite.off( "active" ) ;
