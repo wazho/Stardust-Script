@@ -65,7 +65,7 @@
 			// 建立遊戲框架
 			var framework = new Main_Framework( canvasSize ) ;
 			// 建立角色物件
-			var mainCharacter = new Character( mapControl, "novice", 175, 55, 1.00, 25, 39, 4 ) ;
+			var mainCharacter = new Character( mapControl, "小鮭魚", { HP: 175, SP: 55 }, { x: 25, y: 39 }, 1.00, { body: "novice", hair: "style1_white" }, 4 ) ;
 			mainCharacter.OnLifeModify( -999, -40 ) ;
 
 			// 地圖背景匯入

@@ -1,77 +1,107 @@
-function Character( MapControl, Name, HP, SP, Speed, x, y, direction ) {
-	this.OnCreate( MapControl, Name, HP, SP, Speed, x, y, direction ) ;
+function Character( MapControl, Name, LifeBar, grid, Speed, sheet, direction ) {
+	this.OnCreate( MapControl, Name, LifeBar, grid, Speed, sheet, direction ) ;
 	this.MapControlPointer.container_front.addChild( this.container ) ;
-	// Resorting of objects.
-	for ( m = this.MapControlPointer.container_front.getNumChildren() ; m > 0 ; m -- )
-		for ( n = 0 ; n < m - 1 ; n ++ )
-			if ( this.MapControlPointer.container_front.getChildAt( n ).y > this.MapControlPointer.container_front.getChildAt( n + 1 ).y ) 
-				this.MapControlPointer.container_front.swapChildren( this.MapControlPointer.container_front.getChildAt( n ), this.MapControlPointer.container_front.getChildAt( n + 1 ) ) ;
+	// Move to assign location.
+	this.OnMove( { x: grid.x, y: grid.y } ) ;
+	// Resort order.
+	this.resortingOrder() ;
 	return this ;
 } // Character() 
 
 // 角色建立
-Character.prototype.OnCreate = function( MapControl, Name, HP, SP, Speed, x, y, direction ) {
+Character.prototype.OnCreate = function( MapControl, Name, LifeBar, grid, Speed, sheet, direction ) {
 	var that = this ;
 	// Magic Number !!
 	this.spriteSize = 125 ;
 	this.effectSpriteSize = 200 ;
-	// 地圖控制器
+	// Map back and map front are both in map controller.
 	this.MapControlPointer = MapControl ;
-	// 基本資訊設值
-	this.name = Name ;
-	this.hp_max = HP, this.hp = HP ;
-	this.sp_max = SP, this.sp = SP ;
-	this.speed = Speed, this.direction = direction ;
-	// 容器建立
-	this.container = new createjs.Container() ;
-	this.container.name = Name ;
-	this.container.regX = this.spriteSize / 2, this.container.regY = this.spriteSize / 2 ;
-	this.container.length = this.spriteSize, this.container.height = this.spriteSize ;
-	// this.container.x = this.MapControlPointer.GetGrid( { x: 16, y: 11 }, "virtual" ).x + this.container.regX ;
-	// this.container.y = this.MapControlPointer.GetGrid( { x: 16, y: 11 }, "virtual" ).y + this.container.regY * 0.3 ;
-	this.container.grid_x = x, this.container.grid_y = y ;
-	// 圖層建立
-	this.sprite = new createjs.Container() ;
-	this.sprite.body = new createjs.Sprite( SettingSprite( { target: "character", part: "body" }, Name ) ) ;
-	this.sprite.body.regX = this.spriteSize / 2, this.sprite.body.regY = this.spriteSize / 3 ;
-	this.sprite.hair = new createjs.Sprite( SettingSprite( { target: "character", part: "hair" }, "style1_white" ) ) ;
-	this.sprite.hair.regX = Math.ceil( 75 / 2 ), this.sprite.hair.regY = Math.ceil( 75 / 2 ) ;
-	this.sprite.hair.x = 0, this.sprite.hair.y = -18 ;
-	this.sprite.addChild( this.sprite.body, this.sprite.hair ) ;
-	this.container.addChild( this.sprite ) ;
-	// 預設動畫的方向
-	this.OnDirection( this.direction, { part: "body", mode: "stand_A" } ) ;
-	this.OnDirection( this.direction, { part: "hair", mode: "stable_A" } ) ;
-	// 陰影建立
-	// this.sprite.shadow = new createjs.Shadow( "#454", 5, 5, 5 ) ;
-	// 隨從建立
-	this.follower = new createjs.Container() ;
-	this.container.addChild( this.follower ) ;
-	// 特效容器建立
-	this.effect = new createjs.Container() ;
-	this.effect.regX = this.effectSpriteSize / 2, this.effect.regY = this.effectSpriteSize / 2 ;
-	this.container.addChild( this.effect ) ;
-	// 對話視窗建立
-	this.talk = new createjs.Container() ;
-	this.talk.regX = this.spriteSize / 2, this.talk.regY = this.spriteSize / 2 ;
-	this.container.addChild( this.talk ) ;
-	this.talk.bg = new createjs.Shape() ;
-	this.talk.wd = new createjs.Text( "", "17px Courier New", "#FFF" ) ;
-	this.talk.fadetime = 0 ;
-	this.talk.addChild( this.talk.bg, this.talk.wd ) ;
-	// 生命條建立
-	this.lifebar = new createjs.Container() ;
-	this.lifebar.regX = this.spriteSize / 2, this.lifebar.regY = this.spriteSize / 2 ;
-	this.container.addChild( this.lifebar ) ;
-	this.lifebar.bg = new createjs.Shape() ;
-	this.lifebar.hp = new createjs.Shape() ;
-	this.lifebar.sp = new createjs.Shape() ;
-	this.lifebar.addChild( this.lifebar.bg, this.lifebar.hp, this.lifebar.sp ) ;
-	this.LifeBar() ;
-	// 開始進行鍵盤、滑鼠監聽動作
-	this.OnActive() ;
-	// 自動恢復生命條
-	this.sp_recover = createjs.Tween.get( this, { loop: true } ).wait( 1000 ).call( function() { this.OnLifeModify( 2, 2 ) ; } ) ;
+	// Character container created.
+	CreateContainer() ;
+	// Basic character info.
+	AddingBasicInfo() ;
+	// Character's sprite.
+	AddingSprite() ;
+	// Shadow created.
+	AddingShadow() ;
+	// Window of conversation.
+	AddingTalkWindow() ;
+	// Character's life bar.
+	AddingLifeBar() ;
+	// Character's effect of buff or nerf.
+	AddingEffectContainer() ;
+	// Start listening.
+	ListenerStart() ;
+
+	function CreateContainer() {
+		that.container = new createjs.Container() ;
+		that.container.name = Name ;
+		that.container.regX = that.spriteSize / 2, that.container.regY = that.spriteSize / 2 ;
+		that.container.length = that.spriteSize, that.container.height = that.spriteSize ;
+		// that.container.x = that.MapControlPointer.GetGrid( { x: 16, y: 11 }, "virtual" ).x + that.container.regX ;
+		// that.container.y = that.MapControlPointer.GetGrid( { x: 16, y: 11 }, "virtual" ).y + that.container.regY * 0.3 ;
+		that.container.grid_x = grid.x, that.container.grid_y = grid.y ;
+	} // CreateContainer()
+	function AddingBasicInfo() {
+		that.name = Name ;
+		that.hp_max = LifeBar.HP, that.hp = LifeBar.HP ;
+		that.sp_max = LifeBar.SP, that.sp = LifeBar.SP ;
+		that.speed = Speed, that.direction = direction ;
+	} // AddingBasicInfo()
+	function AddingSprite() {
+		that.sprite = new createjs.Container() ;
+		that.sprite.body = new createjs.Sprite( SettingSprite( { target: "character", part: "body" }, sheet.body ) ) ;
+		that.sprite.body.regX = that.spriteSize / 2, that.sprite.body.regY = that.spriteSize / 2 ;
+		that.sprite.body.x = 0, that.sprite.body.y = 21 ;
+		that.sprite.hair = new createjs.Sprite( SettingSprite( { target: "character", part: "hair" }, sheet.hair ) ) ;
+		that.sprite.hair.regX = Math.ceil( 75 / 2 ), that.sprite.hair.regY = Math.ceil( 75 / 2 ) ;
+		that.sprite.hair.x = 0, that.sprite.hair.y = -18 ;
+		that.sprite.addChild( that.sprite.body, that.sprite.hair ) ;
+		that.container.addChild( that.sprite ) ;
+		// Default the direction of this character.
+		that.OnDirection( this.direction, { part: "body", mode: "stand_A" } ) ;
+		that.OnDirection( this.direction, { part: "hair", mode: "stable_A" } ) ;
+	} // AddingSprite()
+	function AddingShadow() {
+		// that.sprite.shadow = new createjs.Shadow( "#454", 5, 5, 5 ) ;
+		that.shadowArea = new createjs.Shape() ;
+		that.shadowArea.scaleY = 0.4 ;
+		that.shadowArea.alpha = 0.3 ;
+		that.shadowArea.graphics.f( "#000000" ).dc( 0, that.spriteSize / 2 / that.shadowArea.scaleY - 13, 25 ) ;
+		that.shadowArea.x = 0, that.shadowArea.y = -10 ;
+		that.container.addChildAt( that.shadowArea, 0 ) ;
+	} // AddingShadow()
+	function AddingTalkWindow() {
+		that.talk = new createjs.Container() ;
+		that.talk.regX = that.spriteSize / 2, that.talk.regY = that.spriteSize / 2 ;
+		that.container.addChild( that.talk ) ;
+		that.talk.bg = new createjs.Shape() ;
+		that.talk.wd = new createjs.Text( "", "17px Courier New", "#FFF" ) ;
+		that.talk.fadetime = 0 ;
+		that.talk.addChild( that.talk.bg, that.talk.wd ) ;
+	} // AddingTalkWindow()
+	function AddingLifeBar() {
+		that.lifebar = new createjs.Container() ;
+		that.lifebar.regX = that.spriteSize / 2, that.lifebar.regY = that.spriteSize / 2 ;
+		that.container.addChild( that.lifebar ) ;
+		that.lifebar.bg = new createjs.Shape() ;
+		that.lifebar.hp = new createjs.Shape() ;
+		that.lifebar.sp = new createjs.Shape() ;
+		that.lifebar.addChild( that.lifebar.bg, that.lifebar.hp, that.lifebar.sp ) ;
+		that.LifeBar() ;
+	} // AddingLifeBar()
+	function AddingEffectContainer() {
+		that.effect = new createjs.Container() ;
+		that.effect.regX = that.effectSpriteSize / 2, that.effect.regY = that.effectSpriteSize / 2 ;
+		that.container.addChild( this.effect ) ;
+	} // AddingEffectContainer()
+	function ListenerStart() {
+		// Mouse, keyboard are listening.
+		that.OnActive() ;
+		// Auto recovering.
+		that.sp_recover = createjs.Tween.get( that, { loop: true } ).wait( 1000 ).call( function() { that.OnLifeModify( 2, 2 ) ; } ) ;
+	} // ListenerStart()
+
 	// Resorting the back, front map container.
 	this.resortingOrder = function ResortingObjectsAndChars() {
 		for ( i = that.MapControlPointer.container_front.getNumChildren() ; i > 0 ; i -- )
@@ -79,8 +109,6 @@ Character.prototype.OnCreate = function( MapControl, Name, HP, SP, Speed, x, y, 
 				if ( that.MapControlPointer.container_front.getChildAt( j ).y > that.MapControlPointer.container_front.getChildAt( j + 1 ).y ) 
 					that.MapControlPointer.container_front.swapChildren( that.MapControlPointer.container_front.getChildAt( j ), that.MapControlPointer.container_front.getChildAt( j + 1 ) ) ;
 	} // ResortingObjectsAndChars()
-	// Move to assign location.
-	this.OnMove( { x: x, y: y } ) ;
 } // OnCreate()
 
 // 按鍵監聽

@@ -45,16 +45,18 @@ NPC.prototype.OnCreate = function( MapControl, Name, grid, sheet, direction, tir
 	function AddingSprite() {
 		that.sprite = new createjs.Sprite( SettingSprite( { target: sheet.type, part: "" }, sheet.name ) ) ;
 		that.sprite.regX = that.spriteSize / 2, that.sprite.regY = that.spriteSize / 2 ;
+		that.sprite.x = 0, that.sprite.y = -8 ;
 		that.container.addChild( that.sprite ) ;
 		// Default the direction of this NPC.
 		that.OnDirection( that.container.direction, "front" ) ;
 	} // AddingSprite()
 	function AddingShadow() {
-		that.sprite.shadow = new createjs.Shadow( "#454", 5, 5, 5 ) ;
+		// that.sprite.shadow = new createjs.Shadow( "#454", 5, 5, 5 ) ;
 		that.shadowArea = new createjs.Shape() ;
 		that.shadowArea.scaleY = 0.4 ;
 		that.shadowArea.alpha = 0.3 ;
 		that.shadowArea.graphics.f( "#000000" ).dc( 0, that.spriteSize / 2 / that.shadowArea.scaleY - 13, 25 ) ;
+		that.shadowArea.x = 0, that.shadowArea.y = -10 ;
 		that.container.addChildAt( that.shadowArea, 0 ) ;
 	} // AddingShadow()
 	function AddingTalkWindow() {
@@ -91,6 +93,7 @@ NPC.prototype.OnCreate = function( MapControl, Name, grid, sheet, direction, tir
 		} ) ;
 	} // AddingMouseEvent()
 
+	// Resorting the back, front map container.
 	this.resortingOrder = function ResortingObjectsAndChars() {
 		for ( i = that.MapControlPointer.container_front.getNumChildren() ; i > 0 ; i -- )
 			for ( j = 0 ; j < i - 1 ; j ++ )
