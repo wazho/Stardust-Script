@@ -171,32 +171,51 @@ Character.prototype.OnWalk = function( endGrid ) {
 	var gridSize = this.MapControlPointer.grid.size ;
 	var startGrid = { x: this.container.grid_x, y: this.container.grid_y } ;
 	// Checking the grid is walkable or not, then walk to there using 'A* algorithm'.
-	var pathfinding = that.MapControlPointer.AStarAlgorithm(  ) ;
+	var pathfinding = that.MapControlPointer.AStarAlgorithm( startGrid, endGrid ) ;
 
-	Recursive( 25 ) ;
+	console.log( pathfinding.length,  pathfinding ) ;
 
-	function Recursive( num ) {
+	Recursive( 0, pathfinding.length ) ;
+
+	function Recursive( nowPath, totalPath ) {
+		// Confirm the distance between two grids.
+		if ( pathfinding[nowPath] == 0 )
+			var distanceX = 0, distanceY = -1 ;
+		else if ( pathfinding[nowPath] == 1 )
+			var distanceX = 1, distanceY = -1 ;
+		else if ( pathfinding[nowPath] == 2 )
+			var distanceX = 1, distanceY = 0 ;
+		else if ( pathfinding[nowPath] == 3 )
+			var distanceX = 1, distanceY = 1 ;
+		else if ( pathfinding[nowPath] == 4 )
+			var distanceX = 0, distanceY = 1 ;
+		else if ( pathfinding[nowPath] == 5 )
+			var distanceX = -1, distanceY = 1 ;
+		else if ( pathfinding[nowPath] == 6 )
+			var distanceX = -1, distanceY = 0 ;
+		else if ( pathfinding[nowPath] == 7 )
+			var distanceX = -1, distanceY = -1 ;
+		else
+			var distanceX = 0, distanceY = 0 ;
+		// Speed assigned and fixed.
 		var speed = 180 ;
-		var distanceX = 1, distanceY = -1 ;
-		var timeFixed = ( ( Math.abs( distanceX ) + Math.abs( distanceY ) ) == 2 ) ? 1.414 : 1 ;
+		var speedFixed = ( speed * ( ( ( Math.abs( distanceX ) + Math.abs( distanceY ) ) == 2 ) ? 1.414 : 1.000 ) ).toFixed( 4 ) ;
 
-		if ( num < 1 )
-			setTimeout( function() { Stop() ; }, speed * timeFixed ) 
+		if ( nowPath >= totalPath )
+			setTimeout( function() { Stop() ; }, speedFixed ) ;
 		else
 			setTimeout( function() { 
-				if ( that.MapControlPointer.MapMove( { x: startGrid.x + 1, y: startGrid.y - 1 }, speed * timeFixed ) ) {
-					that.container.grid_x = startGrid.x += distanceX ;
-					that.container.grid_y = startGrid.y += distanceY ;
-					WalkDirection( Math.ceil( Math.random() * 8 ), speed * timeFixed ) ;
-					Recursive( num - 1 ) ;
+				if ( that.MapControlPointer.MapMove( { x: startGrid.x + distanceX, y: startGrid.y + distanceY }, speedFixed ) ) {
+					that.container.grid_x = startGrid.x += distanceX, that.container.grid_y = startGrid.y += distanceY ;
+					WalkDirection( pathfinding[nowPath], speedFixed ) ;
+					Recursive( nowPath + 1, totalPath ) ;
 				} // if
 				else
-					setTimeout( function() { Stop() ; }, speed ) ;
-			}, speed * timeFixed ) ;
-		
+					setTimeout( function() { Stop() ; }, speedFixed ) ;
+			}, speedFixed ) ;
+
 		function WalkDirection( num, speed ) {
 			var realGrid = that.MapControlPointer.GetGrid( { x: startGrid.x, y: startGrid.y }, "virtual" ) ;
-			 ;
 			if ( num == 0 )
 				Animation( 0, "walk_E", "stable_E" ) ;
 			else if ( num == 1 )
@@ -239,7 +258,6 @@ Character.prototype.OnDirection = function( direction, type ) {
 		// If not the same animation must change.
 		if ( this.sprite.body.currentAnimation != type.mode )
 			this.sprite.body.gotoAndPlay( type.mode ) ;
-		console.log( this.sprite.body.currentAnimation ) ;
 	} // if
 	else if ( type.part == "hair" ) {
 		this.sprite.hair.scaleX = ( direction != -1 ) ? ( ( direction > 0 && direction <= 4 ) ? -1 : 1 ) : direction ;

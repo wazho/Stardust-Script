@@ -154,9 +154,18 @@ Main_Map.prototype.AStarAlgorithm = function( start, end ) {
 	var	pow = Math.pow ;
 	var	sqrt = Math.sqrt ;
 
-	
+	var path = new Array() ;
 
-	return true ;
+	path[0] = 0 ;
+	path[1] = 0 ;
+	path[2] = 2 ;
+	path[3] = 0 ;
+	path[4] = 1 ;
+	path[5] = 1 ;
+	path[6] = 1 ;
+	path[7] = 0 ;
+
+	return path ;
 
 	function AStarTileDatastruct( walk ){
 		this.walkable = walk ;
