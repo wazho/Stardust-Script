@@ -62,8 +62,8 @@ Character.prototype.OnCreate = function( MapControl, Name, LifeBar, grid, Speed,
 		that.sprite.addChild( that.sprite.body, that.sprite.hair ) ;
 		that.container.addChild( that.sprite ) ;
 		// Default the direction of this character.
-		that.OnDirection( this.direction, { part: "body", mode: "stand_A" } ) ;
-		that.OnDirection( this.direction, { part: "hair", mode: "stable_A" } ) ;
+		that.OnDirection( that.container.direction, { part: "body", mode: "stand_A" } ) ;
+		that.OnDirection( that.container.direction, { part: "hair", mode: "stable_A" } ) ;
 		// Breath animation.
 		createjs.Tween.get( that.sprite.body, { loop: true } ).to( { scaleY: 0.97 }, 1500 ).to( { scaleY: 1 }, 1500 ) ;
 		createjs.Tween.get( that.sprite.hair, { loop: true } ).to( { y: that.sprite.hair.y + 3 }, 1500 ).to( { y: that.sprite.hair.y }, 1500 ) ;
@@ -198,11 +198,11 @@ Character.prototype.OnWalk = function( endGrid ) {
 		else
 			var distanceX = 0, distanceY = 0 ;
 		// Speed assigned and fixed.
-		var speed = 180 ;
+		var speed = that.container.speed ;
 		var speedFixed = ( speed * ( ( ( Math.abs( distanceX ) + Math.abs( distanceY ) ) == 2 ) ? 1.414 : 1.000 ) ).toFixed( 4 ) ;
-
+		// Stop or keep walking.
 		if ( nowPath >= totalPath )
-			setTimeout( function() { Stop() ; }, speedFixed ) ;
+			setTimeout( function() { StopDirection() ; }, speedFixed ) ;
 		else
 			setTimeout( function() { 
 				if ( that.MapControlPointer.MapMove( { x: startGrid.x + distanceX, y: startGrid.y + distanceY }, speedFixed ) ) {
@@ -211,7 +211,7 @@ Character.prototype.OnWalk = function( endGrid ) {
 					Recursive( nowPath + 1, totalPath ) ;
 				} // if
 				else
-					setTimeout( function() { Stop() ; }, speedFixed ) ;
+					setTimeout( function() { StopDirection() ; }, speedFixed ) ;
 			}, speedFixed ) ;
 
 		function WalkDirection( num, speed ) {
@@ -221,32 +221,51 @@ Character.prototype.OnWalk = function( endGrid ) {
 			else if ( num == 1 )
 				Animation( 1, "walk_D", "stable_D" ) ;
 			else if ( num == 2 )
-				Animation( 1, "walk_C", "stable_C" ) ;
+				Animation( 2, "walk_C", "stable_C" ) ;
 			else if ( num == 3 )
-				Animation( 1, "walk_B", "stable_B" ) ;
+				Animation( 3, "walk_B", "stable_B" ) ;
 			else if ( num == 4 )
-				Animation( 0, "walk_A", "stable_A" ) ;
+				Animation( 4, "walk_A", "stable_A" ) ;
 			else if ( num == 5 )
-				Animation( 0, "walk_B", "stable_B" ) ;
+				Animation( 5, "walk_B", "stable_B" ) ;
 			else if ( num == 6 )
-				Animation( 0, "walk_C", "stable_C" ) ;
+				Animation( 6, "walk_C", "stable_C" ) ;
 			else if ( num == 7 )
-				Animation( 0, "walk_D", "stable_D" ) ;
-			else if ( num == 8 )
-				Animation( 0, "walk_E", "stable_E" ) ;
+				Animation( 7, "walk_D", "stable_D" ) ;
 
-			function Animation( mirror, bodyAnimation, hairAnimation ) {
+			function Animation( direction, bodyAnimation, hairAnimation ) {
 				createjs.Tween.get( that.container )
-				.call( function() { that.OnDirection( mirror, { part: "body", mode: bodyAnimation } ) ; } )
-				.call( function() { that.OnDirection( mirror, { part: "hair", mode: hairAnimation } ) ; } )
+				.call( function() { that.OnDirection( direction, { part: "body", mode: bodyAnimation } ) ; } )
+				.call( function() { that.OnDirection( direction, { part: "hair", mode: hairAnimation } ) ; } )
 				.to( { x: realGrid.x + that.container.regX, y: realGrid.y + that.container.regY * 0.3 }, speed )
 				.call( function() { that.resortingOrder() ; } ) ;
 			} // Animation()
 		} // WalkDirection()
-		function Stop() {
-			createjs.Tween.get( that.container )
-			.call( function() { that.OnDirection( 5, { part: "body", mode: "stand_E" } ) ; } )
-			.call( function() { that.OnDirection( 5, { part: "hair", mode: "stable_E" } ) ; } ) ;
+		function StopDirection() {
+			console.log( that.container.direction ) ;
+			if ( that.container.direction == 0 )
+				Animation( 0, "stand_E", "stable_E" ) ;
+			else if ( that.container.direction == 1 )
+				Animation( 1, "stand_D", "stable_D" ) ;
+			else if ( that.container.direction == 2 )
+				Animation( 2, "stand_C", "stable_C" ) ;
+			else if ( that.container.direction == 3 )
+				Animation( 3, "stand_B", "stable_B" ) ;
+			else if ( that.container.direction == 4 )
+				Animation( 4, "stand_A", "stable_A" ) ;
+			else if ( that.container.direction == 5 )
+				Animation( 5, "stand_B", "stable_B" ) ;
+			else if ( that.container.direction == 6 )
+				Animation( 6, "stand_C", "stable_C" ) ;
+			else if ( that.container.direction == 7 )
+				Animation( 7, "stand_D", "stable_D" ) ;
+
+			function Animation( direction, bodyAnimation, hairAnimation ) {
+				console.log( bodyAnimation, hairAnimation ) ;
+				createjs.Tween.get( that.container )
+				.call( function() { that.OnDirection( direction, { part: "body", mode: bodyAnimation } ) ; } )
+				.call( function() { that.OnDirection( direction, { part: "hair", mode: hairAnimation } ) ; } ) ;
+			} // Animation()
 		} // Stop()
 	} // Recursive()
 } // OnWalk()
@@ -266,7 +285,7 @@ Character.prototype.OnDirection = function( direction, type ) {
 			this.sprite.hair.gotoAndPlay( type.mode ) ;
 	} // else if
 
-	this.direction = ( direction != -1 ) ? direction : this.direction ;
+	this.container.direction = ( direction != -1 ) ? direction : this.container.direction ;
 } // OnDirection()
 
 // 角色進行對話

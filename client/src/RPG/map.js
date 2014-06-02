@@ -156,14 +156,9 @@ Main_Map.prototype.AStarAlgorithm = function( start, end ) {
 
 	var path = new Array() ;
 
-	path[0] = 0 ;
-	path[1] = 0 ;
-	path[2] = 2 ;
-	path[3] = 0 ;
-	path[4] = 1 ;
-	path[5] = 1 ;
-	path[6] = 1 ;
-	path[7] = 0 ;
+
+	for ( i = 0 ; i < 20 ; i ++ )
+		path[i] = Math.ceil( Math.random() * 8 ) ;
 
 	return path ;
 
