@@ -117,9 +117,8 @@ Main_Map.prototype.DrawMap = function( index ) {
 // Main_Map - MapMove
 // When the player clicked any grid if wanna to move the character.
 // The character need to keep on the center, so map need to move.
-// parameter(start) : start grid, there are x, y virtual grid (index starts from 1). 
 // parameter(end) : end grid, there are x, y virtual grid (index starts from 1). 
-Main_Map.prototype.MapMove = function( start, end ) {
+Main_Map.prototype.MapMove = function( end, speed ) {
 	var that = this ;
 	// Get this map data that player exists.
 	var mapTile = cacheMapData.map[this.mapNum].tileData ;
@@ -130,59 +129,40 @@ Main_Map.prototype.MapMove = function( start, end ) {
 	// If it's walkable, then move the map to center.
 	var ifWalkable = mapTile[end.y-1][end.x-1].w ;
 	if ( ifWalkable == 1 ) {
-		// Only checking the end grid.
-		if ( start.x == 0 && start.y == 0 ) {
-			var distanceX = end.x - this.trim.x - 16, distanceY = end.y - this.trim.y - 11 ;
-			this.trim.x += distanceX, this.trim.y += distanceY ;
-			this.container_back.x = this.container_back.x - distanceX * this.grid.size, this.container_back.y = this.container_back.y - distanceY * this.grid.size ;
-			this.container_front.x = this.container_front.x - distanceX * this.grid.size, this.container_front.y = this.container_front.y - distanceY * this.grid.size ;
-			return true ;
-		} // if
-		// Checking the route is exist or not.
-		if ( ! A_Start_Algorithm( start, end ) )
-			return false ;
 		// Compute the distance between center.
 		var distanceX = end.x - this.trim.x - 16, distanceY = end.y - this.trim.y - 11 ;
 		// Trim the distance about cursor of the map .
 		this.trim.x += distanceX, this.trim.y += distanceY ;
-		var timeDelay = Math.abs( distanceX ) + Math.abs( distanceY ) ;
-		createjs.Tween.get( this.container_back ).to( { x: this.container_back.x - distanceX * this.grid.size, y: this.container_back.y - distanceY * this.grid.size }, 200 * timeDelay ) ;
-		createjs.Tween.get( this.container_front ).to( { x: this.container_back.x - distanceX * this.grid.size, y: this.container_back.y - distanceY * this.grid.size }, 200 * timeDelay ) ;
+		createjs.Tween.get( this.container_back ).to( { x: this.container_back.x - distanceX * this.grid.size, y: this.container_back.y - distanceY * this.grid.size }, speed ) ;
+		createjs.Tween.get( this.container_front ).to( { x: this.container_back.x - distanceX * this.grid.size, y: this.container_back.y - distanceY * this.grid.size }, speed ) ;
 	} // if
 
 	return ( ifWalkable == 1 ) ? true : false ;
+} // MapMove()
 
-	function A_Start_Algorithm( start, end ) {
-		// Copy the 'w' element of mapTile array to aStarTile array.
-		var aStarTile = TwoD_Array( mapTile.length, mapTile[0].length ) ;
-		for ( i = 0 ; i < mapTile.length ; i ++ )
-			for ( j = 0 ; j < mapTile[0].length ; j ++ )
-				aStarTile[i][j] = new AStarTileDatastruct( mapTile[i][j].w ) ;
-		// Functions make them shorter.
-		var	abs = Math.abs ;
-		var	max = Math.max ;
-		var	pow = Math.pow ;
-		var	sqrt = Math.sqrt ;
+Main_Map.prototype.AStarAlgorithm = function( start, end ) {
+	// Get this map data that player exists.
+	var mapTile = cacheMapData.map[this.mapNum].tileData ;
+	// Copy the 'w' element of mapTile array to aStarTile array.
+	var aStarTile = TwoD_Array( mapTile.length, mapTile[0].length ) ;
+	for ( i = 0 ; i < mapTile.length ; i ++ )
+		for ( j = 0 ; j < mapTile[0].length ; j ++ )
+			aStarTile[i][j] = new AStarTileDatastruct( mapTile[i][j].w ) ;
+	// Functions make them shorter.
+	var	abs = Math.abs ;
+	var	max = Math.max ;
+	var	pow = Math.pow ;
+	var	sqrt = Math.sqrt ;
 
-		
+	
 
-		// ~~~~~~~~~~
+	return true ;
 
-		// console.log( aStarTile[end.y-2][end.x-2].walkable, aStarTile[end.y-2][end.x-1].walkable, aStarTile[end.y-2][end.x].walkable ) ;
-		// console.log( aStarTile[end.y-1][end.x-2].walkable, 9, aStarTile[end.y-1][end.x].walkable ) ;
-		// console.log( aStarTile[end.y][end.x-2].walkable, aStarTile[end.y][end.x-1].walkable, aStarTile[end.y][end.x].walkable ) ;
-
-
-		// console.log( start.x + "," + start.y + " to " + end.x + "," + end.y ) ;
-
-		return true ;
-
-		function AStarTileDatastruct( walk ){
-			this.walkable = walk ;
-			this.g = 0 ;
-			this.h = 0 ;
-			this.f = 0 ;
-		} // AStarTileDatastruct()
-	} // A_Start_Algorithm()
-} // MapMove
+	function AStarTileDatastruct( walk ){
+		this.walkable = walk ;
+		this.g = 0 ;
+		this.h = 0 ;
+		this.f = 0 ;
+	} // AStarTileDatastruct()
+} // AStarAlgorithm()
 

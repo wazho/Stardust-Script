@@ -2,7 +2,7 @@ function Character( MapControl, Name, LifeBar, grid, Speed, sheet, direction ) {
 	this.OnCreate( MapControl, Name, LifeBar, grid, Speed, sheet, direction ) ;
 	this.MapControlPointer.container_front.addChild( this.container ) ;
 	// Move to assign location.
-	this.OnMove( { x: grid.x, y: grid.y } ) ;
+	this.OnMove( { x: grid.x, y: grid.y }, 0 ) ;
 	// Resort order.
 	this.resortingOrder() ;
 	return this ;
@@ -156,7 +156,7 @@ Character.prototype.OnMove = function( grid ) {
 	var gridSize = this.MapControlPointer.grid.size ;
 	var endGrid = { x: grid.x, y: grid.y } ;
 	// Checking the grid is walkable or not.
-	if ( this.MapControlPointer.MapMove( { x: 0, y: 0 }, { x: endGrid.x, y: endGrid.y } ) ) {
+	if ( this.MapControlPointer.MapMove( { x: endGrid.x, y: endGrid.y }, 0 ) ) {
 		this.container.grid_x = endGrid.x, this.container.grid_y = endGrid.y ;
 		var realGrid = this.MapControlPointer.GetGrid( { x: endGrid.x, y: endGrid.y }, "virtual" ) ;
 		this.container.x = realGrid.x + this.container.regX, this.container.y = realGrid.y + this.container.regY * 0.3 ;
@@ -165,58 +165,71 @@ Character.prototype.OnMove = function( grid ) {
 } // OnMove()
 
 // Assign the character walking.
-Character.prototype.OnWalk = function( grid ) {
+Character.prototype.OnWalk = function( endGrid ) {
 	var that = this ;
 	// Virtual grid system.
 	var gridSize = this.MapControlPointer.grid.size ;
 	var startGrid = { x: this.container.grid_x, y: this.container.grid_y } ;
-	// var endGrid = { x: grid.x, y: grid.y } ;
 	// Checking the grid is walkable or not, then walk to there using 'A* algorithm'.
-
-	// if ( this.MapControlPointer.MapMove( { x: startGrid.x, y: startGrid.y }, { x: endGrid.x, y: endGrid.y } ) ) {
-	// 	this.container.grid_x = endGrid.x, this.container.grid_y = endGrid.y ;
-	// 	var realGrid = this.MapControlPointer.GetGrid( { x: endGrid.x, y: endGrid.y }, "virtual" ) ;
-	// 	createjs.Tween.get( this.container )
-	// 	.call( function() { that.OnDirection( 0, { part: "body", mode: "walk_E" } ) ; } )
-	// 	.call( function() { that.OnDirection( 0, { part: "hair", mode: "stable_E" } ) ; } )
-	// 	.to( { x: realGrid.x + this.container.regX, y: realGrid.y + this.container.regY * 0.3 }, 750 )
-	// 	.call( function() { that.resortingOrder() ; } )
-	// 	.call( function() { that.OnDirection( 5, { part: "body", mode: "stand_A" } ) ; } )
-	// 	.call( function() { that.OnDirection( 5, { part: "hair", mode: "stable_A" } ) ; } ) ;
-	// 	// sendPlayerStateToServer() ;
-	// } // if
+	var pathfinding = that.MapControlPointer.AStarAlgorithm(  ) ;
 
 	Recursive( 25 ) ;
 
 	function Recursive( num ) {
-		if ( num < 1 ) {
-			setTimeout( function() { Stop() ; }, 200 ) ;
-			return ;
-		} //
-		setTimeout( function() { 
-			if ( that.MapControlPointer.MapMove( { x: startGrid.x, y: startGrid.y }, { x: startGrid.x, y: startGrid.y - 1 } ) ) {
-				that.container.grid_y = startGrid.y -= 1 ;
-				WalkDirection_0() ;
-				Recursive( num - 1 ) ;
-			} // if
-			else
-				setTimeout( function() { Stop() ; }, 200 ) ;
-		}, 200 ) ;
-	} // Recursive()
+		var speed = 180 ;
+		var distanceX = 1, distanceY = -1 ;
+		var timeFixed = ( ( Math.abs( distanceX ) + Math.abs( distanceY ) ) == 2 ) ? 1.414 : 1 ;
 
-	function WalkDirection_0() {
-		var realGrid = that.MapControlPointer.GetGrid( { x: startGrid.x, y: startGrid.y }, "virtual" ) ;
-		createjs.Tween.get( that.container )
-		.call( function() { that.OnDirection( 0, { part: "body", mode: "walk_E" } ) ; } )
-		.call( function() { that.OnDirection( 0, { part: "hair", mode: "stable_E" } ) ; } )
-		.to( { x: realGrid.x + that.container.regX, y: realGrid.y + that.container.regY * 0.3 }, 200 )
-		.call( function() { that.resortingOrder() ; } ) ;
-	} // WalkDirection_0()
-	function Stop() {
-		createjs.Tween.get( that.container )
-		.call( function() { that.OnDirection( 5, { part: "body", mode: "stand_E" } ) ; } )
-		.call( function() { that.OnDirection( 5, { part: "hair", mode: "stable_E" } ) ; } ) ;
-	} // Stop()
+		if ( num < 1 )
+			setTimeout( function() { Stop() ; }, speed * timeFixed ) 
+		else
+			setTimeout( function() { 
+				if ( that.MapControlPointer.MapMove( { x: startGrid.x + 1, y: startGrid.y - 1 }, speed * timeFixed ) ) {
+					that.container.grid_x = startGrid.x += distanceX ;
+					that.container.grid_y = startGrid.y += distanceY ;
+					WalkDirection( Math.ceil( Math.random() * 8 ), speed * timeFixed ) ;
+					Recursive( num - 1 ) ;
+				} // if
+				else
+					setTimeout( function() { Stop() ; }, speed ) ;
+			}, speed * timeFixed ) ;
+		
+		function WalkDirection( num, speed ) {
+			var realGrid = that.MapControlPointer.GetGrid( { x: startGrid.x, y: startGrid.y }, "virtual" ) ;
+			 ;
+			if ( num == 0 )
+				Animation( 0, "walk_E", "stable_E" ) ;
+			else if ( num == 1 )
+				Animation( 1, "walk_D", "stable_D" ) ;
+			else if ( num == 2 )
+				Animation( 1, "walk_C", "stable_C" ) ;
+			else if ( num == 3 )
+				Animation( 1, "walk_B", "stable_B" ) ;
+			else if ( num == 4 )
+				Animation( 0, "walk_A", "stable_A" ) ;
+			else if ( num == 5 )
+				Animation( 0, "walk_B", "stable_B" ) ;
+			else if ( num == 6 )
+				Animation( 0, "walk_C", "stable_C" ) ;
+			else if ( num == 7 )
+				Animation( 0, "walk_D", "stable_D" ) ;
+			else if ( num == 8 )
+				Animation( 0, "walk_E", "stable_E" ) ;
+
+			function Animation( mirror, bodyAnimation, hairAnimation ) {
+				createjs.Tween.get( that.container )
+				.call( function() { that.OnDirection( mirror, { part: "body", mode: bodyAnimation } ) ; } )
+				.call( function() { that.OnDirection( mirror, { part: "hair", mode: hairAnimation } ) ; } )
+				.to( { x: realGrid.x + that.container.regX, y: realGrid.y + that.container.regY * 0.3 }, speed )
+				.call( function() { that.resortingOrder() ; } ) ;
+			} // Animation()
+		} // WalkDirection()
+		function Stop() {
+			createjs.Tween.get( that.container )
+			.call( function() { that.OnDirection( 5, { part: "body", mode: "stand_E" } ) ; } )
+			.call( function() { that.OnDirection( 5, { part: "hair", mode: "stable_E" } ) ; } ) ;
+		} // Stop()
+	} // Recursive()
 } // OnWalk()
 
 // 旋轉角色方向/改變播放圖層
