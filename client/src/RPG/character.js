@@ -58,7 +58,7 @@ Character.prototype.OnCreate = function( MapControl, Name, LifeBar, grid, Speed,
 		that.sprite.body.x = 0, that.sprite.body.y = 47 * that.sprite.scaleY ;
 		that.sprite.hair = new createjs.Sprite( SettingSprite( { target: "character", part: "hair" }, sheet.hair ) ) ;
 		that.sprite.hair.regX = Math.ceil( 75 / 2 ), that.sprite.hair.regY = Math.ceil( 75 / 2 ) * that.sprite.scaleY ;
-		that.sprite.hair.x = -2, that.sprite.hair.y = -11 / that.sprite.scaleY ;
+		that.sprite.hair.x = 0, that.sprite.hair.y = -11 / that.sprite.scaleY ;
 		that.sprite.addChild( that.sprite.body, that.sprite.hair ) ;
 		that.container.addChild( that.sprite ) ;
 		// Default the direction of this character.
@@ -377,4 +377,3 @@ Character.prototype.TimeSleep = function( func ) {
 			func() ;
 	}, 1000 ) ;
 } // TimeSleep()
-

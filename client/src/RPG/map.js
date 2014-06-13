@@ -143,26 +143,38 @@ Main_Map.prototype.MapMove = function( end, speed ) {
 Main_Map.prototype.AStarAlgorithm = function( start, end ) {
 	// Get this map data that player exists.
 	var mapTile = cacheMapData.map[this.mapNum].tileData ;
+
+	console.log( this.mapNum, mapTile, ( mapTile.length * mapTile[0].length ), mapTile.length, mapTile[0].length ) ;
+
 	// Copy the 'w' element of mapTile array to aStarTile array.
 	var aStarTile = TwoD_Array( mapTile.length, mapTile[0].length ) ;
 	for ( i = 0 ; i < mapTile.length ; i ++ )
 		for ( j = 0 ; j < mapTile[0].length ; j ++ )
 			aStarTile[i][j] = new AStarTileDatastruct( mapTile[i][j].w ) ;
 	// Functions make them shorter.
-	var	abs = Math.abs ;
-	var	max = Math.max ;
-	var	pow = Math.pow ;
-	var	sqrt = Math.sqrt ;
-
+	var	abs = Math.abs, 
+		max = Math.max,
+		pow = Math.pow ,
+		sqrt = Math.sqrt ;
+	// Final path of result.
 	var path = new Array() ;
 
+	for ( i = 0 ; i < aStarTile.length ; i ++ ) {
+		for ( j = 0 ; j < aStarTile[0].length ; j ++ )
+			;
+	}
 
-	for ( i = 0 ; i < 20 ; i ++ )
-		path[i] = Math.ceil( Math.random() * 8 ) ;
+
+	for ( i = 0 ; i < 18 ; i ++ )
+		path[i] = 0 ; // Math.ceil( Math.random() * 2 ) ;
+	for ( i = 15 ; i < 25 ; i ++ )
+		path[i] = 2 ;
+	for ( i = 25 ; i < 35 ; i ++ )
+		path[i] = 0 ;
 
 	return path ;
 
-	function AStarTileDatastruct( walk ){
+	function AStarTileDatastruct( walk ) {
 		this.walkable = walk ;
 		this.g = 0 ;
 		this.h = 0 ;
