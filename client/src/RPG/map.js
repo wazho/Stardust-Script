@@ -161,15 +161,15 @@ Main_Map.prototype.AStarAlgorithm = function( start, end ) {
 
 	for ( i = 0 ; i < aStarTile.length ; i ++ ) {
 		for ( j = 0 ; j < aStarTile[0].length ; j ++ )
-			;
+			 ;
 	}
 
 
-	for ( i = 0 ; i < 18 ; i ++ )
+	for ( i = 0 ; i < 8 ; i ++ )
 		path[i] = 0 ; // Math.ceil( Math.random() * 2 ) ;
-	for ( i = 15 ; i < 25 ; i ++ )
-		path[i] = 2 ;
-	for ( i = 25 ; i < 35 ; i ++ )
+	for ( i = 8 ; i < 18 ; i ++ )
+		path[i] = 1 ;
+	for ( i = 18 ; i < 35 ; i ++ )
 		path[i] = 0 ;
 
 	return path ;
