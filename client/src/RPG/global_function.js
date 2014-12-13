@@ -19,7 +19,6 @@ function GlobalValues() {
 
 var G = new GlobalValues() ;
 
-
 // Key event listening.
 
 var KEYCODE_ENTER = 13 ;

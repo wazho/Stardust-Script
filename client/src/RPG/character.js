@@ -166,6 +166,12 @@ Character.prototype.OnMove = function( grid ) {
 
 // Assign the character walking.
 Character.prototype.OnWalk = function( endGrid ) {
+	if ( this.sprite.body.currentAnimation == "walk_A" ||
+		this.sprite.body.currentAnimation == "walk_B" ||
+		this.sprite.body.currentAnimation == "walk_C" ||
+		this.sprite.body.currentAnimation == "walk_D" ||
+		this.sprite.body.currentAnimation == "walk_E" )
+		return ;
 	var that = this ;
 	// Virtual grid system.
 	var gridSize = this.MapControlPointer.grid.size ;
