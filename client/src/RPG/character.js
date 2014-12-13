@@ -173,7 +173,7 @@ Character.prototype.OnWalk = function( endGrid ) {
 	// Checking the grid is walkable or not, then walk to there using 'A* algorithm'.
 	var pathfinding = that.MapControlPointer.AStarAlgorithm( startGrid, endGrid ) ;
 
-	console.log( pathfinding.length,  pathfinding ) ;
+	//console.log( pathfinding.length,  pathfinding ) ;
 
 	Recursive( 0, pathfinding.length ) ;
 
@@ -242,7 +242,6 @@ Character.prototype.OnWalk = function( endGrid ) {
 			} // Animation()
 		} // WalkDirection()
 		function StopDirection() {
-			console.log( that.container.direction ) ;
 			if ( that.container.direction == 0 )
 				Animation( 0, "stand_E", "stable_E" ) ;
 			else if ( that.container.direction == 1 )
@@ -261,7 +260,6 @@ Character.prototype.OnWalk = function( endGrid ) {
 				Animation( 7, "stand_D", "stable_D" ) ;
 
 			function Animation( direction, bodyAnimation, hairAnimation ) {
-				console.log( bodyAnimation, hairAnimation ) ;
 				createjs.Tween.get( that.container )
 				.call( function() { that.OnDirection( direction, { part: "body", mode: bodyAnimation } ) ; } )
 				.call( function() { that.OnDirection( direction, { part: "hair", mode: hairAnimation } ) ; } ) ;

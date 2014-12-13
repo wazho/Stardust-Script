@@ -144,8 +144,6 @@ Main_Map.prototype.AStarAlgorithm = function( start, end ) {
 	// Get this map data that player exists.
 	var mapTile = cacheMapData.map[this.mapNum].tileData ;
 
-	console.log( this.mapNum, mapTile, ( mapTile.length * mapTile[0].length ), mapTile.length, mapTile[0].length ) ;
-
 	// Copy the 'w' element of mapTile array to aStarTile array.
 	var aStarTile = TwoD_Array( mapTile.length, mapTile[0].length ) ;
 	for ( i = 0 ; i < mapTile.length ; i ++ )
@@ -159,18 +157,44 @@ Main_Map.prototype.AStarAlgorithm = function( start, end ) {
 	// Final path of result.
 	var path = new Array() ;
 
-	for ( i = 0 ; i < aStarTile.length ; i ++ ) {
-		for ( j = 0 ; j < aStarTile[0].length ; j ++ )
-			 ;
+
+	var aStarTile = new Array();
+	// Each rows.
+	for ( var r in mapTile ) {
+		var row = new Array() ;
+		// Each columns in one row.
+		for (var c in mapTile[r])
+			row.push(mapTile[r][c].w) ;
+		aStarTile.push(row) ;
 	}
 
+	var aStarTileGraph = new Graph(aStarTile, { diagonal: true }) ;
+	var start = aStarTileGraph.grid[start.x-1][start.y-1] ;
+	var end = aStarTileGraph.grid[end.x-1][end.y-1] ;
+	var resultWithDiagonals = astar.search(aStarTileGraph, start, end) ;
 
-	for ( i = 0 ; i < 8 ; i ++ )
-		path[i] = 0 ; // Math.ceil( Math.random() * 2 ) ;
-	for ( i = 8 ; i < 18 ; i ++ )
-		path[i] = 1 ;
-	for ( i = 18 ; i < 35 ; i ++ )
-		path[i] = 0 ;
+	var count = resultWithDiagonals.length;
+	for (var i = 0 ; i < count ; i++) {
+		var onegridMove = resultWithDiagonals.shift() ;
+		if ( onegridMove.x - onegridMove.parent.x === 0 && onegridMove.y - onegridMove.parent.y === -1 )
+			path[i] = 0;
+		else if ( onegridMove.x - onegridMove.parent.x === 1 && onegridMove.y - onegridMove.parent.y === -1 )
+			path[i] = 1;
+		else if ( onegridMove.x - onegridMove.parent.x === 1 && onegridMove.y - onegridMove.parent.y === 0 )
+			path[i] = 2;
+		else if ( onegridMove.x - onegridMove.parent.x === 1 && onegridMove.y - onegridMove.parent.y === 1 )
+			path[i] = 3;
+		else if ( onegridMove.x - onegridMove.parent.x === 0 && onegridMove.y - onegridMove.parent.y === 1 )
+			path[i] = 4;
+		else if ( onegridMove.x - onegridMove.parent.x === -1 && onegridMove.y - onegridMove.parent.y === 1 )
+			path[i] = 5;
+		else if ( onegridMove.x - onegridMove.parent.x === -1 && onegridMove.y - onegridMove.parent.y === 0 )
+			path[i] = 6;
+		else if ( onegridMove.x - onegridMove.parent.x === -1 && onegridMove.y - onegridMove.parent.y === -1 )
+			path[i] = 7;
+	}
+
+		console.log(path);
 
 	return path ;
 

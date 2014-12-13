@@ -100,7 +100,6 @@ Main_Framework.prototype.OnBoxAnimation = function( container, length, height, x
     // 物品欄顯示消失動畫控制
 	var boxShow = false ;
 	stage.on( "stagemousemove", function( evt ) {
-		// console.log( 'X:' + evt.stageX + ' / ' + 'Y:' + evt.stageY ) ;
 		if ( boxShow ) {
 			if ( evt.stageX < x || evt.stageX > ( x + length ) || evt.stageY < ( y - height + fade_y ) ) {
 				boxShow = false ;
