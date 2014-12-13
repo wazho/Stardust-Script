@@ -157,18 +157,17 @@ Main_Map.prototype.AStarAlgorithm = function( start, end ) {
 	// Final path of result.
 	var path = new Array() ;
 
-
 	var aStarTile = new Array();
 	// Each rows.
 	for ( var r in mapTile ) {
 		var row = new Array() ;
 		// Each columns in one row.
 		for (var c in mapTile[r])
-			row.push(mapTile[r][c].w) ;
+			row.push(mapTile[c][r].w) ;
 		aStarTile.push(row) ;
 	}
 
-	var aStarTileGraph = new Graph(aStarTile, { diagonal: true }) ;
+	var aStarTileGraph = new Graph(aStarTile) ;
 	var start = aStarTileGraph.grid[start.x-1][start.y-1] ;
 	var end = aStarTileGraph.grid[end.x-1][end.y-1] ;
 	var resultWithDiagonals = astar.search(aStarTileGraph, start, end) ;
@@ -193,8 +192,6 @@ Main_Map.prototype.AStarAlgorithm = function( start, end ) {
 		else if ( onegridMove.x - onegridMove.parent.x === -1 && onegridMove.y - onegridMove.parent.y === -1 )
 			path[i] = 7;
 	}
-
-		console.log(path);
 
 	return path ;
 
