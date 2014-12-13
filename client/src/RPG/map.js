@@ -157,22 +157,22 @@ Main_Map.prototype.AStarAlgorithm = function( start, end ) {
 	// Final path of result.
 	var path = new Array() ;
 
-	var aStarTile = new Array();
-	// Each rows.
-	for ( var r in mapTile ) {
-		var row = new Array() ;
-		// Each columns in one row.
-		for (var c in mapTile[r])
-			row.push(mapTile[c][r].w) ;
-		aStarTile.push(row) ;
+	var aStarTile = new Array() ;
+	var rows = mapTile.length ;
+	var columns = mapTile[0].length ;
+	// Each columns.
+	for ( var c = 0 ; c < columns ; c++ ) {
+		var column = new Array() ;
+		// Each rows in one column.
+		for ( var r = 0 ; r < rows ; r++ )
+			column.push( mapTile[r][c].w ) ;
+		aStarTile.push( column ) ;
 	}
 
 	var aStarTileGraph = new Graph( aStarTile ) ;
 	var start = aStarTileGraph.grid[start.x-1][start.y-1] ;
 	var end = aStarTileGraph.grid[end.x-1][end.y-1] ;
 	var resultWithDiagonals = astar.search( aStarTileGraph, start, end ) ;
-
-	// console.log(start, " to ", end);
 
 	var count = resultWithDiagonals.length ;
 	for ( var i = 0 ; i < count ; i++ ) {
