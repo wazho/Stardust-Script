@@ -169,6 +169,7 @@ Main_Map.prototype.AStarAlgorithm = function( start, end ) {
 		aStarTile.push( column ) ;
 	}
 
+	// Generate the a star data structure.
 	var aStarTileGraph = new Graph( aStarTile, { diagonal: true } ) ;
 	var start = aStarTileGraph.grid[start.x-1][start.y-1] ;
 	var end = aStarTileGraph.grid[end.x-1][end.y-1] ;
