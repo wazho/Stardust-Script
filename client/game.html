@@ -53,7 +53,7 @@
 			stage = new createjs.Stage( "myCanvas" ) ;
     		document.body.style.cursor = "url('cursor/normal_select.cur'), default" ;
 
-    		var mapNum = 3 ;
+    		var mapNum = 2 ;
 
 			// Create the map control object, it the highest level.
 			// Back map(texture), front map(objects, characters) all in the object.
@@ -66,8 +66,14 @@
 			// 建立遊戲框架
 			var framework = new Main_Framework( canvasSize ) ;
 			// 建立角色物件
-			// var mainCharacter = new Character( mapControl, "小鮭魚", { HP: 175, SP: 55 }, { x: 17, y: 35 }, 180, { body: "novice", hair: "style1_white" }, 4 ) ;
-			var mainCharacter = new Character( mapControl, "小鮭魚", { HP: 175, SP: 55 }, { x: 1, y: 1 }, 180, { body: "novice", hair: "style1_white" }, 4 ) ;
+			while ( true ) {
+				var startX = Math.floor( Math.random() * cacheMapData.map[mapNum].tileData[0].length ) ;
+				var startY = Math.floor( Math.random() * cacheMapData.map[mapNum].tileData.length ) ;
+				if ( cacheMapData.map[mapNum].tileData[startY][startX].w == 1 )
+					break;
+			}
+
+			var mainCharacter = new Character( mapControl, "小鮭魚", { HP: 175, SP: 55 }, { x: startX+1, y: startY+1 }, 180, { body: "novice", hair: "style1_white" }, 4 ) ;
 			mainCharacter.OnLifeModify( -999, -40 ) ;
 
 			// 地圖背景匯入
@@ -93,12 +99,12 @@
 
 	<style>
 		#myCanvas {
-			 position: absolute ;
-			 top: 50% ;
-			 left: 50% ;
-			 margin-left: -496px ;
-			 margin-top: -285px ;
-			 border-radius: 10px ;
+			position: absolute ;
+			top: 50% ;
+			left: 50% ;
+			margin-left: -496px ;
+			margin-top: -285px ;
+			border-radius: 10px ;
 		}
 	</style>
 </head>
