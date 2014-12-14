@@ -169,7 +169,7 @@ Main_Map.prototype.AStarAlgorithm = function( start, end ) {
 		aStarTile.push( column ) ;
 	}
 
-	var aStarTileGraph = new Graph( aStarTile ) ;
+	var aStarTileGraph = new Graph( aStarTile, { diagonal: true } ) ;
 	var start = aStarTileGraph.grid[start.x-1][start.y-1] ;
 	var end = aStarTileGraph.grid[end.x-1][end.y-1] ;
 	var resultWithDiagonals = astar.search( aStarTileGraph, start, end ) ;
