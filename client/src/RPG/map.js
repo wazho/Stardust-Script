@@ -118,7 +118,7 @@ Main_Map.prototype.DrawMap = function( index ) {
 // When the player clicked any grid if wanna to move the character.
 // The character need to keep on the center, so map need to move.
 // parameter(end) : end grid, there are x, y virtual grid (index starts from 1). 
-Main_Map.prototype.MapMove = function( end, speed ) {
+Main_Map.prototype.MapMove = function( end, speed, selfControl ) {
 	var that = this ;
 	// Get this map data that player exists.
 	var mapTile = cacheMapData.map[this.mapNum].tileData ;
@@ -132,9 +132,11 @@ Main_Map.prototype.MapMove = function( end, speed ) {
 		// Compute the distance between center.
 		var distanceX = end.x - this.trim.x - 16, distanceY = end.y - this.trim.y - 11 ;
 		// Trim the distance about cursor of the map .
-		this.trim.x += distanceX, this.trim.y += distanceY ;
-		createjs.Tween.get( this.container_back ).to( { x: this.container_back.x - distanceX * this.grid.size, y: this.container_back.y - distanceY * this.grid.size }, speed ) ;
-		createjs.Tween.get( this.container_front ).to( { x: this.container_back.x - distanceX * this.grid.size, y: this.container_back.y - distanceY * this.grid.size }, speed ) ;
+		if ( selfControl ) {
+			this.trim.x += distanceX, this.trim.y += distanceY ;
+			createjs.Tween.get( this.container_back ).to( { x: this.container_back.x - distanceX * this.grid.size, y: this.container_back.y - distanceY * this.grid.size }, speed ) ;
+			createjs.Tween.get( this.container_front ).to( { x: this.container_back.x - distanceX * this.grid.size, y: this.container_back.y - distanceY * this.grid.size }, speed ) ;
+		} // if
 	} // if
 
 	return ( ifWalkable == 1 ) ? true : false ;

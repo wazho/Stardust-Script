@@ -1,5 +1,5 @@
-function Character( MapControl, Name, LifeBar, grid, Speed, sheet, direction ) {
-	this.OnCreate( MapControl, Name, LifeBar, grid, Speed, sheet, direction ) ;
+function Character( MapControl, Name, LifeBar, grid, Speed, sheet, direction, active ) {
+	this.OnCreate( MapControl, Name, LifeBar, grid, Speed, sheet, direction, active ) ;
 	this.MapControlPointer.container_front.addChild( this.container ) ;
 	// Move to assign location.
 	this.OnMove( { x: grid.x, y: grid.y }, 0 ) ;
@@ -9,11 +9,13 @@ function Character( MapControl, Name, LifeBar, grid, Speed, sheet, direction ) {
 } // Character() 
 
 // 角色建立
-Character.prototype.OnCreate = function( MapControl, Name, LifeBar, grid, Speed, sheet, direction ) {
+Character.prototype.OnCreate = function( MapControl, Name, LifeBar, grid, Speed, sheet, direction, active ) {
 	var that = this ;
 	// Magic Number !!
 	this.spriteSize = 125 ;
 	this.effectSpriteSize = 200 ;
+	// Self or not
+	this.active = active ;
 	// Map back and map front are both in map controller.
 	this.MapControlPointer = MapControl ;
 	// Character container created.
@@ -135,6 +137,8 @@ Character.prototype.OnTick = function( that ) {
 
 // Starting mouse listener on player.
 Character.prototype.OnActive = function() {
+	if ( this.active == false )
+		return ;
 	var that = this ; 
 	createjs.Ticker.addEventListener( "tick", function() { that.OnTick( that ) ; } ) ;
 
@@ -156,7 +160,7 @@ Character.prototype.OnMove = function( grid ) {
 	var gridSize = this.MapControlPointer.grid.size ;
 	var endGrid = { x: grid.x, y: grid.y } ;
 	// Checking the grid is walkable or not.
-	if ( this.MapControlPointer.MapMove( { x: endGrid.x, y: endGrid.y }, 0 ) ) {
+	if ( this.MapControlPointer.MapMove( { x: endGrid.x, y: endGrid.y }, 0, that.active ) ) {
 		this.container.grid_x = endGrid.x, this.container.grid_y = endGrid.y ;
 		var realGrid = this.MapControlPointer.GetGrid( { x: endGrid.x, y: endGrid.y }, "virtual" ) ;
 		this.container.x = realGrid.x + this.container.regX, this.container.y = realGrid.y + this.container.regY * 0.3 ;
@@ -211,7 +215,7 @@ Character.prototype.OnWalk = function( endGrid ) {
 			setTimeout( function() { StopDirection() ; }, speedFixed ) ;
 		else
 			setTimeout( function() { 
-				if ( that.MapControlPointer.MapMove( { x: startGrid.x + distanceX, y: startGrid.y + distanceY }, speedFixed ) ) {
+				if ( that.MapControlPointer.MapMove( { x: startGrid.x + distanceX, y: startGrid.y + distanceY }, speedFixed, that.active ) ) {
 					that.container.grid_x = startGrid.x += distanceX, that.container.grid_y = startGrid.y += distanceY ;
 					WalkDirection( pathfinding[nowPath], speedFixed ) ;
 					Recursive( nowPath + 1, totalPath ) ;
@@ -335,6 +339,8 @@ Character.prototype.OnPlaySound = function( motivation ) {
 
 // 角色生命條
 Character.prototype.LifeBar = function() {
+	if ( ! this.active )
+		return ;
 	this.lifebar.bg.regX = 0, this.talk.bg.y = 0 ;
 	this.lifebar.bg.graphics.f( "#181789" ).r( ( this.container.length / 2 - 75 / 2 ) , this.container.height, 75, 11 ) ;
 	var per_hp = 1 - ( this.container.hp_max - this.container.hp ) / this.container.hp_max ;
