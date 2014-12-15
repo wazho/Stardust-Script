@@ -53,7 +53,7 @@
 			stage = new createjs.Stage( "myCanvas" ) ;
     		document.body.style.cursor = "url('cursor/normal_select.cur'), default" ;
 
-    		var mapNum = 2 ;
+    		var mapNum = 3 ;
 
 			// Create the map control object, it the highest level.
 			// Back map(texture), front map(objects, characters) all in the object.
@@ -76,9 +76,11 @@
 			}
 
 			var mainCharacter = new Character( mapControl, "小鮭魚", { HP: 175, SP: 55 }, getRandomGrid(), 180, { body: "novice", hair: "style1_white" }, 4, true ) ;
-			var mainCharacter2 = new Character( mapControl, "小鮭魚", { HP: 175, SP: 55 }, getRandomGrid(), 180, { body: "novice", hair: "style1_white" }, 4, false ) ;
-			var mainCharacter3 = new Character( mapControl, "小鮭魚", { HP: 175, SP: 55 }, getRandomGrid(), 180, { body: "novice", hair: "style1_white" }, 4, false ) ;
-			var mainCharacter4 = new Character( mapControl, "小鮭魚", { HP: 175, SP: 55 }, getRandomGrid(), 180, { body: "novice", hair: "style1_white" }, 4, false ) ;
+			if ( mapNum != 3 ) {
+				var mainCharacter2 = new Character( mapControl, "小鮭魚", { HP: 175, SP: 55 }, getRandomGrid(), 180, { body: "novice", hair: "style1_white" }, 4, false ) ;
+				var mainCharacter3 = new Character( mapControl, "小鮭魚", { HP: 175, SP: 55 }, getRandomGrid(), 180, { body: "novice", hair: "style1_white" }, 4, false ) ;
+				var mainCharacter4 = new Character( mapControl, "小鮭魚", { HP: 175, SP: 55 }, getRandomGrid(), 180, { body: "novice", hair: "style1_white" }, 4, false ) ;
+			}
 			mainCharacter.OnLifeModify( -999, -40 ) ;
 
 			// 地圖背景匯入
